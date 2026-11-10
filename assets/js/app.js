@@ -116,13 +116,11 @@
       .fromTo('.hero__title .w', { yPercent: 60, opacity: 0, rotate: 4 }, { yPercent: 0, opacity: 1, rotate: 0, duration: 1, stagger: 0.07 }, 0.35)
       .from('.hero__lead', { y: 24, opacity: 0, duration: 0.9 }, 0.8)
       .from('.hero__actions > *', { y: 24, opacity: 0, duration: 0.8, stagger: 0.1 }, 0.95)
-      .from('.hero__tags li', { y: 16, opacity: 0, duration: 0.6, stagger: 0.07 }, 1.15)
-      .from('.hero__visual', { x: 80, opacity: 0, duration: 1.3 }, 0.55);
+      .from('.hero__tags li', { y: 16, opacity: 0, duration: 0.6, stagger: 0.07 }, 1.15);
     $('.hero__title').classList.add('is-done');
 
     // accueil : légère parallaxe à la sortie
     gsap.to('.hero__text', { yPercent: -10, opacity: 0.25, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('.hero__visual', { yPercent: 22, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
     // titres de section : les mots s'éclaircissent au fil du défilement
     $$('[data-split]').forEach(function (el) {

@@ -18,7 +18,7 @@ Tout le contenu vient du site d'origine, réorganisé sur une page :
 
 | Rubrique | Ce qu'on y trouve |
 |---|---|
-| Accueil | surface d'eau animée (réagit au pointeur), accroche, accès rapides |
+| Accueil | réseau de tuyaux en verre en 3D où circule l'eau (suit le pointeur), accroche, accès rapides |
 | Votre besoin | sélecteur en deux clics : profil, puis besoin, qui affiche la réponse H2O Partner |
 | Domaines | onglets Résidentiel, Collectif & tertiaire, Industrie |
 | L'adoucisseur | schéma animé du trajet de l'eau, en 4 étapes suivies au défilement |
@@ -37,9 +37,9 @@ index.html               page principale
 mentions-legales.html
 assets/css/styles.css    toute la mise en forme
 assets/js/app.js         défilement, animations, menu, sélecteur, quiz, formulaire
-assets/js/water.js       eau animée de l'accueil (WebGL)
+assets/js/hero3d.js      accueil : tuyaux en verre et eau qui circule (Three.js)
 assets/js/schema.js      schéma animé de l'adoucisseur (canvas)
-assets/vendor/           GSAP, ScrollTrigger, Lenis (copies locales)
+assets/vendor/           GSAP, ScrollTrigger, Lenis, Three.js (copies locales)
 assets/fonts/            polices Outfit et Manrope (copies locales)
 assets/img/              logo, photos, visuels produits
 docs/                    plaquettes et fiches techniques PDF

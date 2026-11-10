@@ -15,7 +15,7 @@
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/outfit-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/styles.css?v=1">
+  <link rel="stylesheet" href="assets/css/styles.css?v=2">
   <script>document.documentElement.classList.replace('no-js', 'js');</script>
   <script type="application/ld+json">
   {
@@ -91,7 +91,7 @@
 
   <!-- ================= ACCUEIL ================= -->
   <section class="hero">
-    <canvas class="hero__water" id="eau" aria-hidden="true"></canvas>
+    <canvas class="hero__scene" id="scene3d" aria-hidden="true"></canvas>
     <div class="container hero__in">
       <div class="hero__text">
         <p class="eyebrow eyebrow--light"><svg class="ico"><use href="#i-drop"/></svg>Traitement de l'eau · Isère et Rhône-Alpes</p>
@@ -107,10 +107,6 @@
           <li><a href="#domaines" data-domaine="industrie"><svg class="ico"><use href="#i-factory"/></svg>Industrie</a></li>
           <li><a href="#prestations"><svg class="ico"><use href="#i-wrench"/></svg>Entretien</a></li>
         </ul>
-      </div>
-      <div class="hero__visual" aria-hidden="true">
-        <div class="hero__halo"></div>
-        <img class="hero__van" src="assets/img/camionnette.webp" alt="" width="469" height="302">
       </div>
     </div>
     <svg class="wave wave--hero" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
@@ -682,8 +678,9 @@
 <script src="assets/vendor/lenis.min.js" defer></script>
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
-<script src="assets/js/water.js?v=1" defer></script>
-<script src="assets/js/schema.js?v=1" defer></script>
-<script src="assets/js/app.js?v=1" defer></script>
+<script type="importmap">{ "imports": { "three": "./assets/vendor/three.module.min.js" } }</script>
+<script type="module" src="assets/js/hero3d.js?v=2"></script>
+<script src="assets/js/schema.js?v=2" defer></script>
+<script src="assets/js/app.js?v=2" defer></script>
 </body>
 </html>

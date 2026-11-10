@@ -72,7 +72,9 @@
   var lastY = 0, fab = $('.fab');
   function onScroll() {
     var y = window.scrollY;
-    header.classList.toggle('is-scrolled', y > 40);
+    // pendant la séquence de l'accueil, l'en-tête reste transparent pour ne pas couper l'image
+    var seq = document.querySelector('.hero.has-seq');
+    header.classList.toggle('is-scrolled', y > (seq ? seq.offsetHeight - window.innerHeight * 0.35 : 40));
     var down = y > lastY && y > 500 && !nav.classList.contains('is-open');
     header.classList.toggle('is-hidden', down);
     if (fab) fab.classList.toggle('is-on', y > 500);
@@ -115,12 +117,11 @@
       .from('.hero .eyebrow', { y: 20, opacity: 0, duration: 0.7 }, 0.25)
       .fromTo('.hero__title .w', { yPercent: 60, opacity: 0, rotate: 4 }, { yPercent: 0, opacity: 1, rotate: 0, duration: 1, stagger: 0.07 }, 0.35)
       .from('.hero__lead', { y: 24, opacity: 0, duration: 0.9 }, 0.8)
-      .from('.hero__actions > *', { y: 24, opacity: 0, duration: 0.8, stagger: 0.1 }, 0.95)
-      .from('.hero__tags li', { y: 16, opacity: 0, duration: 0.6, stagger: 0.07 }, 1.15);
+      .from('.hero__actions > *', { y: 24, opacity: 0, duration: 0.8, stagger: 0.1, clearProps: 'all' }, 0.95)
+      .from('.hero__hint', { opacity: 0, duration: 0.8 }, 1.3);
     $('.hero__title').classList.add('is-done');
 
     // accueil : légère parallaxe à la sortie
-    gsap.to('.hero__text', { yPercent: -10, opacity: 0.25, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
     // titres de section : les mots s'éclaircissent au fil du défilement
     $$('[data-split]').forEach(function (el) {

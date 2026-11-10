@@ -18,7 +18,7 @@ Tout le contenu vient du site d'origine, réorganisé sur une page :
 
 | Rubrique | Ce qu'on y trouve |
 |---|---|
-| Accueil | réseau de tuyaux en verre en 3D où circule l'eau (suit le pointeur), accroche, accès rapides |
+| Accueil | séquence vidéo pilotée par le défilement (une goutte traverse les nuages et rejoint les tuyaux), qui se fond dans les tuyaux en verre en 3D |
 | Votre besoin | sélecteur en deux clics : profil, puis besoin, qui affiche la réponse H2O Partner |
 | Domaines | onglets Résidentiel, Collectif & tertiaire, Industrie |
 | L'adoucisseur | schéma animé du trajet de l'eau, en 4 étapes suivies au défilement |
@@ -37,6 +37,8 @@ index.html               page principale
 mentions-legales.html
 assets/css/styles.css    toute la mise en forme
 assets/js/app.js         défilement, animations, menu, sélecteur, quiz, formulaire
+assets/js/hero-seq.js    accueil : séquence d'images pilotée par le défilement
+assets/img/seq/          images de la séquence (d = ordinateur, m = téléphone) et affiche
 assets/js/hero3d.js      accueil : tuyaux en verre et eau qui circule (Three.js)
 assets/js/pipes-flow.js  tuyaux qui traversent le site dans les espaces vides (sections data-pipes)
 assets/js/pipes-kit.js   éléments communs des tuyaux (verre, eau, bulles, raccords, vanne)
@@ -53,6 +55,18 @@ docs/                    plaquettes et fiches techniques PDF
 - Sélecteur « Votre besoin » : tableau `FINDER` dans `assets/js/app.js`.
 - Repères de dureté du simulateur : tableau `CLASSES` dans `assets/js/app.js`.
 - Après une modification de `styles.css` ou d'un script, augmenter le numéro `?v=1` dans les deux pages HTML pour forcer le rechargement chez les visiteurs.
+
+## Remplacer la vidéo de l'accueil
+
+La séquence vient de deux clips générés avec Higgsfield (modèle Hailuo 2.3 Fast, 1376 × 768), assemblés puis découpés en images :
+
+```bash
+# seq.mp4 = la vidéo finale, sans son
+ffmpeg -i seq.mp4 -vf "fps=16" -start_number 0 -c:v libwebp -quality 70 assets/img/seq/d/f%03d.webp
+ffmpeg -i seq.mp4 -vf "fps=16,scale=768:-2" -start_number 0 -c:v libwebp -quality 64 assets/img/seq/m/f%03d.webp
+```
+
+Mettre ensuite le nombre d'images dans `data-frames` de la section `.hero` (`index.html`). La dernière image doit rester une capture de la scène 3D en 1376 × 768 pour que le fondu vers la 3D soit invisible (cadrage de référence dans `hero3d.js`).
 
 ## Choix techniques
 

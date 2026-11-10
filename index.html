@@ -13,9 +13,10 @@
   <meta property="og:description" content="Adoucisseurs, filtration, désembouage, désinfection et entretien : 25 années d'expérience au service des particuliers, du collectif, du tertiaire et de l'industrie.">
   <meta property="og:image" content="https://www.h2o-partner.fr/assets/img/logo.png">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/img/seq/poster.webp" as="image" fetchpriority="high">
   <link rel="preload" href="assets/fonts/outfit-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/styles.css?v=3">
+  <link rel="stylesheet" href="assets/css/styles.css?v=4">
   <script>document.documentElement.classList.replace('no-js', 'js');</script>
   <script type="application/ld+json">
   {
@@ -90,24 +91,43 @@
 <main id="contenu">
 
   <!-- ================= ACCUEIL ================= -->
-  <section class="hero">
-    <canvas class="hero__scene" id="scene3d" aria-hidden="true"></canvas>
-    <div class="container hero__in">
-      <div class="hero__text">
-        <p class="eyebrow eyebrow--light"><svg class="ico"><use href="#i-drop"/></svg>Traitement de l'eau · Isère et Rhône-Alpes</p>
-        <h1 class="hero__title" data-split>Votre équipier du traitement de l'eau.</h1>
-        <p class="hero__lead">Avec 25 années d'expérience, H2O Partner étudie, fournit, met en service et entretient les solutions de traitement de l'eau des particuliers, du collectif, du tertiaire et de l'industrie.</p>
-        <div class="hero__actions">
-          <a class="btn btn--primary" href="#solution">Trouver ma solution<svg class="ico"><use href="#i-arrow"/></svg></a>
-          <a class="btn btn--ghost" href="#contact">Nous contacter</a>
+  <section class="hero" data-frames="121">
+    <div class="hero__stage">
+      <img class="hero__poster" src="assets/img/seq/poster.webp" alt="" width="1376" height="768" fetchpriority="high">
+      <canvas class="hero__seq" id="seq" aria-hidden="true"></canvas>
+      <canvas class="hero__scene" id="scene3d" aria-hidden="true"></canvas>
+      <div class="hero__scrim" aria-hidden="true"></div>
+
+      <div class="container hero__in">
+        <div class="hero__panel hero__text" data-panel="0">
+          <p class="eyebrow eyebrow--light"><svg class="ico"><use href="#i-drop"/></svg>Traitement de l'eau · Isère et Rhône-Alpes</p>
+          <h1 class="hero__title" data-split>Votre équipier du traitement de l'eau.</h1>
+          <p class="hero__lead">Avec 25 années d'expérience, H2O Partner étudie, fournit, met en service et entretient les solutions de traitement de l'eau des particuliers, du collectif, du tertiaire et de l'industrie.</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#solution">Trouver ma solution<svg class="ico"><use href="#i-arrow"/></svg></a>
+            <a class="btn btn--ghost" href="#contact">Nous contacter</a>
+          </div>
         </div>
-        <ul class="hero__tags" aria-label="Nos domaines">
-          <li><a href="#domaines" data-domaine="residentiel"><svg class="ico"><use href="#i-home"/></svg>Résidentiel</a></li>
-          <li><a href="#domaines" data-domaine="tertiaire"><svg class="ico"><use href="#i-building"/></svg>Collectif &amp; tertiaire</a></li>
-          <li><a href="#domaines" data-domaine="industrie"><svg class="ico"><use href="#i-factory"/></svg>Industrie</a></li>
-          <li><a href="#prestations"><svg class="ico"><use href="#i-wrench"/></svg>Entretien</a></li>
-        </ul>
+
+        <div class="hero__panel" data-panel="1">
+          <p class="hero__big">Chaque goutte mérite le bon traitement.</p>
+          <p class="hero__lead">Filtrer, adoucir, désinfecter, entretenir : nous choisissons avec vous la solution adaptée à votre eau.</p>
+        </div>
+
+        <div class="hero__panel" data-panel="2">
+          <p class="eyebrow eyebrow--light"><svg class="ico"><use href="#i-drop"/></svg>Nos domaines</p>
+          <p class="hero__big">De l'arrivée d'eau jusqu'au robinet.</p>
+          <p class="hero__lead">Étude technique, matériel, mise en service, entretien et SAV en direct.</p>
+          <ul class="hero__tags" aria-label="Nos domaines">
+            <li><a href="#domaines" data-domaine="residentiel"><svg class="ico"><use href="#i-home"/></svg>Résidentiel</a></li>
+            <li><a href="#domaines" data-domaine="tertiaire"><svg class="ico"><use href="#i-building"/></svg>Collectif &amp; tertiaire</a></li>
+            <li><a href="#domaines" data-domaine="industrie"><svg class="ico"><use href="#i-factory"/></svg>Industrie</a></li>
+            <li><a href="#prestations"><svg class="ico"><use href="#i-wrench"/></svg>Entretien</a></li>
+          </ul>
+        </div>
       </div>
+
+      <p class="hero__hint" aria-hidden="true"><span></span>Faites défiler</p>
     </div>
     <svg class="wave wave--hero" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
       <path class="wave__a" d="M0 60c120-30 240-30 360 0s240 30 360 0 240-30 360 0 240 30 360 0v60H0Z"/>
@@ -679,9 +699,10 @@
 <script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/vendor/ScrollTrigger.min.js" defer></script>
 <script type="importmap">{ "imports": { "three": "./assets/vendor/three.module.min.js" } }</script>
-<script type="module" src="assets/js/hero3d.js?v=3"></script>
+<script type="module" src="assets/js/hero3d.js?v=4"></script>
 <script type="module" src="assets/js/pipes-flow.js?v=1"></script>
+<script src="assets/js/hero-seq.js?v=1" defer></script>
 <script src="assets/js/schema.js?v=2" defer></script>
-<script src="assets/js/app.js?v=2" defer></script>
+<script src="assets/js/app.js?v=3" defer></script>
 </body>
 </html>

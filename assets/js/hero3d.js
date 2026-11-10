@@ -54,31 +54,34 @@ function init() {
   gauge.position.set(5.3, 1.1, -1.8);
   world.add(gauge);
 
-  /* ---------- mise en page selon le format ---------- */
+  /* ---------- cadrage ----------
+     La dernière image de la séquence vidéo est une capture de cette scène en 1376 × 768.
+     Pour que le fondu vidéo → 3D soit invisible, la scène garde ce cadrage de référence
+     et se recadre comme l'image (équivalent d'object-fit: cover), quel que soit l'écran. */
+  const REF_ASPECT = 1376 / 768, REF_FOV = 32, REF_SCALE = 0.84;
+  const FOCUS_PORTRAIT = 0.8;   // en portrait, on cadre sur la vanne (même valeur que dans hero-seq.js)
   function layout() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, w < 700 ? 1.5 : 1.75));
     renderer.setSize(w, h, false);
-    camera.aspect = w / h;
+    camera.fov = REF_FOV;
+    camera.aspect = REF_ASPECT;
+    // image de référence agrandie pour couvrir l'écran, dont on ne regarde qu'une fenêtre
+    const k = Math.max(w / REF_ASPECT, h);
+    const fullW = k * REF_ASPECT, fullH = k;
+    const fx = w < h ? FOCUS_PORTRAIT : 0.5;
+    camera.setViewOffset(fullW, fullH, (fullW - w) * fx, (fullH - h) / 2, w, h);
     camera.updateProjectionMatrix();
-    const halfW = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z * camera.aspect;
-    if (camera.aspect > 1.05) {        // ordinateur et tablette : réseau à droite du texte
-      const wide = camera.aspect > 1.5;
-      const s = wide ? 0.84 : 0.6;
-      world.scale.setScalar(s);
-      world.position.set(halfW - 6.6 * s - (wide ? 0.4 : -0.6), wide ? -0.2 : 0.6, 0);
-    } else {                           // téléphone : réseau en haut, au-dessus du titre
-      const s = 0.62;
-      world.scale.setScalar(s);
-      world.position.set(halfW - 8.6 * s, 3.4, -1);
-    }
+    const halfW = Math.tan(THREE.MathUtils.degToRad(REF_FOV / 2)) * camera.position.z * REF_ASPECT;
+    world.scale.setScalar(REF_SCALE);
+    world.position.set(halfW - 6.6 * REF_SCALE - 0.4, -0.2, 0);
   }
 
   /* ---------- animation ---------- */
   const clock = new THREE.Clock();
   let t = 0;
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-  let scrollP = 0;
+  let scrollP = 0, live = 0;
 
   function render(dt) {
     t += dt;
@@ -86,8 +89,10 @@ function init() {
     kit.updateFlows(flows, dt);
     pointer.x += (pointer.tx - pointer.x) * Math.min(1, dt * 2.5);
     pointer.y += (pointer.ty - pointer.y) * Math.min(1, dt * 2.5);
-    rig.rotation.y = -0.22 + pointer.x * 0.12 + scrollP * 0.25;
-    rig.rotation.x = 0.1 + pointer.y * 0.08 - scrollP * 0.15;
+    // le pointeur n'agit qu'une fois le fondu depuis la vidéo terminé (sinon les deux images se décalent)
+    live += ((hero.dataset.live === '0' ? 0 : 1) - live) * Math.min(1, dt * 3);
+    rig.rotation.y = -0.22 + pointer.x * 0.12 * live + scrollP * 0.25;
+    rig.rotation.x = 0.1 + pointer.y * 0.08 * live - scrollP * 0.15;
     rig.position.y = scrollP * 2.2;
     wheel.rotation.z = scrollP * 3 + Math.sin(t * 0.4) * 0.05;
     needle.rotation.z = 0.9 - Math.sin(t * 0.7) * 0.08 - Math.sin(t * 2.3) * 0.03;
@@ -110,13 +115,17 @@ function init() {
   }, { passive: true });
   hero.addEventListener('pointerleave', () => { pointer.tx = 0; pointer.ty = 0; });
   window.addEventListener('scroll', () => {
-    scrollP = Math.min(1, Math.max(0, window.scrollY / (hero.offsetHeight || 1)));
+    // la scène ne réagit au défilement qu'une fois la zone fixée de l'accueil terminée
+    const pinned = Math.max(0, hero.offsetHeight - window.innerHeight);
+    scrollP = Math.min(1, Math.max(0, (window.scrollY - pinned) / (window.innerHeight || 1)));
   }, { passive: true });
 
   let visible = true, raf = 0;
   function loop() {
     raf = 0;
     if (!visible || document.hidden) { clock.getDelta(); return; }
+    // pendant la séquence vidéo, la 3D est invisible : inutile de la calculer
+    if (hero.dataset.mix === '0') { clock.getDelta(); raf = requestAnimationFrame(loop); return; }
     render(Math.min(0.05, clock.getDelta()));
     raf = requestAnimationFrame(loop);
   }

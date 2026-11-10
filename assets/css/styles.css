@@ -567,6 +567,9 @@ small { font-size: .82em; }
   .presta__card--entretien .presta__media { max-width: none; }
 }
 
+/* ---------- tuyaux 3D entre les sections (dessinés seulement dans les zones vides) ---------- */
+.pipes-layer { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 60; pointer-events: none; }
+
 /* ---------- mouvement réduit ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
@@ -575,7 +578,7 @@ small { font-size: .82em; }
 }
 
 @media print {
-  .header, .fab, .progress, .hero__scene, .wave { display: none !important; }
+  .header, .fab, .progress, .hero__scene, .pipes-layer, .wave { display: none !important; }
   .hero, .section--deep { background: #fff !important; color: #000 !important; }
   .js [data-reveal], .js [data-split] .w { opacity: 1 !important; transform: none !important; }
 }

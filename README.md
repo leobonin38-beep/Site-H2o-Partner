@@ -38,6 +38,8 @@ mentions-legales.html
 assets/css/styles.css    toute la mise en forme
 assets/js/app.js         défilement, animations, menu, sélecteur, quiz, formulaire
 assets/js/hero3d.js      accueil : tuyaux en verre et eau qui circule (Three.js)
+assets/js/pipes-flow.js  tuyaux qui traversent le site dans les espaces vides (sections data-pipes)
+assets/js/pipes-kit.js   éléments communs des tuyaux (verre, eau, bulles, raccords, vanne)
 assets/js/schema.js      schéma animé de l'adoucisseur (canvas)
 assets/vendor/           GSAP, ScrollTrigger, Lenis, Three.js (copies locales)
 assets/fonts/            polices Outfit et Manrope (copies locales)

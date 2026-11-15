@@ -5,11 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>H2O Partner · Traitement de l'eau en Isère</title>
   <meta name="description" content="H2O Partner étudie, fournit, met en service et entretient les solutions de traitement de l'eau des particuliers, du collectif, du tertiaire et de l'industrie. Sillans, Isère.">
+  <link rel="icon" href="assets/img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <meta name="theme-color" content="#F6F3EC">
   <link rel="preload" href="assets/fonts/instrument-serif-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-tight-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=2">
-  <link rel="stylesheet" href="assets/css/pages.css?v=2">
-  <script>document.documentElement.classList.replace('no-js','js')</script>
+  <link rel="stylesheet" href="assets/css/style.css?v=3">
+  <link rel="stylesheet" href="assets/css/pages.css?v=3">
+  <link rel="stylesheet" href="assets/css/motion.css?v=1">
+  <script>(function(d){d.classList.replace('no-js','js');if(!/capture/.test(location.search)&&!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('m-enter');setTimeout(function(){d.classList.remove('m-enter')},1500)}})(document.documentElement)</script>
 </head>
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -78,8 +82,8 @@
     </div>
 
     <figure class="hero-photo">
-      <img src="assets/img/photos/accueil-main-robinet-1400.jpg"
-           srcset="assets/img/photos/accueil-main-robinet-700.jpg 700w, assets/img/photos/accueil-main-robinet-1400.jpg 1400w"
+      <img src="assets/img/photos/accueil-main-robinet-1400.webp"
+           srcset="assets/img/photos/accueil-main-robinet-700.webp 700w, assets/img/photos/accueil-main-robinet-1400.webp 1400w"
            sizes="(min-width: 900px) 50vw, 100vw"
            width="1400" height="2100" alt="Une main sous le filet d'eau d'un robinet en laiton, à la lumière d'une fenêtre." fetchpriority="high">
     </figure>
@@ -114,7 +118,7 @@
         </div>
       </div>
       <figure class="durete-photo reveal">
-        <img src="assets/img/photos/calcaire-depot-1600.jpg" srcset="assets/img/photos/calcaire-depot-800.jpg 800w, assets/img/photos/calcaire-depot-1600.jpg 1600w" sizes="(min-width: 900px) 45vw, 100vw" width="1600" height="1252" alt="Dépôts minéraux et rouille sur une surface métallique." loading="lazy">
+        <img src="assets/img/photos/calcaire-depot-1600.webp" srcset="assets/img/photos/calcaire-depot-800.webp 800w, assets/img/photos/calcaire-depot-1600.webp 1600w" sizes="(min-width: 900px) 45vw, 100vw" width="1600" height="1252" alt="Dépôts minéraux et rouille sur une surface métallique." loading="lazy">
         <figcaption>Dépôts et corrosion sur du métal&nbsp;: une eau non traitée marque les installations.</figcaption>
       </figure>
     </div>
@@ -141,8 +145,12 @@
         <p>De l'arrivée d'eau jusqu'au robinet&nbsp;: étude technique, matériel, mise en service, entretien et SAV en direct.</p>
       </header>
 
+      <!-- Temps fort : sur ordinateur, la photo reste fixe et change à chaque métier (motion.js) -->
+      <div class="chapters">
+      <div class="chapters-media" aria-hidden="true"></div>
+
       <article class="terrain" id="particuliers">
-        <figure class="reveal"><img src="assets/img/photos/douche-pomme-1200.jpg" srcset="assets/img/photos/douche-pomme-600.jpg 600w, assets/img/photos/douche-pomme-1200.jpg 1200w" sizes="(min-width: 900px) 40vw, 100vw" width="1200" height="1800" alt="Pomme de douche en fonctionnement dans une salle de bain claire." loading="lazy"></figure>
+        <figure class="reveal"><img src="assets/img/photos/douche-pomme-1200.webp" srcset="assets/img/photos/douche-pomme-600.webp 600w, assets/img/photos/douche-pomme-1200.webp 1200w" sizes="(min-width: 900px) 40vw, 100vw" width="1200" height="1800" alt="Pomme de douche en fonctionnement dans une salle de bain claire." loading="lazy"></figure>
         <div class="terrain-text">
           <h3>Particuliers</h3>
           <p>Un antitartre ou un adoucisseur de qualité, au meilleur prix, avec le suivi et la garantie d'une société spécialisée. Nous vous mettons en relation avec nos partenaires régionaux en Rhône-Alpes.</p>
@@ -156,7 +164,7 @@
       </article>
 
       <article class="terrain" id="installateurs">
-        <figure class="reveal"><img src="assets/img/photos/installateur-sertissage-1600.jpg" srcset="assets/img/photos/installateur-sertissage-800.jpg 800w, assets/img/photos/installateur-sertissage-1600.jpg 1600w" sizes="(min-width: 900px) 40vw, 100vw" width="1600" height="1067" alt="Un installateur sertit un raccord sur une canalisation de cuivre." loading="lazy"></figure>
+        <figure class="reveal"><img src="assets/img/photos/installateur-sertissage-1600.webp" srcset="assets/img/photos/installateur-sertissage-800.webp 800w, assets/img/photos/installateur-sertissage-1600.webp 1600w" sizes="(min-width: 900px) 40vw, 100vw" width="1600" height="1067" alt="Un installateur sertit un raccord sur une canalisation de cuivre." loading="lazy"></figure>
         <div class="terrain-text">
           <h3>Plombiers-chauffagistes</h3>
           <p>Le meilleur matériel de traitement de l'eau, pour offrir à vos clients une garantie de qualité et de fiabilité dans le temps. Conseil, formation, mise en service après installation et service après-vente, en continu.</p>
@@ -165,7 +173,7 @@
       </article>
 
       <article class="terrain" id="collectif">
-        <figure class="reveal"><img src="assets/img/photos/chaufferie-manometres-1600.jpg" srcset="assets/img/photos/chaufferie-manometres-800.jpg 800w, assets/img/photos/chaufferie-manometres-1600.jpg 1600w" sizes="(min-width: 900px) 40vw, 100vw" width="1600" height="1065" alt="Manomètres et vannes dans une chaufferie collective." loading="lazy"></figure>
+        <figure class="reveal"><img src="assets/img/photos/chaufferie-manometres-1600.webp" srcset="assets/img/photos/chaufferie-manometres-800.webp 800w, assets/img/photos/chaufferie-manometres-1600.webp 1600w" sizes="(min-width: 900px) 40vw, 100vw" width="1600" height="1065" alt="Manomètres et vannes dans une chaufferie collective." loading="lazy"></figure>
         <div class="terrain-text">
           <h3>Collectif &amp; tertiaire</h3>
           <p>Étude technique pour le bon choix du matériel et de son dimensionnement, livraison jusqu'au chantier, mise en service par une équipe spécialisée, entretien et garantie en direct.</p>
@@ -179,13 +187,14 @@
       </article>
 
       <article class="terrain" id="industrie">
-        <figure class="reveal"><img src="assets/img/photos/industrie-tuyauterie-inox-1600.jpg" srcset="assets/img/photos/industrie-tuyauterie-inox-800.jpg 800w, assets/img/photos/industrie-tuyauterie-inox-1600.jpg 1600w" sizes="(min-width: 900px) 40vw, 100vw" width="1600" height="1067" alt="Tuyauterie en acier inoxydable d'une installation industrielle." loading="lazy"></figure>
+        <figure class="reveal"><img src="assets/img/photos/industrie-tuyauterie-inox-1600.webp" srcset="assets/img/photos/industrie-tuyauterie-inox-800.webp 800w, assets/img/photos/industrie-tuyauterie-inox-1600.webp 1600w" sizes="(min-width: 900px) 40vw, 100vw" width="1600" height="1067" alt="Tuyauterie en acier inoxydable d'une installation industrielle." loading="lazy"></figure>
         <div class="terrain-text">
           <h3>Industrie</h3>
           <p>À chaque besoin son eau de process&nbsp;: filtre, antitartre, adoucisseur, osmoseur, adoucisseurs TWIN ou DUPLEX, eau déminéralisée. Entretien des installations et assistance réactive.</p>
           <a class="link" href="industrie.html">Parler de mon installation</a>
         </div>
       </article>
+      </div>
     </div>
   </section>
 
@@ -205,7 +214,7 @@
 
   <!-- ÉCRAN 6 : ici, l'Isère -->
   <section class="local">
-    <img class="local-bg" src="assets/img/photos/alpes-mont-aiguille-nuages-2000.jpg" srcset="assets/img/photos/alpes-mont-aiguille-nuages-900.jpg 900w, assets/img/photos/alpes-mont-aiguille-nuages-2000.jpg 2000w" sizes="100vw" width="2000" height="1125" alt="Le mont Aiguille émergeant d'une mer de nuages, dans le Vercors." loading="lazy">
+    <img class="local-bg" src="assets/img/photos/alpes-mont-aiguille-nuages-2000.webp" srcset="assets/img/photos/alpes-mont-aiguille-nuages-900.webp 900w, assets/img/photos/alpes-mont-aiguille-nuages-2000.webp 2000w" sizes="100vw" width="2000" height="1125" alt="Le mont Aiguille émergeant d'une mer de nuages, dans le Vercors." loading="lazy">
     <div class="local-card">
       <h2>Une entreprise d'ici.</h2>
       <p>H2O Partner est installée à Sillans, entre Grenoble et Lyon. Nous intervenons en Isère et en Rhône-Alpes, avec nos partenaires plombiers-chauffagistes.</p>
@@ -255,6 +264,11 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=2" defer></script>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/SplitText.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/js/site.js?v=3" defer></script>
+<script src="assets/js/motion.js?v=1" defer></script>
 </body>
 </html>

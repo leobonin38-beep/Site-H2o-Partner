@@ -3,6 +3,7 @@
 Site vitrine de H2O Partner (traitement de l'eau, Sillans, Isère). Version 2, direction artistique « L'eau, au degré près ».
 
 - HTML, CSS et JavaScript sans outil de construction : le dossier se sert tel quel (GitHub Pages ou tout hébergeur).
+- Mouvement : `assets/css/motion.css` et `assets/js/motion.js`, avec GSAP, ScrollTrigger, SplitText et Lenis copiés dans `assets/vendor/` (licences jointes). Sans script ou avec « réduire les animations », tout reste lisible et immobile.
 - Pages : `index.html`, `particuliers.html`, `installateurs.html`, `collectif-tertiaire.html`, `industrie.html`, `entretien-sav.html`, `contact.html`, `mentions-legales.html`.
 - `assets/css/style.css` (base et accueil), `assets/css/pages.css` (pages intérieures), `assets/js/site.js`.
 - Polices hébergées en local dans `assets/fonts/` (Instrument Serif, Inter Tight, Geist Mono, licence SIL OFL).

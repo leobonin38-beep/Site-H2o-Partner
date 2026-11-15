@@ -18,8 +18,8 @@
     transform: translateY(-8px); opacity: 0; visibility: hidden; transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s .25s; }
   .menu-open .menu { opacity: 1; transform: none; visibility: visible; transition-delay: 0s; }
   .menu-open { overflow: hidden; }
-  .menu a { display: block; text-decoration: none; font-family: var(--serif); font-size: 34px; line-height: 1.1; padding: 14px 0; border-bottom: 1px solid var(--rule); }
-  .menu a[aria-current="page"] { color: var(--h2o); }
+  .menu > a { display: block; text-decoration: none; font-family: var(--serif); font-size: 34px; line-height: 1.1; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  .menu > a[aria-current="page"] { color: var(--h2o); }
   .menu-foot { margin-top: 28px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
   .menu-foot .phone { font-size: 20px; }
   .menu-foot .btn { display: inline-block; }

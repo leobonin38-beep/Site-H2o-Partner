@@ -19,38 +19,7 @@
     });
   }
 
-  /* Images révélées par un masque, une fois */
-  var reveals = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window && !reduce) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
-      });
-    }, { rootMargin: '0px 0px -12% 0px' });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else {
-    reveals.forEach(function (el) { el.classList.add('is-in'); });
-  }
-
-  /* Chiffres qui comptent */
-  var counters = document.querySelectorAll('[data-count]');
-  if (counters.length && 'IntersectionObserver' in window && !reduce) {
-    var io2 = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        io2.unobserve(e.target);
-        var el = e.target, end = +el.getAttribute('data-count'), t0 = null;
-        function step(t) {
-          if (!t0) t0 = t;
-          var p = Math.min((t - t0) / 900, 1);
-          el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));
-          if (p < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      });
-    }, { threshold: .6 });
-    counters.forEach(function (el) { io2.observe(el); });
-  }
+  /* Révélations d'images, compteurs et temps forts : voir motion.js */
 
   /* Règle de dureté (logique reprise de la V1) */
   var CLASSES = [

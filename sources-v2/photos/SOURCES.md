@@ -40,3 +40,4 @@ Toutes les photos viennent de Pexels (licence Pexels : usage commercial autoris�
 | isere-chartreuse-hiver.jpg | https://www.pexels.com/fr-fr/photo/35694660/ | Melvyn Grolla | 5904x3936 | Vue sereine des montagnes et des forêts enneigées d'Auvergne-Rhône-Alpes, en France. |
 | alpes-torrent-prairie.jpg | https://www.pexels.com/fr-fr/photo/19128354/ | PHILIPPE SERRAND | 5392x3595 | Une vue imprenable d'un ruisseau de montagne à Briançon, Provence-Alpes-Côte d'Azur, France. |
 | alpes-torrent-pierres.jpg | https://www.pexels.com/fr-fr/photo/32713031/ | Susanne Jutzeler, suju-foto  | 7166x4780 | Un ruisseau alpin tranquille qui coule à travers un paysage de montagne luxuriant sous un ciel bleu clair. |
+| nettoyage-pommeau.jpg | [Pexels 3867607](https://www.pexels.com/fr-fr/photo/3867607/) | Gustavo Fring | 5040x3360 | Licence Pexels | Homme nettoyant un pommeau de douche, gants orange |

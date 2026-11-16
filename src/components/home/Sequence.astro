@@ -32,6 +32,11 @@ const steps = [
   </div>
 </section>
 
+<script>
+  import { initSequence } from '../../scripts/sequence';
+  initSequence();
+</script>
+
 <style>
   .seq { background: var(--night); position: relative; }
   .stage { padding: clamp(80px, 9vw, 140px) 0; }
@@ -53,6 +58,17 @@ const steps = [
   :global(.seq-live) .fallback { display: none; }
   :global(.seq-live) .steps li { opacity: .38; }
   :global(.seq-live) .steps li.on { opacity: 1; }
+  @media (min-width: 901px) {
+    :global(.seq-live) .stage { min-height: 100vh; display: flex; align-items: center; padding: calc(var(--header-h) * .5) 0 24px; }
+    :global(.seq-live) .layout { width: min(var(--max), 100% - 2 * var(--gutter)); }
+    :global(.seq-live) .steps li { padding: 12px 0; }
+    :global(.seq-live) .visual { align-self: center; }
+  }
+  @media (max-width: 900px) {
+    :global(.seq-live) .visual { position: sticky; top: 8px; z-index: 1; background: var(--night); padding-bottom: 8px; }
+    :global(.seq-live) canvas { width: auto; height: min(52svh, 520px); margin-inline: auto; }
+    :global(.seq-live) .steps { padding-bottom: 30svh; }
+  }
 
   @media (max-width: 900px) {
     .layout { grid-template-columns: 1fr; grid-template-areas: 'head' 'visual' 'steps'; }

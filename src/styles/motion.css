@@ -1,0 +1,6 @@
+/* États d'attente de l'entrée du haut de page : posés seulement si le script tourne (classe m-pending),
+   retirés par motion.ts ou, au pire, au bout de 1,5 s par le script en ligne. */
+html.m-pending [data-hero-title],
+html.m-pending [data-hero-item] { opacity: 0; }
+.m-line { padding-bottom: .06em; margin-bottom: -.06em; }
+[data-card] { will-change: transform; }

@@ -5,6 +5,7 @@ import '@fontsource-variable/hanken-grotesk';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/type.css';
+import '../styles/motion.css';
 import Seo from '../components/Seo.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -21,7 +22,15 @@ const p = Astro.props;
     <link rel="icon" type="image/png" sizes="32x32" href={url('/favicon-32.png')} />
     <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
     <link rel="sitemap" href={url('/sitemap-index.xml')} />
-    <script is:inline>document.documentElement.classList.add('js')</script>
+    <script is:inline>
+      (function (h) {
+        h.classList.add('js');
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          h.classList.add('m-pending');
+          setTimeout(function () { h.classList.remove('m-pending'); }, 1500);
+        }
+      })(document.documentElement);
+    </script>
     <Seo title={p.title} description={p.description} path={p.path} ld={p.ld} ogImage={p.ogImage} noindex={p.noindex} />
     <slot name="head" />
   </head>
@@ -30,5 +39,9 @@ const p = Astro.props;
     <Header current={p.path} overDark={p.overDark} />
     <main id="contenu"><slot /></main>
     <Footer />
+    <script>
+      import { initMotion } from '../scripts/motion';
+      initMotion();
+    </script>
   </body>
 </html>

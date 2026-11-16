@@ -92,7 +92,8 @@ function stackedCards() {
   mm.add('(min-width: 1024px)', () => {
     const cards = gsap.utils.toArray<HTMLElement>('[data-card]');
     cards.slice(0, -1).forEach((card, i) => {
-      gsap.to(card, {
+      // Point de départ explicite : sans lui, GSAP part de « filter: none » interprété comme brightness(0).
+      gsap.fromTo(card, { scale: 1, filter: 'brightness(1)' }, {
         scale: 0.95, filter: 'brightness(0.93)', ease: 'none', transformOrigin: '50% 0%',
         scrollTrigger: { trigger: cards[i + 1], start: 'top bottom', end: 'top 20%', scrub: true },
       });

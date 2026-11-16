@@ -71,3 +71,19 @@ test('le grand nom du pied de page n’est pas coupé', async ({ page }) => {
   expect(r.clipped).toBe(false);
   expect(r.ratio).toBeGreaterThanOrEqual(0.98);
 });
+
+test('cartes métiers empilées : jamais assombries au-delà de 90 % pendant le défilement', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('./', { waitUntil: 'networkidle' });
+  await expect.poll(() => page.evaluate(() => (window as any).__motionReady === true)).toBe(true);
+  const cards = page.locator('[data-card]');
+  for (const frac of [0.9, 0.7, 0.5]) {
+    const y = await cards.nth(1).evaluate((e, f) => e.getBoundingClientRect().top + window.scrollY - window.innerHeight * f, frac);
+    await page.evaluate((v) => { (window as any).__lenis?.scrollTo(v, { immediate: true }) ?? window.scrollTo(0, v); }, y);
+    await page.waitForTimeout(400);
+    const filter = await cards.nth(0).evaluate((e) => getComputedStyle(e).filter);
+    const m = filter.match(/brightness\(([\d.]+)\)/);
+    const b = m ? Number(m[1]) : 1;
+    expect(b, `${frac} : ${filter}`).toBeGreaterThanOrEqual(0.9);
+  }
+});

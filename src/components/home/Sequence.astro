@@ -57,8 +57,9 @@ const steps = [
   /* Mode animé : canvas à la place de l'image fixe (dès que la 1re image est chargée) */
   :global(.seq-live) canvas { display: block; }
   :global(.seq-live) .fallback { display: none; }
-  :global(.seq-live) .steps li { opacity: .55; }
-  :global(.seq-live) .steps li.on { opacity: 1; }
+  :global(.seq-live) .steps li:not(.on) h3 { color: rgba(243, 242, 238, .62); }
+  :global(.seq-live) .steps li:not(.on) p { color: rgba(243, 242, 238, .56); }
+  :global(.seq-live) .steps li:not(.on) .n { opacity: .6; }
 
   /* Mode épinglé (ordinateur, si la scène tient dans l'écran) : posé par le script avant la mesure */
   @media (min-width: 901px) {

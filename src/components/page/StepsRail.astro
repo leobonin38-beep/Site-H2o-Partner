@@ -41,7 +41,11 @@ const { items, photo, alt = '', caption } = Astro.props;
   h3 { font-family: var(--f-body); font-size: 1.1875rem; font-weight: 600; letter-spacing: 0; }
   p { margin-top: 6px; color: var(--muted); max-width: 56ch; }
   :global(.dark) p { color: var(--on-dark-muted); }
-  :global(.rail-live) li:not(.on) { opacity: .5; }
+  /* Étape pas encore atteinte : couleur atténuée (contraste AA conservé), pas de transparence */
+  :global(.rail-live) li:not(.on) h3 { color: var(--muted); }
+  :global(.dark) :global(.rail-live) li:not(.on) h3 { color: rgba(243, 242, 238, .62); }
+  :global(.dark) :global(.rail-live) li:not(.on) p { color: rgba(243, 242, 238, .56); }
+  :global(.rail-live) li:not(.on) .n { opacity: .6; }
   :global(.rail-live) li.on .n { background: var(--accent-strong); color: #fff; border-color: transparent; }
   :global(.dark.rail-live) li.on .n, :global(.dark) :global(.rail-live) li.on .n { background: var(--accent); color: var(--night); }
 </style>

@@ -1,0 +1,24 @@
+---
+// Pages provisoires (noindex) pour les liens du menu tant que les vraies pages ne sont pas construites.
+import Base from '../layouts/Base.astro';
+import { NAV } from '../config/site';
+import { url } from '../lib/url';
+export function getStaticPaths() {
+  const pages = [
+    ...NAV.flatMap((n) => [{ label: n.label, href: n.href }, ...(n.children ?? []).map((c) => ({ label: c.label, href: c.href }))]),
+    { label: 'Demander un diagnostic', href: '/diagnostic/' },
+    { label: 'Contact', href: '/contact/' },
+    { label: 'Mentions légales', href: '/mentions-legales/' },
+  ];
+  return pages.map((p) => ({ params: { slug: p.href.replace(/^\/|\/$/g, '') }, props: { label: p.label, href: p.href } }));
+}
+const { label, href } = Astro.props;
+---
+<Base title={`${label} (en construction)`} description={`La page « ${label} » du nouveau site H2O Partner est en cours de construction. Appelez le 04 76 06 92 12.`} path={href} noindex>
+  <section class="wrap" style="padding:calc(var(--header-h) + 18vh) 0 18vh">
+    <p class="kicker">Nouveau site en construction</p>
+    <h1 style="margin-top:12px">{label}</h1>
+    <p class="lead muted" style="margin-top:24px;max-width:46ch">Cette page arrive bientôt. En attendant, appelez-nous au 04 76 06 92 12.</p>
+    <p style="margin-top:32px"><a class="btn" href={url('/')}>Retour à l'accueil</a></p>
+  </section>
+</Base>

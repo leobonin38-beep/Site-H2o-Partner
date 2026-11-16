@@ -1,0 +1,63 @@
+---
+import { NAV, SITE } from '../config/site';
+import { url } from '../lib/url';
+const docs = [
+  { label: 'Plaquette Privilège', href: '/docs/plaquette-privilege.pdf' },
+  { label: 'Plaquette Petit Privilège', href: '/docs/plaquette-petit-privilege.pdf' },
+  { label: 'Documentation vannes CLACK', href: '/docs/documentation-vannes-clack.pdf' },
+  { label: 'Fiche filtre magnétique à poche', href: '/docs/fiche-filtre-magnetique-a-poche.pdf' },
+];
+const year = new Date().getFullYear();
+---
+<footer class="site-footer dark">
+  <div class="wrap">
+    <div class="cols">
+      <div class="col col--contact">
+        <p class="f-title">Nous joindre</p>
+        <a class="f-tel num" href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a>
+        <a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <address>{SITE.street}<br />{SITE.postalCode} {SITE.city}, {SITE.region}</address>
+      </div>
+      <nav class="col" aria-label="Solutions">
+        <p class="f-title">Solutions</p>
+        <ul>{NAV.map((n) => <li><a href={url(n.href)}>{n.label}</a></li>)}</ul>
+      </nav>
+      <nav class="col" aria-label="Documents">
+        <p class="f-title">Documents (PDF)</p>
+        <ul>{docs.map((d) => <li><a href={url(d.href)} type="application/pdf">{d.label}</a></li>)}</ul>
+      </nav>
+      <nav class="col" aria-label="Informations">
+        <p class="f-title">Informations</p>
+        <ul>
+          <li><a href={url('/contact/')}>Contact</a></li>
+          <li><a href={url('/diagnostic/')}>Demander un diagnostic</a></li>
+          <li><a href={url('/mentions-legales/')}>Mentions légales</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="wordmark" aria-hidden="true" data-wordmark>H2O Partner</p>
+    <div class="legal">
+      <p>© {year} {SITE.legalName}, {SITE.city} ({SITE.region}). {SITE.slogan}.</p>
+      <p>Ce site ne dépose aucun cookie. Photographies d'illustration : Pexels.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--night-2); padding: clamp(64px, 8vw, 112px) 0 32px; overflow: hidden; }
+  .cols { display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 40px; }
+  .f-title { font-size: var(--t-sm); color: var(--accent); font-weight: 600; margin-bottom: 14px; }
+  .col ul { list-style: none; padding: 0; display: grid; gap: 8px; }
+  .col a:not(.link):not(.f-tel) { text-decoration: none; color: var(--on-dark-muted); transition: color .2s; }
+  .col a:not(.link):not(.f-tel):hover { color: var(--on-dark); }
+  .col--contact { display: grid; gap: 10px; align-content: start; justify-items: start; }
+  .f-tel { font-family: var(--f-display); font-size: var(--t-xl); text-decoration: none; line-height: 1.1; }
+  address { font-style: normal; color: var(--on-dark-muted); margin-top: 6px; }
+  .wordmark {
+    font-family: var(--f-display); font-weight: 340; font-size: clamp(4rem, 17.5vw, 17rem); line-height: .82;
+    letter-spacing: -.045em; white-space: nowrap; margin: clamp(56px, 8vw, 120px) 0 28px -.04em; color: var(--on-dark);
+  }
+  .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px; padding-top: 20px; border-top: 1px solid var(--line-dark); font-size: var(--t-xs); color: var(--on-dark-muted); }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .cols { grid-template-columns: 1fr; } }
+</style>

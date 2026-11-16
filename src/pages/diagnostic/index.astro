@@ -1,0 +1,102 @@
+---
+import '../../styles/forms.css';
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import hero from '../../assets/photos/goutte-seule.jpg';
+import { SITE } from '../../config/site';
+import { url } from '../../lib/url';
+const crumbs = [{ name: 'Demander un diagnostic', href: '/diagnostic/' }];
+const profils = ['Un particulier', 'Un plombier-chauffagiste', 'Un établissement collectif ou tertiaire', 'Un industriel'];
+const besoins = ['Calcaire, eau dure', 'Embouage du chauffage', 'Désinfection, qualité sanitaire', 'Eau de source ou de forage', 'Eau de process', "Entretien d'un appareil existant", 'Autre demande'];
+---
+<Page title="Demander un diagnostic de votre eau" description="Décrivez votre installation en quatre étapes : profil, besoin, commune, coordonnées. H2O Partner vous répond rapidement, en Isère et Rhône-Alpes." path="/diagnostic/" crumbs={crumbs}>
+  <PageHero title="Parlons de votre eau, en quatre questions." crumbs={crumbs} photo={hero} alt="Goutte d'eau en suspension, en gros plan"
+    lead="Profil, besoin, commune, coordonnées : quelques réponses suffisent pour que nous vous rappelions avec la bonne solution ou le bon partenaire." />
+  <Section tone="paper">
+    <div class="wrapf">
+      <form class="form" data-diag method="post" action={`mailto:${SITE.email}?subject=Diagnostic`} enctype="text/plain" novalidate>
+        <div class="steps-head" aria-live="polite"><p class="label" data-step-label>Étape 1 sur 4</p><div class="bar" aria-hidden="true"><span data-step-bar></span></div></div>
+
+        <fieldset data-step>
+          <legend>Vous êtes…</legend>
+          <div class="choices" role="radiogroup">
+            {profils.map((p) => <label class="choice"><input type="radio" name="profil" value={p} data-required data-msg="Choisissez votre profil." aria-describedby="err-profil" /><span>{p}</span></label>)}
+          </div>
+          <p class="err" id="err-profil" data-error="profil" hidden></p>
+        </fieldset>
+
+        <fieldset data-step>
+          <legend>Votre besoin<span class="hint">Choisissez ce qui vous amène.</span></legend>
+          <div class="choices" role="radiogroup">
+            {besoins.map((b) => <label class="choice"><input type="radio" name="besoin" value={b} data-required data-msg="Choisissez votre besoin." aria-describedby="err-besoin" /><span>{b}</span></label>)}
+          </div>
+          <p class="err" id="err-besoin" data-error="besoin" hidden></p>
+        </fieldset>
+
+        <fieldset data-step>
+          <legend>Où se trouve l'installation ?</legend>
+          <div class="row2">
+            <div class="field">
+              <label for="d-commune">Commune</label>
+              <input id="d-commune" type="text" name="commune" autocomplete="address-level2" data-required data-msg="Indiquez la commune." aria-describedby="err-commune" />
+              <p class="err" id="err-commune" data-error="commune" hidden></p>
+            </div>
+            <div class="field">
+              <label for="d-durete">Dureté de votre eau, si vous la connaissez <span class="opt">(°f, facultatif)</span></label>
+              <input id="d-durete" type="number" name="durete" min="0" max="80" inputmode="numeric" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset data-step>
+          <legend>Vos coordonnées<span class="hint">Un téléphone ou un e-mail suffit.</span></legend>
+          <div class="field">
+            <label for="d-nom">Nom</label>
+            <input id="d-nom" type="text" name="nom" autocomplete="name" data-required data-msg="Indiquez votre nom." aria-describedby="err-nom" />
+            <p class="err" id="err-nom" data-error="nom" hidden></p>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="d-tel">Téléphone</label><input id="d-tel" type="tel" name="telephone" autocomplete="tel" aria-describedby="err-joindre" /></div>
+            <div class="field"><label for="d-mail">E-mail</label><input id="d-mail" type="email" name="email" autocomplete="email" aria-describedby="err-joindre err-email" /><p class="err" id="err-email" data-error="email" hidden></p></div>
+          </div>
+          <p class="err" id="err-joindre" data-error="joindre" hidden></p>
+          <div class="field">
+            <label for="d-msg">Précisions <span class="opt">(facultatif)</span></label>
+            <textarea id="d-msg" name="message" rows="4"></textarea>
+          </div>
+          <label class="honey" aria-hidden="true"><input type="checkbox" name="botcheck" tabindex="-1" /> Ne pas cocher</label>
+          <p class="legal-note">Vos données ne servent qu'à répondre à votre demande. Voir les <a href={url('/mentions-legales/')}>mentions légales</a>.</p>
+        </fieldset>
+
+        <div class="actions-row">
+          <button type="button" class="btn btn--ghost" data-back hidden>Retour</button>
+          <button type="button" class="btn" data-next>Continuer</button>
+          <button type="submit" class="btn" data-submit>Envoyer ma demande</button>
+        </div>
+      </form>
+      <div class="done" data-done hidden tabindex="-1" role="status">
+        <h2>Merci.</h2>
+        <p data-done-text></p>
+        <p><a class="link link--accent" data-mailto href="#">Ouvrir le message dans ma messagerie</a></p>
+      </div>
+      <aside class="side">
+        <p class="t">Plus simple par téléphone ?</p>
+        <a class="tel num" href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a>
+        <p class="muted">{SITE.street}, {SITE.postalCode} {SITE.city}</p>
+      </aside>
+    </div>
+  </Section>
+</Page>
+<script>
+  import { initForms } from '../../scripts/forms';
+  initForms();
+</script>
+<style>
+  .wrapf { display: grid; grid-template-columns: 8fr 4fr; gap: clamp(36px, 6vw, 96px); align-items: start; }
+  .wrapf > * { min-width: 0; }
+  .side { border-top: 2px solid var(--accent-strong); padding-top: 18px; display: grid; gap: 8px; }
+  .side .t { font-weight: 600; }
+  .tel { font-family: var(--f-display); font-size: var(--t-2xl); text-decoration: none; line-height: 1.1; }
+  @media (max-width: 900px) { .wrapf { grid-template-columns: 1fr; } }
+</style>

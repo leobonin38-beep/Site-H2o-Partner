@@ -9,6 +9,6 @@ export default defineConfig({
   base: BASE_PATH,
   trailingSlash: 'always',
   build: { format: 'directory', inlineStylesheets: 'always' },
-  integrations: [sitemap({ filter: (page) => !/\/(404|en-construction)\//.test(page) })],
+  integrations: [sitemap({ filter: (page) => !/\/404\//.test(page) })],
   image: { responsiveStyles: false },
 });

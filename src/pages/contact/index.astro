@@ -1,0 +1,85 @@
+---
+import '../../styles/forms.css';
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import hero from '../../assets/photos/isere-chartreuse-hiver.jpg';
+import { SITE } from '../../config/site';
+import { url } from '../../lib/url';
+import { localBusinessLd } from '../../lib/schema';
+const crumbs = [{ name: 'Contact', href: '/contact/' }];
+const site = new URL(import.meta.env.BASE_URL, Astro.site).href;
+const profils = ['Un particulier', 'Un plombier-chauffagiste', 'Un établissement collectif ou tertiaire', 'Un industriel'];
+---
+<Page title="Contacter H2O Partner, Sillans (Isère)" description="Téléphone, e-mail, adresse et formulaire de contact de H2O Partner, traitement de l'eau à Sillans (Isère), entre Grenoble et Lyon." path="/contact/" crumbs={crumbs} ld={[localBusinessLd(site)]}>
+  <PageHero title="Parlons de votre eau." crumbs={crumbs} photo={hero} alt="Massif de la Chartreuse enneigé, en Isère"
+    lead="Nous nous tenons à votre disposition pour vous aider à choisir le système de traitement de l'eau adapté à votre besoin." />
+  <Section tone="paper">
+    <div class="grid">
+      <div class="coords">
+        <dl>
+          <div><dt>Téléphone</dt><dd><a class="tel num" href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a></dd></div>
+          <div><dt>E-mail</dt><dd><a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a></dd></div>
+          <div><dt>Adresse</dt><dd>{SITE.street}<br />{SITE.postalCode} {SITE.city}, {SITE.region}</dd></div>
+          <div><dt>Facebook</dt><dd><a class="link" href="https://www.facebook.com/H2OPartner/" rel="noopener">H2O Partner sur Facebook</a></dd></div>
+        </dl>
+        <div class="map" data-map>
+          <p class="muted">Entre Grenoble et Lyon, près de La Côte-Saint-André.</p>
+          <button type="button" class="btn btn--ghost" data-map-btn>Afficher la carte (OpenStreetMap)</button>
+          <p class="legal-note">La carte est chargée depuis OpenStreetMap seulement si vous cliquez.</p>
+        </div>
+      </div>
+      <div>
+        <h2 class="ft">Écrivez-nous.</h2>
+        <form class="form" data-contact method="post" action={`mailto:${SITE.email}?subject=Contact`} enctype="text/plain" novalidate>
+          <div class="row2">
+            <div class="field"><label for="c-nom">Nom</label><input id="c-nom" type="text" name="nom" autocomplete="name" data-required data-msg="Indiquez votre nom." aria-describedby="err-c-nom" /><p class="err" id="err-c-nom" data-error="nom" hidden></p></div>
+            <div class="field"><label for="c-tel">Téléphone</label><input id="c-tel" type="tel" name="telephone" autocomplete="tel" aria-describedby="err-c-joindre" /></div>
+          </div>
+          <div class="field"><label for="c-mail">E-mail</label><input id="c-mail" type="email" name="email" autocomplete="email" aria-describedby="err-c-joindre err-c-email" /><p class="err" id="err-c-email" data-error="email" hidden></p></div>
+          <p class="err" id="err-c-joindre" data-error="joindre" hidden></p>
+          <div class="row2">
+            <div class="field"><label for="c-profil">Vous êtes</label><select id="c-profil" name="profil"><option value="">Choisir…</option>{profils.map((p) => <option>{p}</option>)}</select></div>
+            <div class="field"><label for="c-objet">Objet</label><input id="c-objet" type="text" name="objet" /></div>
+          </div>
+          <div class="field"><label for="c-msg">Votre message</label><textarea id="c-msg" name="message" rows="6" data-required data-msg="Écrivez votre message." aria-describedby="err-c-msg"></textarea><p class="err" id="err-c-msg" data-error="message" hidden></p></div>
+          <label class="honey" aria-hidden="true"><input type="checkbox" name="botcheck" tabindex="-1" /> Ne pas cocher</label>
+          <p class="legal-note">Vos données ne servent qu'à répondre à votre demande. Voir les <a href={url('/mentions-legales/')}>mentions légales</a>.</p>
+          <div class="actions-row"><button type="submit" class="btn">Envoyer</button></div>
+        </form>
+        <div class="done" data-done hidden tabindex="-1" role="status">
+          <h2>Merci.</h2>
+          <p data-done-text></p>
+          <p><a class="link link--accent" data-mailto href="#">Ouvrir le message dans ma messagerie</a></p>
+        </div>
+      </div>
+    </div>
+  </Section>
+</Page>
+<script>
+  import { initForms } from '../../scripts/forms';
+  initForms();
+  const btn = document.querySelector<HTMLButtonElement>('[data-map-btn]');
+  btn?.addEventListener('click', () => {
+    const box = document.querySelector<HTMLElement>('[data-map]')!;
+    const f = document.createElement('iframe');
+    f.title = 'Carte : 134 chemin du Randan, 38590 Sillans';
+    f.loading = 'lazy';
+    f.src = 'https://www.openstreetmap.org/export/embed.html?bbox=5.36%2C45.32%2C5.42%2C45.36&layer=mapnik&marker=45.341%2C5.389';
+    f.className = 'osm';
+    btn.replaceWith(f);
+    box.querySelector('.legal-note')?.remove();
+  });
+</script>
+<style>
+  .grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 6vw, 112px); align-items: start; }
+  .grid > * { min-width: 0; }
+  dl { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  dl > div { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  dt { font-size: var(--t-sm); color: var(--accent-text); font-weight: 600; margin-bottom: 4px; }
+  .tel { font-family: var(--f-display); font-size: var(--t-2xl); text-decoration: none; line-height: 1.1; }
+  .map { margin-top: 32px; display: grid; gap: 14px; justify-items: start; }
+  .map :global(.osm) { width: 100%; aspect-ratio: 4 / 3; border: 0; border-radius: var(--radius); }
+  .ft { margin-bottom: 28px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+</style>

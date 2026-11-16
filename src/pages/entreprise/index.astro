@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets';
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import Split from '../../components/page/Split.astro';
+import Features from '../../components/page/Features.astro';
+import Proofs from '../../components/home/Proofs.astro';
+import CtaBand from '../../components/page/CtaBand.astro';
+import Related from '../../components/page/Related.astro';
+import hero from '../../assets/photos/isere-chartreuse-crete.jpg';
+import vue from '../../assets/photos/isere-grenoble-vue.jpg';
+import camion from '../../assets/img/camionnette.webp';
+import { SITE } from '../../config/site';
+const crumbs = [{ name: "L'entreprise", href: '/entreprise/' }];
+---
+<Page title="L'entreprise H2O Partner, Sillans (Isère)" description="H2O Partner, votre équipier du traitement de l'eau : 25 ans d'expérience, installée à Sillans entre Grenoble et Lyon, en Isère et Rhône-Alpes." path="/entreprise/" crumbs={crumbs}>
+  <PageHero title="Votre équipier du traitement de l'eau." crumbs={crumbs} photo={hero} alt="Crête de la Chartreuse au-dessus des nuages, en Isère"
+    lead="Avec 25 années d'expérience, H2O Partner étudie, fournit, met en service et entretient les solutions de traitement de l'eau des particuliers, du collectif, du tertiaire et de l'industrie." />
+
+  <Section>
+    <Split photo={vue} alt="Vue de Grenoble et des montagnes environnantes" caption="L'Isère, notre terrain. Photo d'illustration.">
+      <h2 data-reveal-text>Une entreprise d'ici.</h2>
+      <p class="lead muted">H2O Partner est installée à {SITE.city}, entre Grenoble et Lyon. Nous intervenons en Isère et en Rhône-Alpes, avec nos partenaires plombiers-chauffagistes.</p>
+      <p class="muted">La marque H2O Partner, avec ses 25 années d'expérience, est une garantie de qualité et de fiabilité pour ses clients : particuliers, collectif, tertiaire et industrie.</p>
+      <div class="van"><Image src={camion} alt="Camionnette H2O Partner aux couleurs de l'entreprise" width={469} loading="lazy" /></div>
+    </Split>
+  </Section>
+
+  <Section tone="paper" title="Notre façon de travailler.">
+    <Features cols={4} items={[
+      { t: "L'étude d'abord", d: 'Le bon choix du matériel et de son dimensionnement, selon votre eau, vos débits et votre installation.' },
+      { t: 'Des matériels que nous connaissons', d: "Fabriqués en France, sauf la tête d'adoucisseur (américaine) et certaines résines (Italie). ACS sur demande." },
+      { t: 'En direct, sans intermédiaire', d: 'Avec les plombiers-chauffagistes : fourniture, formation, mise en service et SAV.' },
+      { t: 'Le suivi dans le temps', d: 'Entretien, SAV et garantie en direct, sur le matériel que nous avons fourni.' },
+    ]} />
+  </Section>
+
+  <Proofs />
+
+  <Section title="Les informations légales.">
+    <dl class="legal">
+      <div><dt>Raison sociale</dt><dd>SARL H2O Partner, au capital de 5 000 €</dd></div>
+      <div><dt>Immatriculation</dt><dd>RCS Grenoble, SIREN 822 183 646</dd></div>
+      <div><dt>Siège</dt><dd>{SITE.street}, {SITE.postalCode} {SITE.city}</dd></div>
+      <div><dt>Zone d'intervention</dt><dd>Isère et Rhône-Alpes</dd></div>
+    </dl>
+  </Section>
+
+  <CtaBand title="Parlons de votre eau." text="Une question sur votre installation, un devis, un entretien : appelez-nous ou écrivez-nous, nous vous répondons rapidement." />
+  <Related items={[
+    { label: 'Particuliers', desc: 'Adoucisseurs Privilège, filtres, antitartre', href: '/particuliers/' },
+    { label: 'Plombiers-chauffagistes', desc: 'Matériel en direct, formation, mise en service', href: '/installateurs/' },
+    { label: 'Collectif & tertiaire', desc: 'CLACK, désembouage, désinfection', href: '/collectif-tertiaire/' },
+    { label: 'Industrie', desc: 'Eau de process et maintenance', href: '/industrie/' },
+  ]} />
+</Page>
+<style>
+  .van { margin-top: 28px; max-width: 300px; background: var(--paper); padding: 16px; border-radius: var(--radius); }
+  .van :global(img) { width: 100%; height: auto; }
+  .legal { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; border-top: 1px solid var(--line); }
+  .legal > div { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  dt { font-size: var(--t-sm); color: var(--muted); }
+  dd { font-family: var(--f-display); font-size: var(--t-lg); margin-top: 2px; }
+  @media (max-width: 700px) { .legal { grid-template-columns: 1fr; } }
+</style>

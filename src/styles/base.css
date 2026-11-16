@@ -41,3 +41,4 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 @view-transition { navigation: auto; }
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .35s; }
+[hidden] { display: none !important; }

@@ -34,3 +34,21 @@ Textes **rédigés par Claude**, absents de l'ancien site et de la V2. À relire
 - Les techniciens interviennent-ils eux-mêmes en entretien (texte V2 : « Nos techniciens interviennent sur le matériel que nous avons fourni ») ?
 - Le diagnostic est-il gratuit ?
 - Zone d'intervention exacte (aujourd'hui : « Isère et Rhône-Alpes »).
+
+## Autres pages (ajout du 2026-11-16)
+Les pages reprennent les textes de la V2 et de l'ancien site. Textes nouveaux, à relire :
+| Page | Texte |
+|---|---|
+| Toutes | Titres et descriptions pour Google (balises `title` et `description` de chaque page) ; sous-titres des liens « À voir aussi » |
+| Méga-menus | Sous-titres des liens (« Privilège 20 L et Petit Privilège 8 L », « Circuits de chauffage collectif »…) |
+| Particuliers | Bloc « Aussi pour votre maison » (repris des métiers de l'ancien site) ; légende du schéma |
+| Privilège | Titre « Deux formats, la même exigence. » ; « Garanti 5 ans, avec un entretien annuel. » et son paragraphe ; « Le bon modèle pour votre maison. » + texte |
+| Pourquoi un adoucisseur | Introduction « Le calcaire se dépose partout où passe l'eau chaude… » ; « On regarde votre eau ensemble ? » |
+| Vrai ou faux | « Les adoucisseurs Privilège disposent de l'ACS, fournie sur demande, et sont installés selon la norme NF 14743. » ; « Une autre question ? » + texte |
+| Désembouage | « Une prestation en quatre temps. » ; « Et ensuite, protéger le circuit. » + paragraphe ; « Un circuit à désembouer ? » |
+| Désinfection | « Le protocole, étape par étape. » ; « Chaque étape est mesurée… » ; « Un réseau à désinfecter ? Travaux neufs, résultat d'analyse non conforme… » |
+| Matériel CLACK | Introduction ; « Dimensionner votre installation. » + texte |
+| Entretien | « Des analyses à l'appui. Quand c'est utile, les analyses d'eau sont confiées à un laboratoire accrédité COFRAC. » |
+| L'entreprise | « Notre façon de travailler » (4 points, reformulés à partir de faits du site) |
+| Diagnostic | Titre « Parlons de votre eau, en quatre questions. » ; texte d'introduction ; libellés des besoins (« Calcaire, eau dure », « Embouage du chauffage »…) |
+| Formulaires | Messages d'erreur et de confirmation |

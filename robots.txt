@@ -1,3 +1,2 @@
 User-agent: *
-Allow: /
-Disallow: /sources-v2/
+Disallow: /

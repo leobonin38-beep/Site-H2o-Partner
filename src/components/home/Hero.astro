@@ -10,15 +10,13 @@ const markets = [
 ---
 <section id="haut" class="hero dark" data-hero>
   <div class="media" aria-hidden="true">
-    <video autoplay muted loop playsinline preload="metadata" poster={url('/media/hero-poster.webp')} data-hero-video>
-      <source src={url('/media/hero-854.mp4')} type="video/mp4" media="(max-width: 900px)" />
-      <source src={url('/media/hero-1280.mp4')} type="video/mp4" />
-    </video>
+    <video muted loop playsinline preload="none" poster={url('/media/hero-poster.webp')} data-hero-video
+      data-src-small={url('/media/hero-854.mp4')} data-src-large={url('/media/hero-1280.mp4')}></video>
   </div>
   <div class="body wrap">
-    <p class="place" data-hero-item>{SITE.city}, {SITE.region}</p>
+    <p class="place">{SITE.city}, {SITE.region}</p>
     <h1 data-hero-title>Votre équipier du traitement de l'eau.</h1>
-    <p class="lead" data-hero-item>Avec 25 années d'expérience, H2O Partner étudie, fournit, met en service et entretient les solutions de traitement de l'eau des particuliers, du collectif, du tertiaire et de l'industrie.</p>
+    <p class="lead">Avec 25 années d'expérience, H2O Partner étudie, fournit, met en service et entretient les solutions de traitement de l'eau des particuliers, du collectif, du tertiaire et de l'industrie.</p>
     <div class="actions" data-hero-item>
       <a class="btn" href={url('/diagnostic/')}>Demander un diagnostic</a>
       <a class="link link--accent num" href={`tel:${SITE.phoneIntl}`}>Appeler le {SITE.phone}</a>
@@ -40,7 +38,14 @@ const markets = [
   const btn = document.querySelector<HTMLButtonElement>('[data-video-toggle]');
   const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
   if (btn && video) {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { video.removeAttribute('autoplay'); video.pause(); }
+    // La vidéo ne se charge qu'après l'affichage de la page, pour laisser passer textes et polices.
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const start = () => {
+      video.src = matchMedia('(max-width: 900px)').matches ? video.dataset.srcSmall! : video.dataset.srcLarge!;
+      if (!reduce) video.play().catch(() => {});
+    };
+    if (document.readyState === 'complete') setTimeout(start, 300);
+    else window.addEventListener('load', () => setTimeout(start, 300), { once: true });
     const sync = () => { btn.classList.toggle('paused', video.paused); btn.setAttribute('aria-label', video.paused ? 'Lire la vidéo' : 'Mettre la vidéo en pause'); };
     btn.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
     video.addEventListener('play', sync); video.addEventListener('pause', sync); sync();

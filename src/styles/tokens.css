@@ -14,8 +14,8 @@
   --line-dark: rgba(255, 255, 255, .16);
   --on-dark: #F3F2EE;
   --on-dark-muted: rgba(243, 242, 238, .72);
-  --cta: #E8212B;
-  --cta-hover: #C8161F;
+  --cta: #D81F28;           /* rouge du logo, à peine assombri pour le contraste AA du texte blanc */
+  --cta-hover: #B8161E;
   --logo-blue: #272E7C;
 
   --f-display: 'Newsreader Variable', Georgia, 'Times New Roman', serif;

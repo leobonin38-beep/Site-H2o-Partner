@@ -8,7 +8,6 @@ export function getStaticPaths() {
     ...NAV.flatMap((n) => [{ label: n.label, href: n.href }, ...(n.children ?? []).map((c) => ({ label: c.label, href: c.href }))]),
     { label: 'Demander un diagnostic', href: '/diagnostic/' },
     { label: 'Contact', href: '/contact/' },
-    { label: 'Mentions légales', href: '/mentions-legales/' },
   ];
   return pages.map((p) => ({ params: { slug: p.href.replace(/^\/|\/$/g, '') }, props: { label: p.label, href: p.href } }));
 }

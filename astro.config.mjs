@@ -8,7 +8,7 @@ export default defineConfig({
   site: SITE_URL,
   base: BASE_PATH,
   trailingSlash: 'always',
-  build: { format: 'directory', inlineStylesheets: 'auto' },
+  build: { format: 'directory', inlineStylesheets: 'always' },
   integrations: [sitemap({ filter: (page) => !/\/(404|en-construction)\//.test(page) })],
   image: { responsiveStyles: false },
 });

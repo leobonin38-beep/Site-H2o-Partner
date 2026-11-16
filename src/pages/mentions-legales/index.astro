@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../config/site';
+import { usedPhotoCredits } from '../../lib/credits';
+import { breadcrumbLd } from '../../lib/schema';
+import { url } from '../../lib/url';
+const credits = usedPhotoCredits();
+const site = new URL(import.meta.env.BASE_URL, Astro.site).href;
+---
+<Base title="Mentions légales" description="Mentions légales du site H2O Partner : éditeur, hébergement, données personnelles, cookies, crédits photographiques et polices." path="/mentions-legales/"
+  ld={[breadcrumbLd(site, [{ name: 'Accueil', href: '/' }, { name: 'Mentions légales', href: '/mentions-legales/' }])]}>
+  <article class="legal wrap">
+    <nav class="crumbs" aria-label="Fil d'Ariane"><a href={url('/')}>Accueil</a> <span aria-hidden="true">/</span> Mentions légales</nav>
+    <h1>Mentions légales.</h1>
+    <div class="prose">
+      <h2>Éditeur du site</h2>
+      <dl>
+        <div><dt>Société</dt><dd>{SITE.name}</dd></div>
+        <div><dt>Siège social</dt><dd>{SITE.street}, {SITE.postalCode} {SITE.city}</dd></div>
+        <div><dt>Téléphone</dt><dd><a href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a></dd></div>
+        <div><dt>E-mail</dt><dd><a href={`mailto:${SITE.email}`}>{SITE.email}</a></dd></div>
+        <div><dt>Forme juridique</dt><dd>SARL au capital de 5 000 €, enregistrée au RCS de Grenoble</dd></div>
+        <div><dt>SIREN</dt><dd>822 183 646</dd></div>
+        <div><dt>Responsable éditorial</dt><dd>M. Jérôme Bonin</dd></div>
+      </dl>
+      <h2>Hébergement</h2>
+      <p>Version de présentation hébergée par GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis. L'hébergeur définitif sera indiqué à la mise en ligne.</p>
+      <h2>Cookies et traceurs</h2>
+      <p>Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience ni traceur publicitaire. Les polices, scripts, images et vidéos sont hébergés avec le site : aucune ressource n'est chargée depuis un service tiers pendant votre visite.</p>
+      <h2>Données personnelles</h2>
+      <p>Les informations que vous nous envoyez par e-mail, par téléphone ou par un formulaire ne sont utilisées qu'à des fins professionnelles, pour répondre à votre demande. Elles ne sont ni diffusées à des tiers, ni utilisées à des fins publicitaires.</p>
+      <p>Conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'opposition, de limitation du traitement et d'effacement des données qui vous concernent. Vous pouvez l'exercer en écrivant à <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Pour en savoir plus : <a href="https://www.cnil.fr" rel="noopener">www.cnil.fr</a>.</p>
+      <h2>Propriété intellectuelle</h2>
+      <p>Les textes, logos, photographies et documents présents sur ce site sont la propriété de H2O Partner ou de leurs auteurs respectifs. Les informations de la rubrique « Vrai ou faux » sont issues d'un document de l'Union des professionnels du traitement de l'eau (UAE).</p>
+      <h2>Crédits photographiques et illustrations</h2>
+      <p>Les photographies d'illustration proviennent de <a href="https://www.pexels.com/fr-fr/" rel="noopener">Pexels</a>, sous licence Pexels (usage commercial et modification autorisés). Merci à leurs auteurs :</p>
+      <ul class="credits">{credits.map((c) => <li><a href={c.source} rel="noopener">{c.author}</a></li>)}</ul>
+      <p>Les visuels des produits et la photo de la camionnette appartiennent à H2O Partner ou à ses fournisseurs. La vidéo du haut de l'accueil et les images avant / après de la canalisation sont des illustrations générées par intelligence artificielle. Le schéma animé de l'adoucisseur a été réalisé pour ce site.</p>
+      <h2>Polices de caractères et bibliothèques</h2>
+      <p>Newsreader (Production Type) et Hanken Grotesk (Hanken Design Co.), sous licence SIL Open Font License, hébergées avec le site. Animations : GSAP (GreenSock, licence standard gratuite) et Lenis (darkroom.engineering, licence MIT). Site construit avec Astro (licence MIT).</p>
+    </div>
+  </article>
+</Base>
+<style>
+  .legal { padding: calc(var(--header-h) + clamp(48px, 8vw, 112px)) 0 clamp(80px, 10vw, 140px); }
+  .crumbs { font-size: var(--t-sm); color: var(--muted); margin-bottom: 20px; }
+  .crumbs a { color: inherit; }
+  .prose { max-width: 68ch; margin-top: 48px; }
+  .prose h2 { font-size: var(--t-xl); margin: 48px 0 14px; }
+  .prose p + p { margin-top: 14px; }
+  .prose dl { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .prose dl div { display: grid; grid-template-columns: 200px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .prose dt { color: var(--muted); }
+  .credits { columns: 2; padding-left: 1.1em; margin: 14px 0; }
+  @media (max-width: 600px) { .prose dl div { grid-template-columns: 1fr; gap: 2px; } .credits { columns: 1; } }
+</style>

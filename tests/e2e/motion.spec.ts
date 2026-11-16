@@ -54,3 +54,20 @@ test('aucune erreur dans la console', async ({ page }) => {
   await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 50)); } });
   expect(errors).toEqual([]);
 });
+
+test('le grand nom du pied de page n’est pas coupé', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('./');
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(2500);
+  const r = await page.locator('[data-wordmark]').evaluate((el) => {
+    const cs = getComputedStyle(el);
+    const clipped = [el, ...el.querySelectorAll('*')].some((n) => {
+      const s = getComputedStyle(n as Element);
+      return (s.overflow !== 'visible' || s.clipPath !== 'none') && (n as HTMLElement).getBoundingClientRect().height < parseFloat(cs.fontSize) * 0.98;
+    });
+    return { ratio: parseFloat(cs.lineHeight) / parseFloat(cs.fontSize), clipped };
+  });
+  expect(r.clipped).toBe(false);
+  expect(r.ratio).toBeGreaterThanOrEqual(0.98);
+});

@@ -34,9 +34,11 @@ export function initMenus(): void {
   const setMobile = (on: boolean, focus = false) => {
     burger.setAttribute('aria-expanded', String(on));
     mobile.hidden = !on;
-    burger.textContent = on ? 'Fermer' : 'Menu';
-    burger.setAttribute('aria-label', 'Menu');
     document.documentElement.classList.toggle('menu-open', on);
+    // Le reste de la page devient inerte : le clavier reste dans le menu.
+    document.querySelectorAll<HTMLElement>('main, footer.site-footer').forEach((el) => { el.inert = on; });
+    const lenis = (window as unknown as { __lenis?: { stop(): void; start(): void } }).__lenis;
+    if (lenis) { if (on) lenis.stop(); else lenis.start(); }
     header.classList.toggle('is-solid', on || window.scrollY > 80);
     if (on) mobile.querySelector<HTMLElement>('a')?.focus();
     else if (focus) burger.focus();

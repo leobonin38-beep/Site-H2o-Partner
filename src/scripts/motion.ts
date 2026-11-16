@@ -106,5 +106,6 @@ function wordmark() {
   gsap.from(split.chars, {
     yPercent: 100, duration: 1.2, stagger: 0.035, ease: EASE,
     scrollTrigger: { trigger: el, start: 'top 95%', once: true },
+    onComplete: () => split.revert(),
   });
 }

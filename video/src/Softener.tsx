@@ -111,8 +111,9 @@ const useFonts = () => {
 
 export const Softener: React.FC<SoftenerProps> = ({ layout }) => {
   useFonts();
-  const frame = useCurrentFrame();
-  const { width, height } = useVideoConfig();
+  const { width, height, durationInFrames } = useVideoConfig();
+  // Le récit est écrit sur 120 « temps » ; plus d'images = mêmes étapes, découpées plus finement.
+  const frame = useCurrentFrame() * (120 / durationInFrames);
   const g = GEO[layout];
   const { tank, bedTop } = g;
   const bedBottom = tank.y + tank.h - 34;

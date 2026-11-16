@@ -53,25 +53,34 @@ const steps = [
   h3 { font-family: var(--f-body); font-size: 1.0625rem; font-weight: 600; letter-spacing: 0; line-height: 1.35; }
   .steps p { font-size: var(--t-sm); margin-top: 4px; }
 
-  /* Mode animé (activé par le script) */
+  /* Mode animé : canvas à la place de l'image fixe (dès que la 1re image est chargée) */
   :global(.seq-live) canvas { display: block; }
   :global(.seq-live) .fallback { display: none; }
-  :global(.seq-live) .steps li { opacity: .38; }
+  :global(.seq-live) .steps li { opacity: .55; }
   :global(.seq-live) .steps li.on { opacity: 1; }
+
+  /* Mode épinglé (ordinateur, si la scène tient dans l'écran) : posé par le script avant la mesure */
   @media (min-width: 901px) {
-    :global(.seq-live) .stage { min-height: 100vh; display: flex; align-items: center; padding: calc(var(--header-h) * .5) 0 24px; }
-    :global(.seq-live) .layout { width: min(var(--max), 100% - 2 * var(--gutter)); }
-    :global(.seq-live) .steps li { padding: 12px 0; }
-    :global(.seq-live) .visual { align-self: center; }
+    :global(.seq-pin) .stage { min-height: 100vh; display: flex; align-items: center; padding: calc(var(--header-h) * .5) 0 20px; }
+    :global(.seq-pin) .layout { width: min(var(--max), 100% - 2 * var(--gutter)); row-gap: 24px; }
+    :global(.seq-pin) .steps li { padding: 11px 0; }
+    :global(.seq-pin) .visual { align-self: center; }
+    :global(.seq-pin) canvas, :global(.seq-pin) .fallback { width: auto; max-width: 100%; max-height: calc(100vh - 140px); margin-inline: auto; }
   }
+  @media (min-width: 901px) and (max-height: 820px) {
+    :global(.seq-pin) .head p { display: none; }
+    :global(.seq-pin) .head h2 { font-size: clamp(2rem, 1.4rem + 1.6vw, 2.75rem); }
+    :global(.seq-pin) .steps p { font-size: var(--t-xs); line-height: 1.45; }
+    :global(.seq-pin) .steps li { padding: 9px 0; }
+  }
+
+  /* Téléphone : image fixée en haut pendant que les étapes défilent dessous */
   @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; grid-template-areas: 'head' 'visual' 'steps'; }
+    canvas { aspect-ratio: 3 / 4; }
+    .fallback { aspect-ratio: 16 / 9; object-fit: contain; }
     :global(.seq-live) .visual { position: sticky; top: 8px; z-index: 1; background: var(--night); padding-bottom: 8px; }
     :global(.seq-live) canvas { width: auto; height: min(52svh, 520px); margin-inline: auto; }
     :global(.seq-live) .steps { padding-bottom: 30svh; }
-  }
-
-  @media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; grid-template-areas: 'head' 'visual' 'steps'; }
-    canvas, .fallback { aspect-ratio: 3 / 4; object-fit: cover; }
   }
 </style>

@@ -19,6 +19,8 @@ test('aucun fichier interne cassé', async ({ page, request, baseURL }) => {
       });
       document.querySelectorAll('img[srcset],source[srcset]').forEach((e) =>
         (e.getAttribute('srcset') || '').split(',').forEach((s) => out.push('r:' + new URL(s.trim().split(' ')[0], location.href).href)));
+      document.querySelectorAll('[data-src-small],[data-src-large]').forEach((e) => ['srcSmall', 'srcLarge'].forEach((k) => (e as HTMLElement).dataset[k] && out.push('r:' + new URL((e as HTMLElement).dataset[k]!, location.href).href)));
+      document.querySelectorAll('[data-sequence]').forEach((e) => out.push('r:' + new URL((e as HTMLElement).dataset.src + 'manifest.json', location.href).href, 'r:' + new URL((e as HTMLElement).dataset.src + 'wide/f000.webp', location.href).href, 'r:' + new URL((e as HTMLElement).dataset.src + 'tall/f000.webp', location.href).href));
       document.querySelectorAll('link[href]').forEach((l) => { const h = (l as HTMLLinkElement); if (h.rel !== 'canonical' && h.rel !== 'preconnect') out.push('r:' + h.href); });
       return out;
     });

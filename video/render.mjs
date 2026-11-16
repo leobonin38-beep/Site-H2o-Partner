@@ -5,7 +5,7 @@ import { createRequire } from 'node:module';
 const sharp = createRequire(import.meta.url)('../node_modules/sharp');
 const H = '/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell';
 const OUT = new URL('../public/sequences/softener/', import.meta.url).pathname;
-const targets = { wide: { q: 66, w: 1600, step: 1 }, tall: { q: 66, w: 720, step: 2 } };
+const targets = { wide: { q: 60, w: 1600, step: 1 }, tall: { q: 60, w: 720, step: 1 } };
 const counts = {};
 for (const [layout, { q, w, step }] of Object.entries(targets)) {
   const tmp = `out/png-${layout}`;

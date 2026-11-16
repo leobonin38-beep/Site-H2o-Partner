@@ -54,3 +54,34 @@ test('si le manifeste manque, la section reste lisible', async ({ page }) => {
     expect(Number(await page.locator(`[data-seq-step="${i}"]`).evaluate((e) => getComputedStyle(e).opacity))).toBe(1);
   }
 });
+
+test('les déclencheurs sous la section épinglée tiennent compte de l’épinglage (le compteur compte à l’écran)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('./', { waitUntil: 'networkidle' });
+  await page.locator('#adoucissement').scrollIntoViewIfNeeded();
+  await expect(page.locator('html')).toHaveClass(/seq-live/, { timeout: 8000 });
+  await page.waitForTimeout(500);
+  const y = await page.locator('#preuves').evaluate((e) => e.getBoundingClientRect().top + window.scrollY);
+  // Juste avant que la section des preuves n'apparaisse : le compteur ne doit pas avoir démarré.
+  await page.evaluate((v) => { (window as any).__lenis?.stop(); window.scrollTo(0, v - window.innerHeight - 150); }, y);
+  await page.waitForTimeout(300);
+  await expect(page.locator('[data-count="25"]')).toHaveText('25');
+  // Puis à l'écran : il compte.
+  await page.evaluate((v) => window.scrollTo(0, v - 500), y);
+  await page.waitForTimeout(150);
+  const early = Number(await page.locator('[data-count="25"]').textContent());
+  expect(early).toBeLessThan(25);
+  await expect(page.locator('[data-count="25"]')).toHaveText('25', { timeout: 4000 });
+});
+
+test('écran bas (1280×680) : pendant l’épinglage, les 4 étapes restent dans l’écran', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 680 });
+  await page.goto('./');
+  await page.locator('#adoucissement').scrollIntoViewIfNeeded();
+  await expect(page.locator('html')).toHaveClass(/seq-live/, { timeout: 8000 });
+  const top = await page.locator('#adoucissement').evaluate((e) => e.getBoundingClientRect().top + window.scrollY);
+  await page.evaluate((v) => { (window as any).__lenis?.stop(); window.scrollTo(0, v + 300); }, top);
+  await page.waitForTimeout(600);
+  const b = await page.locator('[data-seq-step="3"]').evaluate((e) => e.getBoundingClientRect().bottom);
+  expect(b).toBeLessThanOrEqual(680);
+});

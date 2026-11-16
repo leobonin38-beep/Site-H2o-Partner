@@ -9,7 +9,8 @@ Textes **rédigés par Claude**, absents de l'ancien site et de la V2. À relire
 | Description pour Google | « Adoucisseurs, filtration, désembouage et désinfection pour particuliers, installateurs, collectif et industrie. 25 ans d'expérience, à Sillans (Isère). » |
 | Haut de page, bas | Sous-titres des 4 entrées : « Adoucisseurs Privilège, filtres, antitartre » ; « Matériel en direct, formation, mise en service » ; « Gamme CLACK, désembouage, désinfection » ; « Eau de process, TWIN et DUPLEX, maintenance » |
 | Méthode, titre | « De l'analyse de votre eau à l'entretien de l'installation, un seul interlocuteur. » |
-| Méthode, texte | « Une maison, un immeuble, une usine : nous étudions votre eau, choisissons le matériel, le mettons en service et l'entretenons, en direct. » |
+| Méthode, texte | « Une maison, un immeuble, une usine : nous étudions votre eau, choisissons le matériel, le mettons en service et l'entretenons, avec nos partenaires plombiers-chauffagistes. » |
+| Preuves, « France » | « matériels fabriqués en France, sauf la tête d'adoucisseur (américaine) et certaines résines (Italie) » (reformulé d'après l'ancien site, qui précise ces exceptions) |
 | Méthode, 4 étapes | « Étude de votre eau et de votre installation : dureté, débits, usages : on part de vos mesures, pas d'un catalogue. » ; « Choix et dimensionnement du matériel : le bon appareil, à la bonne taille, chez des fabricants que nous connaissons. » ; « Livraison et mise en service : jusqu'au chantier, avec nos partenaires plombiers-chauffagistes. » ; « Entretien et service après-vente : un entretien annuel qui garde les performances et la garantie. » |
 | Métiers, Plombiers-chauffagistes | Liste : « Fourniture en direct, sans intermédiaire » ; « Conseil et formation » ; « Mise en service et SAV » |
 | Métiers, Industrie | Liste : « Eau de process sur mesure » ; « Adoucisseurs TWIN et DUPLEX » ; « Maintenance des installations » |

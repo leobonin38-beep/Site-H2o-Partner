@@ -56,3 +56,43 @@ test('pied de page : coordonnées et PDF', async ({ page }) => {
   await expect(f.locator('a[href$=".pdf"]')).toHaveCount(4);
   await expect(f).toContainText('aucun cookie');
 });
+
+test('menu téléphone ouvert : vraie boîte de dialogue, le reste de la page est inerte', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 760 });
+  await page.goto('./');
+  await page.getByRole('button', { name: 'Menu' }).click();
+  await expect(page.locator('#menu-mobile')).toHaveAttribute('role', 'dialog');
+  await expect(page.locator('#menu-mobile')).toHaveAttribute('aria-modal', 'true');
+  expect(await page.locator('main').evaluate((e) => (e as HTMLElement).inert)).toBe(true);
+  expect(await page.locator('footer.site-footer').evaluate((e) => (e as HTMLElement).inert)).toBe(true);
+  await page.keyboard.press('Escape');
+  expect(await page.locator('main').evaluate((e) => (e as HTMLElement).inert)).toBe(false);
+});
+
+test('sans JavaScript : la navigation reste accessible', async ({ browser }) => {
+  const base = test.info().project.use.baseURL!;
+  const ctx = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 360, height: 760 } });
+  const page = await ctx.newPage();
+  await page.goto(base);
+  await expect(page.locator('[data-burger]')).toBeHidden();
+  const nojs = page.locator('.site-header a.burger-nojs');
+  await expect(nojs).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(page.locator('header.site-header .nav a[href$="/particuliers/"]').first()).toBeVisible();
+  await ctx.close();
+});
+
+test('survol puis clic sur « Particuliers » : on arrive sur la page Particuliers', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('./');
+  const link = page.locator('header.site-header .nav a[href$="/particuliers/"]').first();
+  await link.hover();
+  await page.waitForTimeout(150);
+  await link.click();
+  await expect(page).toHaveURL(/\/particuliers\/$/);
+});
+
+test('la mention « France » précise l’exception de la tête d’adoucisseur', async ({ page }) => {
+  await page.goto('./');
+  await expect(page.locator('#preuves')).toContainText('sauf la tête');
+});

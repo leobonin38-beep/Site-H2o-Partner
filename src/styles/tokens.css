@@ -1,0 +1,38 @@
+/* Palette « Résine et ardoise » (choix de Léo, 2026-11-16) */
+:root {
+  --night: #0F1D24;
+  --night-2: #0A1419;
+  --night-3: #16282F;
+  --accent: #D9A25F;        /* ambre résine, sur fond sombre */
+  --accent-strong: #A8692A; /* ambre, sur fond clair (contraste AA pour les grands textes et traits) */
+  --accent-text: #8A5420;   /* ambre pour petits textes sur fond clair (AA) */
+  --day: #F3F2EE;
+  --paper: #FFFFFF;
+  --ink: #151C20;
+  --muted: #55615F;
+  --line: rgba(21, 28, 32, .14);
+  --line-dark: rgba(255, 255, 255, .16);
+  --on-dark: #F3F2EE;
+  --on-dark-muted: rgba(243, 242, 238, .72);
+  --cta: #E8212B;
+  --cta-hover: #C8161F;
+  --logo-blue: #272E7C;
+
+  --f-display: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  --f-body: 'Hanken Grotesk Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Échelle typographique (rapport ~1.25, fluide) */
+  --t-xs: .8125rem;
+  --t-sm: .9375rem;
+  --t-base: 1.0625rem;
+  --t-lg: clamp(1.125rem, 1rem + .4vw, 1.3125rem);
+  --t-xl: clamp(1.5rem, 1.2rem + 1.1vw, 2.125rem);
+  --t-2xl: clamp(2rem, 1.4rem + 2.4vw, 3.5rem);
+  --t-3xl: clamp(2.75rem, 1.6rem + 4.8vw, 6.75rem);
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1320px;
+  --radius: 3px;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --header-h: 84px;
+}

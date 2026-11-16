@@ -1,0 +1,11 @@
+.display, h1, h2, h3 { font-family: var(--f-display); font-weight: 380; font-optical-sizing: auto; letter-spacing: -.015em; line-height: 1.05; text-wrap: balance; }
+h1, .t-3xl { font-size: var(--t-3xl); line-height: .98; letter-spacing: -.025em; font-weight: 360; }
+h2, .t-2xl { font-size: var(--t-2xl); }
+h3, .t-xl { font-size: var(--t-xl); line-height: 1.15; }
+p { text-wrap: pretty; }
+.lead { font-size: var(--t-lg); line-height: 1.55; }
+.muted { color: var(--muted); }
+.dark .muted { color: var(--on-dark-muted); }
+.kicker { font-size: var(--t-sm); font-weight: 600; color: var(--accent-text); }
+.dark .kicker { color: var(--accent); }
+.num { font-variant-numeric: tabular-nums lining-nums; }

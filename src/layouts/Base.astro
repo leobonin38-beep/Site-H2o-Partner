@@ -1,0 +1,32 @@
+---
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource-variable/hanken-grotesk';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/type.css';
+import Seo from '../components/Seo.astro';
+import { url } from '../lib/url';
+interface Props { title: string; description: string; path: string; ld?: object[]; ogImage?: string; noindex?: boolean; bodyClass?: string }
+const p = Astro.props;
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0F1D24" />
+    <link rel="icon" type="image/png" sizes="32x32" href={url('/favicon-32.png')} />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    <Seo title={p.title} description={p.description} path={p.path} ld={p.ld} ogImage={p.ogImage} noindex={p.noindex} />
+    <slot name="head" />
+  </head>
+  <body class={p.bodyClass}>
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <slot name="header" />
+    <main id="contenu"><slot /></main>
+    <slot name="footer" />
+  </body>
+</html>

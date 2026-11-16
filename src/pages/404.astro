@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+<Base title="Page introuvable" description="Cette page n'existe pas ou a changé d'adresse. Retrouvez les solutions de traitement de l'eau de H2O Partner depuis l'accueil." path="/404/" noindex>
+  <section class="wrap" style="padding:20vh 0">
+    <h1>Cette page n'existe pas.</h1>
+    <p class="lead muted" style="margin-top:24px;max-width:48ch">Elle a peut-être changé d'adresse avec le nouveau site. Repartez de l'accueil ou appelez-nous.</p>
+    <p style="margin-top:32px"><a class="btn" href={url('/')}>Retour à l'accueil</a></p>
+  </section>
+</Base>

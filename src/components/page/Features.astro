@@ -1,0 +1,18 @@
+---
+import { fr } from '../../lib/typo';
+interface Props { items: { t: string; d: string }[]; cols?: 2 | 3 | 4 }
+const { items, cols = 2 } = Astro.props;
+---
+<ul class="feat" style={`--cols:${cols}`}>
+  {items.map((it) => <li><h3>{fr(it.t)}</h3><p>{fr(it.d)}</p></li>)}
+</ul>
+<style>
+  .feat { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: 36px clamp(24px, 3vw, 48px); }
+  li { border-top: 2px solid var(--accent-strong); padding-top: 18px; }
+  :global(.dark) li { border-color: var(--accent); }
+  h3 { font-size: var(--t-xl); margin-bottom: 10px; }
+  p { color: var(--muted); max-width: 46ch; }
+  :global(.dark) p { color: var(--on-dark-muted); }
+  @media (max-width: 1000px) { .feat { grid-template-columns: repeat(min(var(--cols), 2), 1fr); } }
+  @media (max-width: 640px) { .feat { grid-template-columns: 1fr; } }
+</style>

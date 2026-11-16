@@ -1,0 +1,76 @@
+---
+import { Picture } from 'astro:assets';
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import StepsRail from '../../components/page/StepsRail.astro';
+import Checklist from '../../components/page/Checklist.astro';
+import railPic from '../../assets/photos/technicien-chaudiere-mains.jpg';
+import CtaBand from '../../components/page/CtaBand.astro';
+import Related from '../../components/page/Related.astro';
+import hero from '../../assets/photos/chaufferie-collecteur.jpg';
+import pClack from '../../assets/photos/chaufferie-circulateur.jpg';
+import pDes from '../../assets/photos/chaufferie-manometres.jpg';
+import pDis from '../../assets/photos/analyse-tubes.jpg';
+import { url } from '../../lib/url';
+import { fr } from '../../lib/typo';
+const crumbs = [{ name: 'Collectif & tertiaire', href: '/collectif-tertiaire/' }];
+const offers = [
+  { t: 'Adoucisseurs CLACK et filtre magnétique', d: 'Une gamme dimensionnée pour la longévité de vos appareils, et un filtre clarificateur inox pour les circuits de process.', href: '/collectif-tertiaire/materiel-clack/', photo: pClack, alt: "Circulateur et vannes dans une chaufferie" },
+  { t: 'Désembouage hydropneumatique', d: 'Pour les circuits de chauffage collectif : écoles, Ehpad, hôpitaux, copropriétés, gymnases…', href: '/collectif-tertiaire/desembouage/', photo: pDes, alt: "Manomètres sur les canalisations d'une chaufferie collective" },
+  { t: 'Désinfection sanitaire EFS et ECS', d: 'En préventif après travaux neufs ou en curatif, selon le protocole ARS, avec validation par un laboratoire accrédité COFRAC.', href: '/collectif-tertiaire/desinfection-reseaux/', photo: pDis, alt: "Tubes d'analyse d'eau en laboratoire" },
+];
+---
+<Page title="Traitement de l'eau pour le collectif et le tertiaire" description="Étude technique, adoucisseurs CLACK, désembouage et désinfection des réseaux pour copropriétés, Ehpad, hôpitaux, écoles et hôtels en Isère et Rhône-Alpes." path="/collectif-tertiaire/" crumbs={crumbs}
+  service={{ name: "Traitement de l'eau pour le collectif et le tertiaire", description: "Étude technique, fourniture, mise en service, désembouage, désinfection, entretien et SAV en direct." }}>
+  <PageHero title="De l'étude technique au SAV en direct." crumbs={crumbs} photo={hero} alt="Collecteur et canalisations isolées d'une chaufferie collective"
+    lead="Forte de ses 25 années d'expérience, H2O Partner vous propose l'étude technique pour le bon choix du matériel et de son dimensionnement, puis vous accompagne jusqu'à l'exploitation."
+    anchors={[{ label: "L'accompagnement", href: '#accompagnement' }, { label: 'Nos prestations', href: '#prestations' }]} cta={{ label: 'Demander une étude', href: '/diagnostic/' }} />
+
+  <Section id="accompagnement" tone="dark" title="Du chantier à l'exploitation.">
+    <StepsRail photo={railPic} alt="Mains d'un technicien réglant une installation de chauffage" items={[
+      { t: 'Étude technique', d: 'Le bon choix du matériel et de son dimensionnement, selon votre eau, vos débits et votre installation.' },
+      { t: 'Livraison sur le chantier', d: 'Livraison du matériel jusqu’au chantier, avec des explications claires à vos techniciens.' },
+      { t: 'Mise en service', d: 'Par une équipe spécialisée, une fois le matériel installé.' },
+      { t: 'Entretien, SAV et garantie en direct', d: 'Nous suivons le matériel que nous avons fourni, sans intermédiaire.' },
+    ]} />
+  </Section>
+
+  <Section id="prestations" title="Nos prestations.">
+    <ul class="offers">
+      {offers.map((o) => (
+        <li>
+          <a href={url(o.href)}>
+            <Picture src={o.photo} formats={['avif', 'webp']} widths={[480, 800]} sizes="(max-width: 900px) 100vw, 30vw" alt={o.alt} loading="lazy" />
+            <h3>{fr(o.t)}</h3>
+            <p>{fr(o.d)}</p>
+            <span class="go">En savoir plus</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section tone="paper" title="Aussi pour le collectif et le tertiaire.">
+    <Checklist items={['Pompe doseuse pour injection de filmogène', 'Panneau de chloration', 'Adoucisseurs et filtres, suivi des produits de conditionnement des circuits de chauffage']} />
+    <p class="more"><a class="link link--accent" href={url('/entretien-sav/')}>Voir l'entretien et le SAV</a></p>
+  </Section>
+
+  <CtaBand title="Un projet, un circuit, un réseau ?" text="Décrivez-nous l'installation : nous préparons l'étude technique ou le devis de prestation." label="Demander une étude" />
+  <Related items={[
+    { label: 'Plombiers-chauffagistes', desc: 'Matériel en direct, formation, mise en service', href: '/installateurs/' },
+    { label: 'Industrie', desc: 'Eau de process et maintenance', href: '/industrie/' },
+    { label: 'Entretien & SAV', desc: 'Suivi du matériel fourni', href: '/entretien-sav/' },
+  ]} />
+</Page>
+<style>
+  .offers { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 3vw, 40px); }
+  .offers a { display: block; text-decoration: none; height: 100%; }
+  .offers :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); transition: transform .6s var(--ease-out); }
+  .offers a:hover :global(img) { transform: scale(1.02); }
+  .offers h3 { font-size: var(--t-xl); margin: 20px 0 8px; }
+  .offers p { color: var(--muted); }
+  .go { display: inline-block; margin-top: 14px; font-weight: 600; border-bottom: 2px solid var(--accent-strong); padding-bottom: 3px; }
+  .more { margin-top: 24px; }
+  @media (max-width: 900px) { .offers { grid-template-columns: 1fr; } }
+</style>

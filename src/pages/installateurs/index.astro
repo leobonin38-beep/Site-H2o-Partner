@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets';
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import Split from '../../components/page/Split.astro';
+import Features from '../../components/page/Features.astro';
+import Checklist from '../../components/page/Checklist.astro';
+import Quote from '../../components/page/Quote.astro';
+import CtaBand from '../../components/page/CtaBand.astro';
+import Related from '../../components/page/Related.astro';
+import hero from '../../assets/photos/installateur-atelier.jpg';
+import mains from '../../assets/photos/technicien-chaudiere-mains.jpg';
+import gamme from '../../assets/img/gamme-privilege.webp';
+import { url } from '../../lib/url';
+const crumbs = [{ name: 'Plombiers-chauffagistes', href: '/installateurs/' }];
+---
+<Page title="Plombiers-chauffagistes : traitement de l'eau en direct" description="Fournisseur en direct pour plombiers-chauffagistes en Isère et Rhône-Alpes : adoucisseurs, conseil, formation, mise en service et SAV, sans intermédiaire." path="/installateurs/" crumbs={crumbs}
+  service={{ name: "Fourniture de matériel de traitement de l'eau aux plombiers-chauffagistes", description: 'Matériel, conseil, formation, mise en service et service après-vente pour les installateurs.' }}>
+  <PageHero title="Le meilleur matériel, par votre plombier-chauffagiste." crumbs={crumbs} photo={hero} alt="Installateur au travail dans son atelier"
+    lead="H2O Partner fournit aux plombiers-chauffagistes le meilleur matériel de traitement de l'eau pour offrir une garantie de qualité et de fiabilité dans le temps. Nous apportons de façon continue conseil, formation, mise en service du matériel après installation et service après-vente."
+    anchors={[{ label: "L'accompagnement", href: '#accompagnement' }, { label: 'Le matériel', href: '#materiel' }, { label: 'Le prix', href: '#prix' }]} cta={{ label: 'Travailler avec H2O Partner', href: '/contact/' }} />
+
+  <Section id="accompagnement" title="Un fournisseur en direct, avant et après la pose.">
+    <Features cols={4} items={[
+      { t: 'Conseil', d: 'Le bon matériel et le bon dimensionnement pour chaque chantier, avec des explications claires à vos techniciens.' },
+      { t: 'Formation', d: 'Nous formons vos équipes au matériel que nous fournissons, de façon continue.' },
+      { t: 'Mise en service', d: "Après votre installation, nous mettons l'appareil en service et le réglons." },
+      { t: 'Service après-vente', d: 'Entretien, SAV et garantie en direct : votre client est suivi par une société spécialisée, vous gardez la relation.' },
+    ]} />
+  </Section>
+
+  <Section id="materiel" tone="paper">
+    <Split photo={mains} alt="Mains d'un technicien raccordant une installation de chauffage">
+      <h2 data-reveal-text>Des matériels que nous connaissons.</h2>
+      <p class="lead muted">H2O Partner utilise des matériels fabriqués en France, sauf la tête d'adoucisseur (américaine) et les résines (fabriquées en France ou en Italie). Attestation de conformité sanitaire (ACS) sur demande. Garantie 5 ans dans le cadre d'un entretien annuel.</p>
+      <div class="models">
+        <Image src={gamme} alt="Adoucisseur Privilège et ses organes complémentaires" width={140} loading="lazy" />
+        <p><b>Privilège</b> (20 L de résine) pour les maisons, <b>Petit Privilège</b> (8 L) pour les appartements. <a class="link link--accent" href={url('/particuliers/adoucisseur-privilege/')}>Voir la gamme</a></p>
+      </div>
+      <h3>Les organes complémentaires, livrés avec</h3>
+      <Checklist items={['Filtre 3 pièces à bol transparent, dimension standard 10 pouces', 'Cartouche de filtration en polypropylène 25 µm', 'Flexibles en inox', 'Tuyau Crystal transparent, sans phtalate', 'Disconnecteur contre les contaminations bactériennes par le rejet (norme NF 14743)']} />
+    </Split>
+  </Section>
+
+  <Section title="Aussi au catalogue.">
+    <Checklist cols={2} items={['Filtres, antitartres, déferrisation, traitement UVc', 'Traitement des eaux de source et de forage', 'Adoucisseurs CLACK pour le collectif, filtres magnétiques à poche', 'Pompes doseuses, panneaux de chloration']} />
+    <p class="more"><a class="link link--accent" href={url('/collectif-tertiaire/materiel-clack/')}>Voir la gamme CLACK</a></p>
+  </Section>
+
+  <Section id="prix" tone="paper">
+    <Quote text="La qualité n'est pas synonyme de cher : vos plombiers-chauffagistes travaillent directement avec nous, sans intermédiaire." cite="Un matériel très haut de gamme pour un prix modéré." />
+  </Section>
+
+  <CtaBand title="Travaillons ensemble." text="Appelez-nous pour obtenir une documentation, un tarif professionnel ou préparer un chantier." label="Nous contacter" href="/contact/" />
+  <Related items={[
+    { label: 'Collectif & tertiaire', desc: 'Étude, CLACK, désembouage, désinfection', href: '/collectif-tertiaire/' },
+    { label: 'Entretien & SAV', desc: 'Le suivi de vos clients, en direct', href: '/entretien-sav/' },
+    { label: 'Particuliers', desc: 'Ce que nous proposons à vos clients', href: '/particuliers/' },
+  ]} />
+</Page>
+<style>
+  .models { display: flex; align-items: center; gap: 20px; margin: 26px 0 8px; padding: 16px; background: var(--day); border-radius: var(--radius); }
+  .models :global(img) { width: 96px; height: auto; flex: none; }
+  .more { margin-top: 24px; }
+</style>

@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets';
+import Page from '../../../layouts/Page.astro';
+import PageHero from '../../../components/page/PageHero.astro';
+import Section from '../../../components/page/Section.astro';
+import Checklist from '../../../components/page/Checklist.astro';
+import CtaBand from '../../../components/page/CtaBand.astro';
+import Related from '../../../components/page/Related.astro';
+import hero from '../../../assets/photos/chaufferie-circulateur.jpg';
+import clack from '../../../assets/img/adoucisseur-clack.webp';
+import filtre from '../../../assets/img/filtre-magnetique.webp';
+import { url } from '../../../lib/url';
+const crumbs = [{ name: 'Collectif & tertiaire', href: '/collectif-tertiaire/' }, { name: 'Matériel CLACK', href: '/collectif-tertiaire/materiel-clack/' }];
+const models = [
+  ['CLACK CK-1', '6,1 m³/h', '50 à 250 L'], ['CLACK WS125CK', '7 m³/h', '50 à 250 L'],
+  ['CLACK WS1,5CK', '16,4 m³/h', '50 à 500 L'], ['CLACK WS2CK', '26 m³/h', '75 à 700 L'],
+];
+---
+<Page title="Adoucisseurs CLACK et filtre magnétique à poche" description="Adoucisseurs CLACK de 6,1 à 26 m³/h et 50 à 700 L de résine, filtre magnétique à poche en inox : le matériel pour le collectif, le tertiaire et l'industrie." path="/collectif-tertiaire/materiel-clack/" crumbs={crumbs}
+  service={{ name: 'Adoucisseurs CLACK et filtre magnétique à poche', description: 'Fourniture et mise en service d’adoucisseurs CLACK et de filtres magnétiques à poche pour le collectif et le tertiaire.' }}>
+  <PageHero title="Adoucisseurs CLACK et filtre magnétique." crumbs={crumbs} photo={hero} alt="Circulateur et vannes dans une chaufferie collective"
+    lead="Une gamme dimensionnée pour assurer une longévité maximale à tous vos appareils, et un filtre clarificateur en acier inoxydable pour vos circuits."
+    anchors={[{ label: 'Gamme CLACK', href: '#clack' }, { label: 'Filtre magnétique', href: '#filtre' }, { label: 'Dosage et chloration', href: '#dosage' }]} />
+
+  <Section id="clack" tone="paper" title="Adoucisseurs CLACK.">
+    <div class="clack">
+      <figure class="prod"><Image src={clack} alt="Adoucisseur CLACK : bouteille bleue, tête de vanne et bac à sel" width={460} loading="lazy" /></figure>
+      <div>
+        <div class="tbl" role="region" aria-label="Gamme CLACK" tabindex="0">
+          <table>
+            <thead><tr><th scope="col">Modèle</th><th scope="col">Débit de pointe</th><th scope="col">Résine</th></tr></thead>
+            <tbody>{models.map(([m, d, r]) => <tr><th scope="row">{m}</th><td class="num">{d}</td><td class="num">{r}</td></tr>)}</tbody>
+          </table>
+        </div>
+        <p class="muted small">CLACK WS2HF / WS3HF : documentation sur demande.</p>
+        <a class="link link--accent" href={url('/docs/documentation-vannes-clack.pdf')} type="application/pdf">Documentation des vannes CLACK (PDF)</a>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="filtre" title="Filtre magnétique à poche." intro="Ce filtre clarificateur en acier inoxydable se monte sur le circuit de retour des eaux de process, chaudes ou glacées. Associé à un produit nettoyant, il filtre toute particule en suspension.">
+    <div class="clack">
+      <figure class="prod"><Image src={filtre} alt="Filtre magnétique à poche en inox, avec sa poche et ses manomètres" width={300} loading="lazy" /></figure>
+      <div>
+        <Checklist items={['Filtre mécanique inox avec poche en polypropylène', 'Centrale magnétique de 1 à 4 barreaux, qui capte les particules de fer', 'Étanchéité par joints EPDM, 3 pieds réglables', '2 manomètres de contrôle, vanne à bille de dégazage', 'Maintenance rapide grâce au couvercle à écrous oreille']} />
+        <a class="link link--accent" href={url('/docs/fiche-filtre-magnetique-a-poche.pdf')} type="application/pdf">Fiche technique (PDF)</a>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="dosage" tone="paper" title="Dosage et chloration.">
+    <Checklist cols={2} items={['Pompe doseuse pour injection de filmogène', 'Panneau de chloration']} />
+  </Section>
+
+  <CtaBand title="Dimensionner votre installation." text="Débits, dureté, volume du réseau : décrivez-nous l'installation, nous préparons l'étude technique." label="Demander une étude" />
+  <Related items={[
+    { label: 'Désembouage', desc: 'Circuits de chauffage collectif', href: '/collectif-tertiaire/desembouage/' },
+    { label: 'Désinfection des réseaux', desc: 'EFS et ECS, préventif ou curatif', href: '/collectif-tertiaire/desinfection-reseaux/' },
+    { label: 'Industrie', desc: 'Adoucisseurs TWIN et DUPLEX', href: '/industrie/' },
+  ]} />
+</Page>
+<style>
+  .clack { display: grid; grid-template-columns: 4fr 7fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .clack > * { min-width: 0; }
+  .prod { background: var(--day); border-radius: var(--radius); padding: 28px; display: grid; place-items: center; }
+  :global(.sec--day) .prod { background: var(--paper); }
+  .prod :global(img) { width: min(100%, 300px); height: auto; }
+  .tbl { overflow-x: auto; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; min-width: 420px; }
+  th, td { text-align: left; padding: 14px 12px 14px 0; border-bottom: 1px solid var(--line); }
+  thead th { font-size: var(--t-sm); color: var(--muted); font-weight: 600; }
+  tbody th { font-family: var(--f-display); font-weight: 400; font-size: var(--t-lg); }
+  .small { font-size: var(--t-sm); margin-bottom: 18px; }
+  @media (max-width: 900px) { .clack { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,50 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import Split from '../../components/page/Split.astro';
+import Features from '../../components/page/Features.astro';
+import Checklist from '../../components/page/Checklist.astro';
+import Quote from '../../components/page/Quote.astro';
+import CtaBand from '../../components/page/CtaBand.astro';
+import Related from '../../components/page/Related.astro';
+import hero from '../../assets/photos/industrie-cuves-hall.jpg';
+import vannes from '../../assets/photos/industrie-vannes-inox.jpg';
+import { url } from '../../lib/url';
+const crumbs = [{ name: 'Industrie', href: '/industrie/' }];
+---
+<Page title="Traitement de l'eau de process industrielle" description="Eau de process pour l'industrie en Isère et Rhône-Alpes : filtres, adoucisseurs TWIN et DUPLEX, osmoseurs, eau déminéralisée, maintenance et assistance réactive." path="/industrie/" crumbs={crumbs}
+  service={{ name: "Traitement de l'eau de process industrielle", description: "Filtres, antitartres, adoucisseurs TWIN ou DUPLEX, osmoseurs, eau déminéralisée et maintenance des installations." }}>
+  <PageHero title="À chaque besoin son eau de process." crumbs={crumbs} photo={hero} alt="Cuves en inox alignées dans un hall industriel"
+    lead="H2O Partner propose les solutions et les services adaptés à votre eau de process, avec une assistance réactive."
+    anchors={[{ label: 'Les solutions', href: '#solutions' }, { label: 'La maintenance', href: '#maintenance' }]} cta={{ label: 'Parler de mon installation', href: '/diagnostic/' }} />
+
+  <Section id="solutions" title="Traiter l'eau de votre process.">
+    <Features cols={4} items={[
+      { t: 'Filtre, antitartre, adoucisseur, osmoseur', d: "Le traitement adapté à la qualité d'eau que demande votre production." },
+      { t: 'Filtre à barreau magnétique', d: "Pour capter les particules de fer sur les circuits d'eau de process, chaude ou glacée." },
+      { t: 'Adoucisseurs TWIN ou DUPLEX', d: 'Deux bouteilles en alternance pour une eau adoucie en continu, sans interruption pendant la régénération.' },
+      { t: 'Eau déminéralisée', d: 'Quand le process exige une eau sans minéraux.' },
+    ]} />
+  </Section>
+
+  <Section id="maintenance" tone="paper">
+    <Split photo={vannes} alt="Vannes et tuyauteries en inox d'une installation industrielle" reverse>
+      <h2 data-reveal-text>Entretien des installations industrielles.</h2>
+      <p class="lead muted">Adoucisseurs TWIN ou DUPLEX, osmoseurs, eau déminéralisée : nous assurons l'entretien de vos installations de traitement d'eau, avec une assistance réactive.</p>
+      <Checklist items={['Contrôle des réglages et des cycles', 'Remplacement des consommables et des cartouches', "Analyses d'eau par laboratoire accrédité COFRAC sur demande"]} />
+      <a class="link link--accent" href={url('/entretien-sav/')}>Voir l'entretien et le SAV</a>
+    </Split>
+  </Section>
+
+  <Section>
+    <Quote text="Le même matériel et la même exigence que pour l'industrie, c'est aussi ce que nous apportons aux maisons et aux collectivités." cite="H2O Partner, 25 ans d'expérience dans le traitement de l'eau." />
+  </Section>
+
+  <CtaBand title="Parlons de votre installation." text="Décrivez-nous votre process et la qualité d'eau attendue : nous vous répondons avec une proposition adaptée." label="Parler de mon installation" />
+  <Related items={[
+    { label: 'Matériel CLACK', desc: 'Adoucisseurs et filtre magnétique à poche', href: '/collectif-tertiaire/materiel-clack/' },
+    { label: 'Entretien & SAV', desc: 'Maintenance des installations', href: '/entretien-sav/' },
+    { label: 'Collectif & tertiaire', desc: 'Réseaux des bâtiments', href: '/collectif-tertiaire/' },
+  ]} />
+</Page>

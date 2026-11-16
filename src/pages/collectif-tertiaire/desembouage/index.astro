@@ -1,0 +1,41 @@
+---
+import Page from '../../../layouts/Page.astro';
+import PageHero from '../../../components/page/PageHero.astro';
+import Section from '../../../components/page/Section.astro';
+import Split from '../../../components/page/Split.astro';
+import StepsRail from '../../../components/page/StepsRail.astro';
+import railPic from '../../../assets/photos/technicien-chaudiere.jpg';
+import CtaBand from '../../../components/page/CtaBand.astro';
+import Related from '../../../components/page/Related.astro';
+import hero from '../../../assets/photos/chaufferie-manometres.jpg';
+import filtre from '../../../assets/img/filtre-magnetique.webp';
+import { url } from '../../../lib/url';
+const crumbs = [{ name: 'Collectif & tertiaire', href: '/collectif-tertiaire/' }, { name: 'Désembouage', href: '/collectif-tertiaire/desembouage/' }];
+---
+<Page title="Désembouage des circuits de chauffage collectif" description="Désembouage hydropneumatique des circuits de chauffage collectif : écoles, Ehpad, hôpitaux, copropriétés. Contrôle par laboratoire indépendant, Isère." path="/collectif-tertiaire/desembouage/" crumbs={crumbs}
+  service={{ name: 'Désembouage hydropneumatique', description: 'Désembouage des circuits de chauffage collectif, circuit par circuit, avec analyses de contrôle et protection finale.' }}>
+  <PageHero title="Désembouage hydropneumatique." crumbs={crumbs} photo={hero} alt="Manomètres sur les canalisations d'une chaufferie collective"
+    lead="Pour les circuits de chauffage collectif : écoles, collèges, lycées, mairies, gymnases, Ehpad, hôpitaux, copropriétés…"
+    cta={{ label: 'Demander un devis de prestation', href: '/diagnostic/' }} />
+  <Section tone="dark" title="Une prestation en quatre temps.">
+    <StepsRail photo={railPic} alt="Technicien intervenant sur une installation de chauffage" caption="Photo d'illustration." items={[
+      { t: 'Avant les travaux', d: 'Injection d’un désembouant lent pour faciliter le décollement et la dispersion des boues.' },
+      { t: 'Nettoyage', d: 'Hydropneumatique, circuit par circuit ou élément par élément, par isolement.' },
+      { t: 'Contrôle', d: 'Analyses de la qualité du travail effectué par un laboratoire indépendant.' },
+      { t: 'Protection', d: 'Injection d’un produit de conditionnement des circuits en fin de prestation.' },
+    ]} />
+  </Section>
+  <Section tone="paper">
+    <Split photo={filtre} alt="Filtre magnétique à poche en inox" contain ratio="1 / 1" caption="Le filtre magnétique à poche protège ensuite l'installation.">
+      <h2 data-reveal-text>Et ensuite, protéger le circuit.</h2>
+      <p class="lead muted">Monté sur le retour du circuit, le filtre magnétique à poche capte les particules de fer et les impuretés en suspension.</p>
+      <p><a class="link link--accent" href={url('/collectif-tertiaire/materiel-clack/#filtre')}>Le filtre magnétique à poche</a></p>
+    </Split>
+  </Section>
+  <CtaBand title="Un circuit à désembouer ?" text="Décrivez-nous le bâtiment et le circuit : nous préparons le devis de prestation." label="Demander un devis" />
+  <Related items={[
+    { label: 'Désinfection des réseaux', desc: 'EFS et ECS, préventif ou curatif', href: '/collectif-tertiaire/desinfection-reseaux/' },
+    { label: 'Matériel CLACK', desc: 'Adoucisseurs et filtre magnétique', href: '/collectif-tertiaire/materiel-clack/' },
+    { label: 'Entretien & SAV', desc: 'Suivi des produits de conditionnement', href: '/entretien-sav/' },
+  ]} />
+</Page>

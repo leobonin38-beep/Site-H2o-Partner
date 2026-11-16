@@ -5,7 +5,7 @@ import { NAV } from '../config/site';
 import { url } from '../lib/url';
 export function getStaticPaths() {
   const pages = [
-    ...NAV.flatMap((n) => [{ label: n.label, href: n.href }, ...(n.children ?? []).map((c) => ({ label: c.label, href: c.href }))]).filter((p) => !p.href.startsWith('/particuliers/')),
+    ...NAV.flatMap((n) => [{ label: n.label, href: n.href }, ...(n.children ?? []).map((c) => ({ label: c.label, href: c.href }))]).filter((p) => !/^\/(particuliers|installateurs|collectif-tertiaire|industrie|entretien-sav)\//.test(p.href)),
     { label: 'Demander un diagnostic', href: '/diagnostic/' },
     { label: 'Contact', href: '/contact/' },
   ];

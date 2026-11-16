@@ -1,0 +1,23 @@
+---
+import Hardness from './Hardness.astro';
+import BeforeAfter from './BeforeAfter.astro';
+---
+<section id="chez-vous" class="cv">
+  <div class="wrap">
+    <header class="head">
+      <h2 data-reveal-text>Et chez vous, l'eau est-elle dure ?</h2>
+      <p class="lead muted">Déplacez le curseur sur la dureté de votre eau, puis comparez une canalisation exposée au tartre et une canalisation protégée.</p>
+    </header>
+    <div class="grid">
+      <Hardness />
+      <BeforeAfter />
+    </div>
+  </div>
+</section>
+<style>
+  .cv { background: var(--paper); padding: clamp(80px, 10vw, 150px) 0; }
+  .head { max-width: 760px; margin-bottom: clamp(40px, 5vw, 72px); }
+  .head .lead { margin-top: 20px; }
+  .grid { display: grid; grid-template-columns: 6fr 5fr; gap: clamp(40px, 6vw, 96px); align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+</style>

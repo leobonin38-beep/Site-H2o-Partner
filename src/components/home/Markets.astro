@@ -1,0 +1,74 @@
+---
+import { Picture } from 'astro:assets';
+import pPart from '../../assets/photos/mains-lavabo.jpg';
+import pInst from '../../assets/photos/installateur-sertissage.jpg';
+import pColl from '../../assets/photos/chaufferie-manometres.jpg';
+import pInd from '../../assets/photos/industrie-tuyauterie-inox.jpg';
+import { url } from '../../lib/url';
+// Textes repris de la V2 (accueil, « Un spécialiste, quatre terrains »).
+const cards = [
+  { id: 'particuliers', title: 'Particuliers', photo: pPart, alt: "Mains sous l'eau d'un robinet de salle de bains",
+    text: "Un antitartre ou un adoucisseur de qualité, au meilleur prix, avec le suivi et la garantie d'une société spécialisée. Nous vous mettons en relation avec nos partenaires régionaux en Rhône-Alpes.",
+    items: ['Adoucisseurs Privilège (20 L) et Petit Privilège (8 L)', 'Filtre, antitartre, déferrisation, traitement UVc', 'Eaux de source et de forage'],
+    cta: 'Découvrir la gamme Privilège', href: '/particuliers/' },
+  { id: 'installateurs', title: 'Plombiers-chauffagistes', photo: pInst, alt: 'Installateur sertissant un raccord de canalisation',
+    text: "Le meilleur matériel de traitement de l'eau, pour offrir à vos clients une garantie de qualité et de fiabilité dans le temps. Conseil, formation, mise en service après installation et service après-vente, en continu.",
+    items: ['Fourniture en direct, sans intermédiaire', 'Conseil et formation', 'Mise en service et SAV'],
+    cta: 'Travailler avec H2O Partner', href: '/installateurs/' },
+  { id: 'collectif', title: 'Collectif & tertiaire', photo: pColl, alt: "Manomètres sur les canalisations d'une chaufferie collective",
+    text: 'Étude technique pour le bon choix du matériel et de son dimensionnement, livraison jusqu’au chantier, mise en service par une équipe spécialisée, entretien et garantie en direct.',
+    items: ['Adoucisseurs CLACK, filtres magnétiques à poche, pompes doseuses, chloration', 'Désembouage des circuits de chauffage collectif', 'Désinfection EFS et ECS, en préventif ou curatif'],
+    cta: 'Voir la gamme CLACK et les prestations', href: '/collectif-tertiaire/' },
+  { id: 'industrie', title: 'Industrie', photo: pInd, alt: 'Tuyauteries en inox dans un site industriel',
+    text: 'À chaque besoin son eau de process : filtre, antitartre, adoucisseur, osmoseur, adoucisseurs TWIN ou DUPLEX, eau déminéralisée. Entretien des installations et assistance réactive.',
+    items: ['Eau de process sur mesure', 'Adoucisseurs TWIN et DUPLEX', 'Maintenance des installations'],
+    cta: 'Parler de mon installation', href: '/industrie/' },
+];
+---
+<section id="metiers" class="markets">
+  <div class="wrap">
+    <header class="head">
+      <h2 data-reveal-text>Un spécialiste, quatre terrains.</h2>
+      <p class="lead muted">De l'arrivée d'eau jusqu'au robinet : étude technique, matériel, mise en service, entretien et SAV en direct.</p>
+    </header>
+    <div class="stack" data-stack>
+      {cards.map((c, i) => (
+        <article class="card" id={`metier-${c.id}`} data-card style={`--i:${i}`}>
+          <div class="ph">
+            <Picture src={c.photo} formats={['avif', 'webp']} widths={[560, 900, 1400]} sizes="(max-width: 900px) 100vw, 58vw" alt={c.alt} loading="lazy" />
+          </div>
+          <div class="txt">
+            <h3>{c.title}</h3>
+            <p class="muted">{c.text}</p>
+            <ul>{c.items.map((it) => <li>{it}</li>)}</ul>
+            <a class="link link--accent" href={url(c.href)}>{c.cta}</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .markets { background: var(--day); padding: 0 0 clamp(80px, 10vw, 160px); }
+  .head { display: grid; grid-template-columns: 7fr 5fr; gap: 40px; align-items: end; padding: clamp(80px, 10vw, 150px) 0 clamp(40px, 5vw, 72px); border-top: 1px solid var(--line); }
+  .head .lead { max-width: 44ch; }
+  .stack { display: grid; gap: clamp(20px, 2.5vw, 32px); }
+  .card { display: grid; grid-template-columns: 7fr 5fr; background: var(--paper); border-radius: var(--radius); overflow: hidden; min-height: min(78vh, 680px); box-shadow: 0 1px 0 var(--line); }
+  .ph { position: relative; overflow: hidden; }
+  .ph :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .txt { padding: clamp(28px, 4vw, 64px); display: flex; flex-direction: column; justify-content: center; }
+  h3 { font-size: var(--t-2xl); margin: 0 0 18px; }
+  .txt > p.muted { max-width: 48ch; }
+  ul { list-style: none; padding: 0; margin: 24px 0 32px; border-top: 1px solid var(--line); }
+  li { padding: 11px 0; border-bottom: 1px solid var(--line); font-size: var(--t-sm); }
+  .link { align-self: flex-start; }
+  @media (min-width: 1024px) {
+    .card { position: sticky; top: calc(var(--header-h) + 24px + var(--i) * 18px); }
+  }
+  @media (max-width: 900px) {
+    .head { grid-template-columns: 1fr; align-items: start; }
+    .card { grid-template-columns: 1fr; min-height: 0; }
+    .ph { aspect-ratio: 16 / 10; }
+  }
+</style>

@@ -1,13 +1,32 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Intro from '../components/home/Intro.astro';
+import Sequence from '../components/home/Sequence.astro';
+import Markets from '../components/home/Markets.astro';
+import Proofs from '../components/home/Proofs.astro';
+import ChezVous from '../components/home/ChezVous.astro';
+import Company from '../components/home/Company.astro';
+import Contact from '../components/home/Contact.astro';
 import { localBusinessLd } from '../lib/schema';
+import { url } from '../lib/url';
 const site = new URL(import.meta.env.BASE_URL, Astro.site).href;
+const websiteLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'H2O Partner', url: site, inLanguage: 'fr-FR', publisher: { '@id': site + '#entreprise' } };
 ---
 <Base
   title="Traitement de l'eau en Isère · H2O Partner"
   description="Adoucisseurs, filtration, désembouage et désinfection pour particuliers, installateurs, collectif et industrie. 25 ans d'expérience, à Sillans (Isère)."
   path="/"
-  ld={[localBusinessLd(site)]}
+  ld={[localBusinessLd(site), websiteLd]}
+  overDark
 >
-  <h1>Votre équipier du traitement de l'eau.</h1>
+  <link slot="head" rel="preload" as="image" href={url('/media/hero-poster.webp')} fetchpriority="high" />
+  <Hero />
+  <Intro />
+  <Sequence />
+  <Markets />
+  <Proofs />
+  <ChezVous />
+  <Company />
+  <Contact />
 </Base>

@@ -1,0 +1,84 @@
+---
+import { SITE } from '../../config/site';
+import { url } from '../../lib/url';
+const markets = [
+  { label: 'Particuliers', desc: 'Adoucisseurs Privilège, filtres, antitartre', href: '/particuliers/' },
+  { label: 'Plombiers-chauffagistes', desc: 'Matériel en direct, formation, mise en service', href: '/installateurs/' },
+  { label: 'Collectif & tertiaire', desc: 'Gamme CLACK, désembouage, désinfection', href: '/collectif-tertiaire/' },
+  { label: 'Industrie', desc: 'Eau de process, TWIN et DUPLEX, maintenance', href: '/industrie/' },
+];
+---
+<section id="haut" class="hero dark" data-hero>
+  <div class="media" aria-hidden="true">
+    <video autoplay muted loop playsinline preload="metadata" poster={url('/media/hero-poster.webp')} data-hero-video>
+      <source src={url('/media/hero-854.mp4')} type="video/mp4" media="(max-width: 900px)" />
+      <source src={url('/media/hero-1280.mp4')} type="video/mp4" />
+    </video>
+  </div>
+  <div class="body wrap">
+    <p class="place" data-hero-item>{SITE.city}, {SITE.region}</p>
+    <h1 data-hero-title>Votre équipier du traitement de l'eau.</h1>
+    <p class="lead" data-hero-item>Avec 25 années d'expérience, H2O Partner étudie, fournit, met en service et entretient les solutions de traitement de l'eau des particuliers, du collectif, du tertiaire et de l'industrie.</p>
+    <div class="actions" data-hero-item>
+      <a class="btn" href={url('/diagnostic/')}>Demander un diagnostic</a>
+      <a class="link link--accent num" href={`tel:${SITE.phoneIntl}`}>Appeler le {SITE.phone}</a>
+    </div>
+  </div>
+  <nav class="markets wrap" aria-label="Vous êtes" data-hero-item>
+    <ul>
+      {markets.map((m) => (
+        <li><a href={url(m.href)}><span class="m-label">{m.label}</span><span class="m-desc">{m.desc}</span></a></li>
+      ))}
+    </ul>
+  </nav>
+  <button class="pause" type="button" aria-label="Mettre la vidéo en pause" data-video-toggle>
+    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path class="i-pause" d="M3 1h2v10H3zM7 1h2v10H7z" fill="currentColor"/><path class="i-play" d="M3 1l8 5-8 5z" fill="currentColor"/></svg>
+  </button>
+</section>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-video-toggle]');
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  if (btn && video) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { video.removeAttribute('autoplay'); video.pause(); }
+    const sync = () => { btn.classList.toggle('paused', video.paused); btn.setAttribute('aria-label', video.paused ? 'Lire la vidéo' : 'Mettre la vidéo en pause'); };
+    btn.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
+    video.addEventListener('play', sync); video.addEventListener('pause', sync); sync();
+  }
+</script>
+
+<style>
+  .hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; background: var(--night-2); overflow: hidden; isolation: isolate; }
+  .media { position: absolute; inset: 0; z-index: -1; }
+  .media video { width: 100%; height: 100%; object-fit: cover; }
+  .media::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(10, 20, 25, .92) 0%, rgba(10, 20, 25, .62) 46%, rgba(10, 20, 25, .18) 100%); }
+  .media::after { content: ''; position: absolute; inset: auto 0 0; height: 50%; z-index: 1; background: linear-gradient(0deg, var(--night-2) 4%, transparent); }
+  .body { margin-top: auto; padding-top: calc(var(--header-h) + 64px); }
+  .place { font-size: var(--t-sm); color: var(--accent); margin-bottom: 22px; }
+  h1 { max-width: 12.5ch; }
+  .lead { margin-top: 28px; max-width: 50ch; color: var(--on-dark-muted); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px; margin-top: 36px; }
+  .markets { margin-top: clamp(48px, 7vw, 88px); border-top: 1px solid var(--accent); }
+  .markets ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+  .markets li + li { border-left: 1px solid var(--line-dark); }
+  .markets a { display: block; height: 100%; padding: 22px 24px 32px; text-decoration: none; transition: background-color .3s; }
+  .markets li:first-child a { padding-left: 0; }
+  .markets a:hover { background: rgba(255, 255, 255, .04); }
+  .m-label { display: block; font-weight: 600; transition: color .2s; }
+  .markets a:hover .m-label { color: var(--accent); }
+  .m-desc { display: block; margin-top: 4px; font-size: var(--t-sm); color: var(--on-dark-muted); line-height: 1.45; }
+  .pause { position: absolute; right: var(--gutter); top: calc(var(--header-h) + 16px); width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line-dark); background: rgba(10, 20, 25, .4); color: var(--on-dark); display: grid; place-items: center; cursor: pointer; }
+  .pause .i-play, .pause.paused .i-pause { display: none; }
+  .pause.paused .i-play { display: block; }
+  @media (max-width: 900px) {
+    .markets ul { grid-template-columns: 1fr 1fr; }
+    .markets li:nth-child(3) { border-left: 0; }
+    .markets li:nth-child(n + 3) { border-top: 1px solid var(--line-dark); }
+    .markets li:nth-child(3) a { padding-left: 0; }
+  }
+  @media (max-width: 640px) {
+    .media::before { background: linear-gradient(180deg, rgba(10, 20, 25, .55), rgba(10, 20, 25, .8)); }
+    .markets a { padding: 16px 12px 18px; }
+    .m-desc { display: none; }
+  }
+</style>

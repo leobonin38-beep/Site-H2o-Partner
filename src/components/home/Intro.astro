@@ -1,0 +1,52 @@
+---
+import { Picture } from 'astro:assets';
+import photo from '../../assets/photos/technicien-chaufferie.jpg';
+import { url } from '../../lib/url';
+const steps = [
+  { t: 'Étude de votre eau et de votre installation', d: "Dureté, débits, usages : on part de vos mesures, pas d'un catalogue." },
+  { t: 'Choix et dimensionnement du matériel', d: 'Le bon appareil, à la bonne taille, chez des fabricants que nous connaissons.' },
+  { t: 'Livraison et mise en service', d: 'Jusqu’au chantier, avec nos partenaires plombiers-chauffagistes.' },
+  { t: 'Entretien et service après-vente', d: 'Un entretien annuel qui garde les performances et la garantie.' },
+];
+---
+<section id="methode" class="intro">
+  <div class="wrap grid">
+    <div class="text">
+      <h2 data-reveal-text>De l'analyse de votre eau à l'entretien de l'installation, un seul interlocuteur.</h2>
+      <p class="lead muted">Une maison, un immeuble, une usine : nous étudions votre eau, choisissons le matériel, le mettons en service et l'entretenons, en direct.</p>
+      <ol class="steps">
+        {steps.map((s, i) => (
+          <li data-step>
+            <span class="n num">{i + 1}</span>
+            <span><b>{s.t}</b><span class="d muted">{s.d}</span></span>
+          </li>
+        ))}
+      </ol>
+      <a class="link link--accent" href={url('/entreprise/')}>Découvrir l'entreprise</a>
+    </div>
+    <figure class="photo" data-reveal-img>
+      <Picture src={photo} formats={['avif', 'webp']} widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 40vw" alt="Technicien réglant une installation de traitement de l'eau dans une chaufferie" />
+      <figcaption>Photo d'illustration, en attendant les photos de l'équipe.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .intro { padding: clamp(80px, 10vw, 160px) 0; background: var(--day); }
+  .grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(40px, 6vw, 112px); align-items: start; }
+  h2 { max-width: 18ch; }
+  .lead { margin-top: 28px; max-width: 54ch; }
+  .steps { list-style: none; padding: 0; margin: 48px 0 36px; border-top: 1px solid var(--line); counter-reset: s; }
+  .steps li { display: grid; grid-template-columns: 56px 1fr; gap: 8px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .n { font-family: var(--f-display); font-size: 1.5rem; line-height: 1; color: var(--accent-strong); padding-top: 2px; }
+  .steps b { display: block; font-weight: 600; }
+  .d { display: block; font-size: var(--t-sm); margin-top: 2px; }
+  .photo { position: sticky; top: calc(var(--header-h) + 24px); }
+  .photo :global(img) { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); }
+  figcaption { font-size: var(--t-xs); color: var(--muted); margin-top: 10px; }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .photo { position: static; order: -1; }
+    .photo :global(img) { aspect-ratio: 16 / 10; }
+  }
+</style>

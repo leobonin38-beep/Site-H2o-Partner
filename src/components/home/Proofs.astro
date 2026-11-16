@@ -1,0 +1,43 @@
+---
+// Faits vérifiés uniquement (ancien site et V2). Ne rien ajouter sans confirmation de l'entreprise.
+const proofs = [
+  { big: '25', unit: 'ans', count: 25, text: "d'expérience dans le traitement de l'eau" },
+  { big: '5', unit: 'ans', count: 5, text: 'de garantie sur votre adoucisseur, avec un entretien annuel' },
+  { big: 'ACS', text: 'attestation de conformité sanitaire, sur demande' },
+  { big: 'COFRAC', text: 'analyses d’eau par un laboratoire accrédité' },
+  { big: 'France', text: 'matériels fabriqués en France, chez des fabricants que nous connaissons' },
+];
+---
+<section id="preuves" class="proofs dark" aria-label="Nos garanties">
+  <ul class="wrap">
+    {proofs.map((p) => (
+      <li>
+        <p class="big">
+          {p.count ? <span class="num" data-count={p.count}>{p.big}</span> : p.big}
+          {p.unit && <span class="unit"> {p.unit}</span>}
+        </p>
+        <p class="t">{p.text}</p>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .proofs { background: var(--night-3); padding: clamp(48px, 6vw, 80px) 0; }
+  ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
+  li { padding: 4px 24px 4px 24px; border-left: 1px solid var(--line-dark); }
+  li:first-child { padding-left: 0; border-left: 0; }
+  .big { font-family: var(--f-display); font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.75rem); line-height: 1; letter-spacing: -.02em; font-weight: 360; }
+  .unit { font-size: .45em; letter-spacing: 0; color: var(--accent); }
+  .t { margin-top: 12px; font-size: var(--t-sm); color: var(--on-dark-muted); max-width: 24ch; line-height: 1.45; }
+  @media (max-width: 1000px) {
+    ul { grid-template-columns: repeat(3, 1fr); row-gap: 32px; }
+    li:nth-child(4) { padding-left: 0; border-left: 0; }
+  }
+  @media (max-width: 560px) {
+    ul { grid-template-columns: 1fr 1fr; }
+    li:nth-child(3), li:nth-child(5) { padding-left: 0; border-left: 0; }
+    li:nth-child(4) { padding-left: 20px; border-left: 1px solid var(--line-dark); }
+    li { padding-left: 20px; padding-right: 8px; }
+  }
+</style>

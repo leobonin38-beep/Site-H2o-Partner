@@ -1,0 +1,35 @@
+---
+import { Picture, Image } from 'astro:assets';
+import paysage from '../../assets/photos/isere-village-vercors.jpg';
+import camion from '../../assets/img/camionnette.webp';
+import { SITE } from '../../config/site';
+import { url } from '../../lib/url';
+---
+<section id="entreprise" class="company">
+  <div class="wrap grid">
+    <div class="text">
+      <h2 data-reveal-text>Une entreprise d'ici.</h2>
+      <p class="lead muted">H2O Partner est installée à {SITE.city}, entre Grenoble et Lyon. Nous intervenons en Isère et en Rhône-Alpes, avec nos partenaires plombiers-chauffagistes.</p>
+      <p class="muted">Entretien et SAV en direct : un adoucisseur bien réglé et entretenu chaque année garde ses performances et sa garantie. Nos techniciens interviennent sur le matériel que nous avons fourni, du particulier à l'industrie.</p>
+      <div class="van">
+        <Image src={camion} alt="Camionnette H2O Partner aux couleurs de l'entreprise" width={469} loading="lazy" />
+      </div>
+      <a class="link link--accent" href={url('/entreprise/')}>Découvrir l'entreprise</a>
+    </div>
+    <figure class="land" data-reveal-img>
+      <Picture src={paysage} formats={['avif', 'webp']} widths={[600, 1000, 1600]} sizes="(max-width: 900px) 100vw, 55vw" alt="Village du Vercors au pied des falaises, en Isère" loading="lazy" />
+      <figcaption>L'Isère, notre terrain. Photo d'illustration.</figcaption>
+    </figure>
+  </div>
+</section>
+<style>
+  .company { background: var(--day); padding: clamp(80px, 10vw, 160px) 0; }
+  .grid { display: grid; grid-template-columns: 5fr 7fr; gap: clamp(40px, 6vw, 112px); align-items: center; }
+  .lead { margin: 28px 0 18px; max-width: 46ch; }
+  .text > p.muted:not(.lead) { max-width: 52ch; }
+  .van { margin: 36px 0 28px; max-width: 300px; background: var(--paper); padding: 16px; border-radius: var(--radius); }
+  .van :global(img) { width: 100%; height: auto; }
+  .land :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); }
+  figcaption { font-size: var(--t-xs); color: var(--muted); margin-top: 10px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .land { order: -1; } }
+</style>

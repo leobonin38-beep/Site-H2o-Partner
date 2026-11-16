@@ -1,0 +1,61 @@
+---
+import { url } from '../../lib/url';
+// Textes repris de la V2 (page Particuliers, « Comment l'eau devient douce »).
+const steps = [
+  { t: "L'eau dure arrive", d: "L'eau du réseau transporte du calcium et du magnésium. Plus elle en contient, plus elle est « dure » : c'est ce que mesure le TH, en degrés français (°f)." },
+  { t: 'La résine échange les ions', d: "En traversant la résine échangeuse d'ions, l'eau cède son calcium et son magnésium, remplacés par du sodium. Les résines sont agréées pour une application alimentaire." },
+  { t: "L'eau adoucie alimente la maison", d: "Canalisations, robinets, chauffe-eau et électroménager sont protégés du tartre. L'eau adoucie reste potable." },
+  { t: 'La résine se régénère', d: 'Quand la résine est saturée, une saumure préparée dans le bac à sel la nettoie, puis l’eau de rinçage part à l’égout.' },
+];
+---
+<section id="adoucissement" class="seq dark" data-sequence data-src={url('/sequences/softener/')}>
+  <div class="stage">
+    <div class="wrap layout">
+      <header class="head">
+        <h2>Comment l'eau devient douce.</h2>
+        <p class="muted">Un adoucisseur ne dissout pas le calcaire : il remplace les ions calcium et magnésium de l'eau par des ions sodium.</p>
+      </header>
+      <div class="visual">
+        <canvas width="1600" height="900" aria-hidden="true" data-seq-canvas></canvas>
+        <img class="fallback" src={url('/sequences/softener/fallback.webp')} width="1600" height="900" alt="Coupe schématique d'un adoucisseur : l'eau traverse la résine, qui retient le calcaire" loading="lazy" decoding="async" data-seq-fallback />
+        <p class="note">Schéma animé, valeurs données à titre d'exemple.</p>
+      </div>
+      <ol class="steps">
+        {steps.map((s, i) => (
+          <li data-seq-step={i}>
+            <span class="n num">{i + 1}</span>
+            <div><h3>{s.t}</h3><p class="muted">{s.d}</p></div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .seq { background: var(--night); position: relative; }
+  .stage { padding: clamp(80px, 9vw, 140px) 0; }
+  .layout { display: grid; grid-template-columns: 4fr 8fr; grid-template-areas: 'head visual' 'steps visual'; gap: 32px clamp(32px, 5vw, 80px); align-items: start; }
+  .head { grid-area: head; }
+  .head p { margin-top: 18px; max-width: 40ch; }
+  .visual { grid-area: visual; position: relative; }
+  canvas, .fallback { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--radius); background: var(--night-2); }
+  canvas { display: none; }
+  .note { font-size: var(--t-xs); color: var(--on-dark-muted); margin-top: 10px; }
+  .steps { grid-area: steps; list-style: none; padding: 0; border-top: 1px solid var(--line-dark); }
+  .steps li { display: grid; grid-template-columns: 44px 1fr; gap: 6px; padding: 16px 0; border-bottom: 1px solid var(--line-dark); transition: opacity .4s; }
+  .n { font-family: var(--f-display); font-size: 1.375rem; color: var(--accent); line-height: 1.1; }
+  h3 { font-family: var(--f-body); font-size: 1.0625rem; font-weight: 600; letter-spacing: 0; line-height: 1.35; }
+  .steps p { font-size: var(--t-sm); margin-top: 4px; }
+
+  /* Mode animé (activé par le script) */
+  :global(.seq-live) canvas { display: block; }
+  :global(.seq-live) .fallback { display: none; }
+  :global(.seq-live) .steps li { opacity: .38; }
+  :global(.seq-live) .steps li.on { opacity: 1; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; grid-template-areas: 'head' 'visual' 'steps'; }
+    canvas, .fallback { aspect-ratio: 3 / 4; object-fit: cover; }
+  }
+</style>

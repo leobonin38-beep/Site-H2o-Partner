@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import avant from '../../assets/illustrations/tuyau-avant.png';
+import apres from '../../assets/illustrations/tuyau-apres.png';
+---
+<figure class="ba" data-ba style="--pos: 50%">
+  <div class="frame">
+    <Image class="img after" src={apres} widths={[480, 800, 1024]} sizes="(max-width: 900px) 100vw, 42vw" alt="Après : canalisation en cuivre propre, sans dépôt" loading="lazy" />
+    <Image class="img before" src={avant} widths={[480, 800, 1024]} sizes="(max-width: 900px) 100vw, 42vw" alt="Avant : canalisation en cuivre obstruée par le tartre" loading="lazy" />
+    <span class="tag tag--before">Sans traitement</span>
+    <span class="tag tag--after">Eau adoucie</span>
+    <span class="handle" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M7 5 2 10l5 5M13 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span>
+    <input type="range" min="0" max="100" value="50" aria-label="Comparer avant et après : faites glisser" data-ba-range />
+  </div>
+  <figcaption>Illustration générée, pour montrer l'effet du tartre dans une canalisation.</figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ba]').forEach((fig) => {
+    const r = fig.querySelector<HTMLInputElement>('[data-ba-range]')!;
+    const set = () => { fig.style.setProperty('--pos', r.value + '%'); r.setAttribute('aria-valuetext', `${r.value} % avant`); };
+    r.addEventListener('input', set); set();
+  });
+</script>
+
+<style>
+  .frame { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; background: var(--night); }
+  .frame :global(.img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .frame :global(.before) { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+  .frame::after { content: ''; position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: #fff; pointer-events: none; }
+  .handle { position: absolute; top: 50%; left: var(--pos); width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; background: #fff; color: var(--night); display: grid; place-items: center; box-shadow: 0 4px 18px rgba(0,0,0,.25); pointer-events: none; z-index: 2; transition: transform .2s var(--ease-out); }
+  .frame:hover .handle { transform: scale(1.06); }
+  .tag { position: absolute; top: 16px; z-index: 2; font-size: var(--t-xs); font-weight: 600; background: rgba(10, 20, 25, .72); color: #fff; padding: 6px 10px; border-radius: var(--radius); pointer-events: none; }
+  .tag--before { left: 16px; } .tag--after { right: 16px; }
+  input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; z-index: 3; }
+  input:focus-visible ~ .handle, .frame:has(input:focus-visible) .handle { outline: 3px solid var(--accent-strong); outline-offset: 3px; }
+  figcaption { font-size: var(--t-xs); color: var(--muted); margin-top: 10px; }
+</style>

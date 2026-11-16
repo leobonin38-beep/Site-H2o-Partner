@@ -1,0 +1,33 @@
+---
+import { SITE } from '../../config/site';
+import { url } from '../../lib/url';
+---
+<section id="contact" class="contact dark">
+  <div class="wrap grid">
+    <div>
+      <h2 data-reveal-text>Parlons de votre eau.</h2>
+      <p class="lead muted">Une question sur votre installation, un devis, un entretien : appelez-nous ou écrivez-nous, nous vous répondons rapidement.</p>
+      <div class="actions">
+        <a class="btn" href={url('/diagnostic/')}>Demander un diagnostic</a>
+        <a class="btn btn--ghost" href={url('/contact/')}>Nous écrire</a>
+      </div>
+    </div>
+    <dl class="coords">
+      <div><dt>Téléphone</dt><dd><a class="tel num" href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a></dd></div>
+      <div><dt>E-mail</dt><dd><a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a></dd></div>
+      <div><dt>Adresse</dt><dd>{SITE.street}, {SITE.postalCode} {SITE.city}</dd></div>
+    </dl>
+  </div>
+</section>
+<style>
+  .contact { background: var(--night); padding: clamp(80px, 10vw, 150px) 0; }
+  .grid { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(40px, 6vw, 112px); align-items: end; }
+  .lead { margin-top: 24px; max-width: 46ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+  .coords { display: grid; gap: 22px; }
+  .coords > div { padding-top: 16px; border-top: 1px solid var(--line-dark); }
+  dt { font-size: var(--t-sm); color: var(--accent); }
+  dd { margin-top: 6px; }
+  .tel { font-family: var(--f-display); font-size: var(--t-2xl); line-height: 1; text-decoration: none; letter-spacing: -.01em; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; align-items: start; } }
+</style>

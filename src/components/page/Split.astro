@@ -1,0 +1,25 @@
+---
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+interface Props { photo: ImageMetadata; alt: string; caption?: string; reverse?: boolean; ratio?: string; contain?: boolean }
+const { photo, alt, caption, reverse = false, ratio = '4 / 5', contain = false } = Astro.props;
+---
+<div class:list={['split', { reverse }]}>
+  <figure class:list={['pic', { contain }]} data-reveal-img style={`--ratio:${ratio}`}>
+    <Picture src={photo} formats={['avif', 'webp']} widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 45vw" alt={alt} loading="lazy" />
+    {caption && <figcaption>{caption}</figcaption>}
+  </figure>
+  <div class="body"><slot /></div>
+</div>
+<style>
+  .split { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(36px, 6vw, 104px); align-items: center; }
+  .split.reverse .pic { order: 2; }
+  .pic :global(img) { width: 100%; aspect-ratio: var(--ratio); object-fit: cover; border-radius: var(--radius); }
+  .pic.contain :global(img) { object-fit: contain; background: var(--paper); padding: 6%; }
+  figcaption { font-size: var(--t-xs); color: var(--muted); margin-top: 10px; }
+  .body :global(h2) { margin-bottom: 22px; }
+  .body :global(h3) { margin: 28px 0 10px; }
+  .body :global(p) { max-width: 58ch; }
+  .body :global(p + p) { margin-top: 14px; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; } .split.reverse .pic { order: 0; } .pic :global(img) { aspect-ratio: 16 / 10; } }
+</style>

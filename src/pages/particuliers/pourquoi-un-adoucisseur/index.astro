@@ -1,0 +1,58 @@
+---
+import Page from '../../../layouts/Page.astro';
+import PageHero from '../../../components/page/PageHero.astro';
+import Section from '../../../components/page/Section.astro';
+import Split from '../../../components/page/Split.astro';
+import CtaBand from '../../../components/page/CtaBand.astro';
+import Related from '../../../components/page/Related.astro';
+import ChezVous from '../../../components/home/ChezVous.astro';
+import hero from '../../../assets/photos/douche-carrelage.jpg';
+import p1 from '../../../assets/photos/nettoyage-pommeau.jpg';
+import p2 from '../../../assets/photos/alpes-torrent-prairie.jpg';
+import p3 from '../../../assets/photos/mains-lavabo.jpg';
+const crumbs = [{ name: 'Particuliers', href: '/particuliers/' }, { name: 'Pourquoi un adoucisseur', href: '/particuliers/pourquoi-un-adoucisseur/' }];
+---
+<Page title="Pourquoi installer un adoucisseur chez soi ?" description="Trois raisons d'installer un adoucisseur d'eau : protéger son installation et faire des économies, agir pour l'environnement, gagner en confort." path="/particuliers/pourquoi-un-adoucisseur/" crumbs={crumbs}>
+  <PageHero title="Pourquoi un adoucisseur chez soi ?" crumbs={crumbs} photo={hero} alt="Douche carrelée avec un filet d'eau"
+    lead="Le calcaire se dépose partout où passe l'eau chaude. Un adoucisseur protège l'installation, réduit les dépenses et rend l'eau plus agréable au quotidien."
+    anchors={[{ label: 'Économies', href: '#economies' }, { label: 'Environnement', href: '#environnement' }, { label: 'Confort', href: '#confort' }, { label: 'Votre eau', href: '#chez-vous' }]} />
+
+  <Section id="economies">
+    <Split photo={p1} alt="Pommeau de douche entartré en cours de nettoyage">
+      <p class="kicker">Raison n° 1</p>
+      <h2 data-reveal-text>Protéger mon installation et faire des économies.</h2>
+      <p class="lead muted">Un adoucisseur d'eau permet un fonctionnement optimal et augmente la durée de vie de mes canalisations, mes robinets, mon chauffe-eau, mon lave-linge, ma bouilloire, ma cafetière électrique.</p>
+      <p class="muted">De plus, j'utilise moins de savon, de shampoing, de crème hydratante, de lessive et d'adoucissant.</p>
+    </Split>
+  </Section>
+
+  <Section id="environnement" tone="paper">
+    <Split photo={p2} alt="Torrent de montagne dans une prairie alpine" reverse>
+      <p class="kicker">Raison n° 2</p>
+      <h2 data-reveal-text>Agir pour le développement durable.</h2>
+      <p class="lead muted">Je n'augmente pas ma consommation d'énergie, je change moins souvent d'appareils électroménagers et je rejette moins de détergents dans la nature, tout en réduisant leur consommation.</p>
+      <p class="muted">Les dépôts de tartre dans les canalisations, les équipements de chauffage et les appareils électroménagers augmentent la consommation d'énergie. En optimisant le fonctionnement de vos installations, l'eau adoucie maîtrise votre facture d'énergie et augmente la durée de vie de vos appareils.</p>
+      <p class="src">Source : ADEME, « Eau chaude sanitaire en maison individuelle », février 1991.</p>
+    </Split>
+  </Section>
+
+  <Section id="confort">
+    <Split photo={p3} alt="Mains sous l'eau du robinet d'un lavabo">
+      <p class="kicker">Raison n° 3</p>
+      <h2 data-reveal-text>Améliorer mon confort.</h2>
+      <p class="lead muted">Avec l'eau adoucie, mes cheveux sont plus soyeux, mon linge plus souple et ma peau plus douce.</p>
+    </Split>
+  </Section>
+
+  <ChezVous />
+  <CtaBand title="On regarde votre eau ensemble ?" text="Indiquez-nous la dureté de votre eau et votre commune : nous vous mettons en relation avec un plombier-chauffagiste partenaire de votre secteur." label="Être mis en relation" />
+  <Related items={[
+    { label: 'Les adoucisseurs Privilège', desc: 'Privilège 20 L, Petit Privilège 8 L', href: '/particuliers/adoucisseur-privilege/' },
+    { label: 'Vrai ou faux', desc: "11 idées reçues sur l'adoucisseur", href: '/particuliers/verite-sur-adoucisseur/' },
+    { label: 'Particuliers', desc: 'Toutes nos solutions pour la maison', href: '/particuliers/' },
+  ]} />
+</Page>
+<style>
+  h2 { margin: 8px 0 20px; }
+  .src { margin-top: 18px; font-size: var(--t-xs); color: var(--muted); }
+</style>

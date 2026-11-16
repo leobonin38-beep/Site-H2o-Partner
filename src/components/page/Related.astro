@@ -1,0 +1,20 @@
+---
+import { url } from '../../lib/url';
+interface Props { title?: string; items: { label: string; desc: string; href: string }[] }
+const { title = 'À voir aussi', items } = Astro.props;
+---
+<nav class="rel" aria-label={title}>
+  <div class="wrap">
+    <p class="t">{title}</p>
+    <ul>{items.map((it) => <li><a href={url(it.href)}><span class="l">{it.label}</span><span class="d">{it.desc}</span></a></li>)}</ul>
+  </div>
+</nav>
+<style>
+  .rel { background: var(--day); padding: clamp(48px, 6vw, 80px) 0; border-top: 1px solid var(--line); }
+  .t { font-weight: 600; margin-bottom: 14px; }
+  ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0 32px; }
+  a { display: block; padding: 18px 0; border-top: 1px solid var(--line); text-decoration: none; height: 100%; }
+  .l { display: block; font-family: var(--f-display); font-size: var(--t-xl); line-height: 1.15; transition: color .2s; }
+  .d { display: block; margin-top: 6px; font-size: var(--t-sm); color: var(--muted); }
+  a:hover .l { color: var(--accent-text); }
+</style>

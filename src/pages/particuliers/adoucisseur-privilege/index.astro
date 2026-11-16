@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import Page from '../../../layouts/Page.astro';
+import PageHero from '../../../components/page/PageHero.astro';
+import Section from '../../../components/page/Section.astro';
+import Checklist from '../../../components/page/Checklist.astro';
+import Quote from '../../../components/page/Quote.astro';
+import CtaBand from '../../../components/page/CtaBand.astro';
+import Related from '../../../components/page/Related.astro';
+import hero from '../../../assets/photos/douche-pomme.jpg';
+import gamme from '../../../assets/img/gamme-privilege.webp';
+import garantie from '../../../assets/img/privilege-garantie.webp';
+import { url } from '../../../lib/url';
+const crumbs = [{ name: 'Particuliers', href: '/particuliers/' }, { name: 'Adoucisseurs Privilège', href: '/particuliers/adoucisseur-privilege/' }];
+---
+<Page title="Adoucisseurs Privilège et Petit Privilège" description="Adoucisseurs Privilège (20 L) et Petit Privilège (8 L) : fabrication française, ACS, garantie 5 ans avec entretien annuel, installés selon la norme NF 14743." path="/particuliers/adoucisseur-privilege/" crumbs={crumbs}
+  service={{ name: 'Adoucisseurs Privilège', description: "Adoucisseurs d'eau Privilège (20 L de résine) et Petit Privilège (8 L) pour maisons et appartements." }}>
+  <PageHero title="Les adoucisseurs Privilège." crumbs={crumbs} photo={hero} alt="Pommeau de douche d'où s'écoule une eau claire"
+    lead="Parce que tous les matériels ne se valent pas : des adoucisseurs fabriqués en France, installés avec les meilleurs organes complémentaires et garantis 5 ans dans le cadre d'un entretien annuel."
+    anchors={[{ label: 'Les deux modèles', href: '#modeles' }, { label: "Inclus à l'installation", href: '#inclus' }, { label: 'Garantie', href: '#garantie' }]} />
+
+  <Section id="modeles" tone="paper" title="Deux formats, la même exigence.">
+    <div class="duo">
+      <article class="card">
+        <p class="tag">Maison</p>
+        <h3>Le Privilège</h3>
+        <p class="cap num">20 litres de résine</p>
+        <p class="muted">La qualité et la performance de nos adoucisseurs pour l'industrie, pour votre famille : tranquillité, simplicité et performance.</p>
+        <a class="link link--accent" href={url('/docs/plaquette-privilege.pdf')} type="application/pdf">Plaquette Privilège (PDF)</a>
+      </article>
+      <figure class="prod"><Image src={gamme} alt="Adoucisseur Privilège livré avec filtre, flexibles et accessoires" width={300} loading="lazy" /></figure>
+      <article class="card">
+        <p class="tag">Appartement</p>
+        <h3>Le Petit Privilège</h3>
+        <p class="cap num">8 litres de résine</p>
+        <p class="muted">Le format compact pour les appartements où la place est limitée, avec les mêmes exigences de qualité.</p>
+        <a class="link link--accent" href={url('/docs/plaquette-petit-privilege.pdf')} type="application/pdf">Plaquette Petit Privilège (PDF)</a>
+      </article>
+    </div>
+  </Section>
+
+  <Section id="inclus" title="Inclus à l'installation." intro="H2O Partner procède à votre installation selon la norme NF 14743, avec les meilleurs organes complémentaires.">
+    <Checklist items={[
+      'Filtre 3 pièces à bol transparent, dimension standard 10 pouces',
+      'Cartouche de filtration en polypropylène 25 µm',
+      'Flexibles en inox',
+      'Tuyau Crystal transparent, sans phtalate',
+      'Disconnecteur contre les contaminations bactériennes par le rejet (obligatoire selon la norme NF 14743)',
+    ]} />
+  </Section>
+
+  <Section id="garantie" tone="paper">
+    <div class="gar">
+      <figure class="prod"><Image src={garantie} alt="Adoucisseur Privilège avec les logos Attestation de conformité sanitaire et Garantie 5 ans" width={355} loading="lazy" /></figure>
+      <div>
+        <h2 data-reveal-text>Garanti 5 ans, avec un entretien annuel.</h2>
+        <p class="lead muted">La garantie de 5 ans s'applique dans le cadre d'un entretien annuel par un professionnel : réglages, bac à sel, résines et cycles hydrauliques.</p>
+        <p class="muted">H2O Partner utilise des matériels fabriqués en France, sauf la tête d'adoucisseur (américaine) et les résines (fabriquées en France ou en Italie). Connaître ces fabricants, c'est garantir la qualité alimentaire de votre eau. Attestation de conformité sanitaire (ACS) sur demande.</p>
+        <a class="link link--accent" href={url('/entretien-sav/')}>L'entretien annuel en détail</a>
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <Quote text="La qualité n'est pas synonyme de cher : vos plombiers-chauffagistes travaillent directement avec nous, sans intermédiaire." cite="Un matériel très haut de gamme pour un prix modéré." />
+  </Section>
+
+  <CtaBand title="Le bon modèle pour votre maison." text="Dites-nous combien vous êtes et la dureté de votre eau : nous vous mettons en relation avec un plombier-chauffagiste partenaire de votre secteur." label="Être mis en relation" />
+  <Related items={[
+    { label: 'Comment ça marche', desc: "L'adoucissement en 4 étapes", href: '/particuliers/#comment' },
+    { label: 'Pourquoi un adoucisseur', desc: 'Installation protégée, économies, confort', href: '/particuliers/pourquoi-un-adoucisseur/' },
+    { label: 'Vrai ou faux', desc: "11 idées reçues sur l'adoucisseur", href: '/particuliers/verite-sur-adoucisseur/' },
+  ]} />
+</Page>
+<style>
+  .duo { display: grid; grid-template-columns: 1fr auto 1fr; gap: clamp(28px, 4vw, 64px); align-items: center; }
+  .card { border-top: 2px solid var(--accent-strong); padding-top: 18px; display: grid; gap: 8px; justify-items: start; }
+  .tag { font-size: var(--t-sm); color: var(--accent-text); font-weight: 600; }
+  .card h3 { font-size: var(--t-2xl); }
+  .cap { font-weight: 600; }
+  .card .link { margin-top: 10px; }
+  .prod { background: var(--day); border-radius: var(--radius); padding: 28px; display: grid; place-items: center; }
+  .prod :global(img) { width: min(100%, 320px); height: auto; }
+  .gar { display: grid; grid-template-columns: 4fr 7fr; gap: clamp(36px, 6vw, 96px); align-items: center; }
+  .gar h2 { margin-bottom: 20px; max-width: 16ch; }
+  .gar p + p { margin-top: 14px; }
+  .gar .link { display: inline-block; margin-top: 22px; }
+  @media (max-width: 900px) { .duo, .gar { grid-template-columns: 1fr; } }
+</style>

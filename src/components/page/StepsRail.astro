@@ -1,0 +1,31 @@
+---
+import { fr } from '../../lib/typo';
+// Étapes numérotées le long d'une ligne qui se remplit au défilement (motion.ts : rails()).
+interface Props { items: { t: string; d: string }[] }
+const { items } = Astro.props;
+---
+<ol class="rail" data-rail>
+  <span class="track" aria-hidden="true"><span class="fill" data-rail-fill></span></span>
+  {items.map((s, i) => (
+    <li data-rail-step>
+      <span class="n num">{i + 1}</span>
+      <div><h3>{fr(s.t)}</h3><p>{fr(s.d)}</p></div>
+    </li>
+  ))}
+</ol>
+<style>
+  .rail { position: relative; list-style: none; padding: 0 0 0 64px; display: grid; gap: clamp(28px, 4vw, 48px); max-width: 760px; }
+  .track { position: absolute; left: 19px; top: 8px; bottom: 8px; width: 2px; background: var(--line); }
+  :global(.dark) .track { background: var(--line-dark); }
+  .fill { position: absolute; inset: 0; background: var(--accent-strong); transform-origin: top; }
+  :global(.dark) .fill { background: var(--accent); }
+  li { position: relative; transition: opacity .4s; }
+  .n { position: absolute; left: -64px; top: -2px; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); border: 1px solid var(--line); font-family: var(--f-display); font-size: 1.25rem; color: var(--accent-text); transition: background-color .4s, color .4s; }
+  :global(.dark) .n { background: var(--night-2); border-color: var(--line-dark); color: var(--accent); }
+  h3 { font-family: var(--f-body); font-size: 1.1875rem; font-weight: 600; letter-spacing: 0; }
+  p { margin-top: 6px; color: var(--muted); max-width: 56ch; }
+  :global(.dark) p { color: var(--on-dark-muted); }
+  :global(.rail-live) li:not(.on) { opacity: .5; }
+  :global(.rail-live) li.on .n { background: var(--accent-strong); color: #fff; border-color: transparent; }
+  :global(.dark.rail-live) li.on .n, :global(.dark) :global(.rail-live) li.on .n { background: var(--accent); color: var(--night); }
+</style>

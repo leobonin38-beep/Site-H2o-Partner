@@ -1,0 +1,28 @@
+---
+import { fr } from '../../lib/typo';
+import { SITE } from '../../config/site';
+import { url } from '../../lib/url';
+interface Props { title: string; text: string; label?: string; href?: string }
+const { title, text, label = 'Demander un diagnostic', href = '/diagnostic/' } = Astro.props;
+---
+<section class="cta dark" id="contact">
+  <div class="wrap grid">
+    <div>
+      <h2 data-reveal-text>{fr(title)}</h2>
+      <p class="lead muted">{fr(text)}</p>
+    </div>
+    <div class="side">
+      <a class="btn" href={url(href)}>{label}</a>
+      <a class="tel num" href={`tel:${SITE.phoneIntl}`}>{SITE.phone}</a>
+      <a class="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+    </div>
+  </div>
+</section>
+<style>
+  .cta { background: var(--night); padding: clamp(72px, 9vw, 130px) 0; }
+  .grid { display: grid; grid-template-columns: 7fr 5fr; gap: 40px clamp(40px, 6vw, 112px); align-items: end; }
+  .lead { margin-top: 22px; max-width: 46ch; }
+  .side { display: grid; gap: 16px; justify-items: start; }
+  .tel { font-family: var(--f-display); font-size: var(--t-2xl); line-height: 1; text-decoration: none; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+</style>

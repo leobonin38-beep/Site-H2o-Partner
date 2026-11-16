@@ -1,0 +1,40 @@
+---
+import Page from '../../../layouts/Page.astro';
+import PageHero from '../../../components/page/PageHero.astro';
+import Section from '../../../components/page/Section.astro';
+import Quiz from '../../../components/page/Quiz.astro';
+import Checklist from '../../../components/page/Checklist.astro';
+import CtaBand from '../../../components/page/CtaBand.astro';
+import Related from '../../../components/page/Related.astro';
+import hero from '../../../assets/photos/verre-rempli-sombre.jpg';
+import { QUIZ, faqLd } from '../../../data/quiz';
+const crumbs = [{ name: 'Particuliers', href: '/particuliers/' }, { name: 'Vrai ou faux', href: '/particuliers/verite-sur-adoucisseur/' }];
+---
+<Page title="La vérité sur l'adoucisseur : vrai ou faux" description="Eau adoucie potable, goût salé, bactéries, consommation d'eau : 11 idées reçues sur l'adoucisseur, vraies ou fausses, d'après l'UAE." path="/particuliers/verite-sur-adoucisseur/" crumbs={crumbs} ld={[faqLd(QUIZ)]}>
+  <PageHero title="La vérité sur l'adoucisseur." crumbs={crumbs} photo={hero} alt="Verre rempli d'eau claire sur fond sombre"
+    lead="Testez vos idées reçues : choisissez « Vrai » ou « Faux », la réponse s'affiche. D'après un document de l'Union des professionnels du traitement de l'eau (UAE)."
+    anchors={[{ label: 'Les 11 questions', href: '#quiz' }, { label: 'Reconnaître un adoucisseur conforme', href: '#conforme' }]} />
+  <Section id="quiz" tone="paper" title="Vrai ou faux ?">
+    <Quiz />
+  </Section>
+  <Section id="conforme" title="Reconnaître un adoucisseur qui respecte la réglementation.">
+    <ol class="two">
+      <li>Vérifiez auprès de votre professionnel que l'adoucisseur proposé bénéficie d'une Attestation de Conformité Sanitaire (ACS).</li>
+      <li>Assurez-vous que les résines échangeuses d'ions sont agréées par le ministère de la Santé pour une application alimentaire.</li>
+    </ol>
+    <p class="muted note">Les adoucisseurs Privilège disposent de l'ACS, fournie sur demande, et sont installés selon la norme NF 14743.</p>
+  </Section>
+  <CtaBand title="Une autre question ?" text="Appelez-nous ou écrivez-nous : nous vous répondons, et nous vous mettons en relation avec un plombier-chauffagiste partenaire si vous souhaitez vous équiper." label="Nous écrire" href="/contact/" />
+  <Related items={[
+    { label: 'Pourquoi un adoucisseur', desc: 'Installation protégée, économies, confort', href: '/particuliers/pourquoi-un-adoucisseur/' },
+    { label: 'Les adoucisseurs Privilège', desc: 'Fabriqués en France, garantie 5 ans', href: '/particuliers/adoucisseur-privilege/' },
+    { label: 'Entretien & SAV', desc: "L'entretien annuel de l'adoucisseur", href: '/entretien-sav/' },
+  ]} />
+</Page>
+<style>
+  .two { list-style: none; padding: 0; counter-reset: c; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .two li { counter-increment: c; border-top: 2px solid var(--accent-strong); padding-top: 18px; font-size: var(--t-lg); max-width: 44ch; }
+  .two li::before { content: counter(c); display: block; font-family: var(--f-display); font-size: 2rem; color: var(--accent-text); margin-bottom: 8px; }
+  .note { margin-top: 36px; }
+  @media (max-width: 800px) { .two { grid-template-columns: 1fr; } }
+</style>

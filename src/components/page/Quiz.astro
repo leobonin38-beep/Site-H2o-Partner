@@ -1,0 +1,70 @@
+---
+import { QUIZ } from '../../data/quiz';
+---
+<div class="quiz" data-quiz>
+  <p class="score" aria-live="polite">Score : <b data-quiz-score>0 / {QUIZ.length}</b></p>
+  <ol class="items">
+    {QUIZ.map((it, i) => (
+      <li class="item" data-quiz-item data-answer={it.answer}>
+        <span class="n num">{i + 1}</span>
+        <div class="body">
+          <p class="q">{it.q}</p>
+          <div class="btns" role="group" aria-label={`Votre réponse à la question ${i + 1}`}>
+            <button type="button" data-choice="vrai">Vrai</button>
+            <button type="button" data-choice="faux">Faux</button>
+          </div>
+          <div class="answer" data-quiz-answer aria-live="polite">
+            <p class="verdict" data-quiz-verdict>{it.answer === 'vrai' ? 'Vrai.' : 'Faux.'}</p>
+            <p class="why">{it.why}</p>
+          </div>
+        </div>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-quiz]').forEach((quiz) => {
+    if (quiz.dataset.ready) return; quiz.dataset.ready = '1';
+    quiz.classList.add('live');
+    const items = [...quiz.querySelectorAll<HTMLElement>('[data-quiz-item]')];
+    const scoreEl = quiz.querySelector('[data-quiz-score]')!;
+    let score = 0;
+    items.forEach((item) => {
+      const good = item.dataset.answer!;
+      const verdict = item.querySelector<HTMLElement>('[data-quiz-verdict]')!;
+      item.querySelectorAll<HTMLButtonElement>('[data-choice]').forEach((b) => b.addEventListener('click', () => {
+        const ok = b.dataset.choice === good;
+        if (ok) score++;
+        verdict.textContent = ok ? `Bonne réponse : c’est ${good}.` : `C’est ${good}.`;
+        item.classList.add('done', ok ? 'ok' : 'ko');
+        b.classList.add('picked');
+        item.querySelectorAll<HTMLButtonElement>('[data-choice]').forEach((x) => (x.disabled = true));
+        scoreEl.textContent = `${score} / ${items.length}`;
+      }));
+    });
+  });
+</script>
+
+<style>
+  .score { font-size: var(--t-sm); color: var(--muted); margin-bottom: 18px; }
+  .score b { font-family: var(--f-display); font-size: 1.5rem; font-weight: 400; color: var(--ink); margin-left: 6px; }
+  .items { list-style: none; padding: 0; border-top: 1px solid var(--line); }
+  .item { display: grid; grid-template-columns: 56px 1fr; gap: 8px; padding: 26px 0; border-bottom: 1px solid var(--line); }
+  .n { font-family: var(--f-display); font-size: 1.5rem; color: var(--accent-text); line-height: 1.2; }
+  .q { font-family: var(--f-display); font-size: var(--t-xl); line-height: 1.2; max-width: 34ch; }
+  .btns { display: none; gap: 10px; margin-top: 16px; }
+  .btns button { min-height: 44px; min-width: 96px; padding: 0 18px; border-radius: var(--radius); border: 1px solid var(--ink); background: transparent; cursor: pointer; font-weight: 600; transition: background-color .2s, color .2s; }
+  .btns button:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+  .btns button:disabled { cursor: default; opacity: .45; }
+  .btns button.picked { opacity: 1; background: var(--ink); color: var(--paper); }
+  .answer { margin-top: 14px; max-width: 64ch; }
+  .verdict { font-weight: 700; }
+  .why { margin-top: 4px; color: var(--muted); }
+  .live .btns { display: flex; }
+  .live .answer { display: none; }
+  .live .item.done .answer { display: block; animation: drop .45s var(--ease-out); }
+  .item.ok .verdict { color: #2E6B3A; }
+  .item.ko .verdict { color: var(--cta-hover); }
+  @keyframes drop { from { opacity: 0; transform: translateY(-6px); } }
+</style>

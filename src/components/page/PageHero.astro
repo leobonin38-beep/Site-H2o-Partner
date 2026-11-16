@@ -1,0 +1,50 @@
+---
+import { fr } from '../../lib/typo';
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Crumbs from './Crumbs.astro';
+import { url } from '../../lib/url';
+interface Props {
+  title: string; lead: string; crumbs: { name: string; href: string }[];
+  photo: ImageMetadata; alt: string; caption?: string;
+  anchors?: { label: string; href: string }[];
+  cta?: { label: string; href: string };
+}
+const { title, lead, crumbs, photo, alt, caption, anchors = [], cta } = Astro.props;
+---
+<section class="ph dark" id="haut">
+  <div class="wrap grid">
+    <div class="txt">
+      <Crumbs items={crumbs} />
+      <h1 data-hero-title>{fr(title)}</h1>
+      <p class="lead">{fr(lead)}</p>
+      {cta && <p class="act" data-hero-item><a class="btn" href={url(cta.href)}>{cta.label}</a></p>}
+      {anchors.length > 0 && (
+        <nav class="anchors" aria-label="Sur cette page" data-hero-item>
+          <ul>{anchors.map((a) => <li><a href={a.href}>{a.label}</a></li>)}</ul>
+        </nav>
+      )}
+    </div>
+    <figure class="pic" data-reveal-img>
+      <Picture src={photo} formats={['avif', 'webp']} widths={[600, 900, 1300]} sizes="(max-width: 900px) 100vw, 46vw" alt={alt} loading="eager" fetchpriority="high" />
+      {caption && <figcaption>{caption}</figcaption>}
+    </figure>
+  </div>
+</section>
+<style>
+  .ph { background: var(--night); padding: calc(var(--header-h) + clamp(32px, 5vw, 72px)) 0 clamp(48px, 6vw, 88px); }
+  .grid { display: grid; grid-template-columns: 6fr 5fr; gap: clamp(32px, 5vw, 96px); align-items: end; }
+  h1 { margin-top: 28px; max-width: 14ch; font-size: clamp(2.6rem, 1.5rem + 4vw, 5.5rem); }
+  .lead { margin-top: 24px; max-width: 52ch; color: var(--on-dark-muted); }
+  .act { margin-top: 32px; }
+  .anchors { margin-top: 40px; border-top: 1px solid var(--line-dark); }
+  .anchors ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0 28px; }
+  .anchors a { display: inline-block; padding: 14px 0 0; text-decoration: none; font-size: var(--t-sm); color: var(--on-dark-muted); transition: color .2s; }
+  .anchors a:hover { color: var(--accent); }
+  .pic :global(img) { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); max-height: 72vh; }
+  figcaption { font-size: var(--t-xs); color: var(--on-dark-muted); margin-top: 10px; }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .pic :global(img) { aspect-ratio: 16 / 10; }
+  }
+</style>

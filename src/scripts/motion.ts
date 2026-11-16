@@ -38,6 +38,7 @@ export async function initMotion(): Promise<void> {
   imageReveals();
   counters();
   stackedCards();
+  rails();
   wordmark();
   window.__motionReady = true;
   ScrollTrigger.refresh();
@@ -107,5 +108,25 @@ function wordmark() {
     yPercent: 100, duration: 1.2, stagger: 0.035, ease: EASE,
     scrollTrigger: { trigger: el, start: 'top 95%', once: true },
     onComplete: () => split.revert(),
+  });
+}
+
+function rails() {
+  document.querySelectorAll<HTMLElement>('[data-rail]').forEach((rail) => {
+    const fill = rail.querySelector<HTMLElement>('[data-rail-fill]');
+    const steps = [...rail.querySelectorAll<HTMLElement>('[data-rail-step]')];
+    if (!fill || !steps.length) return;
+    rail.classList.add('rail-live');
+    gsap.fromTo(fill, { scaleY: 0 }, {
+      scaleY: 1, ease: 'none',
+      scrollTrigger: {
+        trigger: rail, start: 'top 70%', end: 'bottom 55%', scrub: 0.5,
+        onUpdate: (self) => {
+          const railTop = rail.getBoundingClientRect().top;
+          const h = rail.offsetHeight * self.progress;
+          steps.forEach((s) => s.classList.toggle('on', s.getBoundingClientRect().top - railTop <= h + 8));
+        },
+      },
+    });
   });
 }

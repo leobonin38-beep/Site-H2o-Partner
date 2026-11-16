@@ -1,0 +1,27 @@
+---
+import { fr } from '../../lib/typo';
+// Section de contenu : titre + intro, fond clair, blanc ou sombre.
+interface Props { id?: string; title?: string; intro?: string; tone?: 'day' | 'paper' | 'dark' }
+const { id, title, intro, tone = 'day' } = Astro.props;
+---
+<section id={id} class:list={['sec', `sec--${tone}`, { dark: tone === 'dark' }]}>
+  <div class="wrap">
+    {(title || intro) && (
+      <header class="head">
+        {title && <h2 data-reveal-text>{fr(title)}</h2>}
+        {intro && <p class="lead muted">{fr(intro)}</p>}
+      </header>
+    )}
+    <slot />
+  </div>
+</section>
+<style>
+  .sec { padding: clamp(72px, 9vw, 140px) 0; }
+  .sec--day { background: var(--day); }
+  .sec--paper { background: var(--paper); }
+  .sec--dark { background: var(--night); }
+  .head { display: grid; grid-template-columns: 7fr 5fr; gap: 24px 48px; align-items: end; margin-bottom: clamp(36px, 5vw, 64px); }
+  .head h2 { max-width: 18ch; }
+  .head .lead { max-width: 46ch; }
+  @media (max-width: 900px) { .head { grid-template-columns: 1fr; align-items: start; } }
+</style>

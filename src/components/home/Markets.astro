@@ -1,4 +1,5 @@
 ---
+import { fr } from '../../lib/typo';
 import { Picture } from 'astro:assets';
 import pPart from '../../assets/photos/mains-lavabo.jpg';
 import pInst from '../../assets/photos/installateur-sertissage.jpg';
@@ -39,7 +40,7 @@ const cards = [
           </div>
           <div class="txt">
             <h3>{c.title}</h3>
-            <p class="muted">{c.text}</p>
+            <p class="muted">{fr(c.text)}</p>
             <ul>{c.items.map((it) => <li>{it}</li>)}</ul>
             <a class="link link--accent" href={url(c.href)}>{c.cta}</a>
           </div>

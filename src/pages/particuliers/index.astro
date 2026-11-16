@@ -1,0 +1,95 @@
+---
+import { Image } from 'astro:assets';
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import Split from '../../components/page/Split.astro';
+import StepsRail from '../../components/page/StepsRail.astro';
+import Checklist from '../../components/page/Checklist.astro';
+import CtaBand from '../../components/page/CtaBand.astro';
+import Related from '../../components/page/Related.astro';
+import ChezVous from '../../components/home/ChezVous.astro';
+import { url as u2 } from '../../lib/url';
+import hero from '../../assets/photos/mains-lavabo-2.jpg';
+import pommeau from '../../assets/photos/nettoyage-pommeau.jpg';
+import gamme from '../../assets/img/gamme-privilege.webp';
+import { url } from '../../lib/url';
+const crumbs = [{ name: 'Particuliers', href: '/particuliers/' }];
+const reasons = [
+  { t: 'Protéger mon installation et faire des économies', d: "Un adoucisseur permet un fonctionnement optimal et augmente la durée de vie des canalisations, robinets, chauffe-eau, lave-linge, bouilloire ou cafetière. Et j'utilise moins de savon, de shampoing, de lessive et d'adoucissant." },
+  { t: 'Agir pour le développement durable', d: "Je n'augmente pas ma consommation d'énergie, je change moins souvent d'appareils électroménagers et je rejette moins de détergents dans la nature." },
+  { t: 'Améliorer mon confort', d: "Avec l'eau adoucie, mes cheveux sont plus soyeux, mon linge plus souple et ma peau plus douce." },
+];
+const steps = [
+  { t: "L'eau dure arrive", d: "L'eau du réseau transporte du calcium et du magnésium. Plus elle en contient, plus elle est « dure » : c'est ce que mesure le TH, exprimé en degrés français (°f)." },
+  { t: 'La résine échange les ions', d: "En traversant la résine échangeuse d'ions, l'eau cède son calcium et son magnésium, remplacés par du sodium. Les résines sont agréées par le ministère de la Santé pour une application alimentaire." },
+  { t: "L'eau adoucie alimente la maison", d: "Canalisations, robinets, chauffe-eau et électroménager sont protégés du tartre. L'eau adoucie reste potable : ce procédé est reconnu pour le traitement des eaux destinées à la consommation humaine." },
+  { t: 'La résine se régénère', d: "Quand la résine est saturée, une saumure préparée dans le bac à sel la nettoie, puis l'eau de rinçage part à l'égout : 5 à 8 m³ par an pour un foyer, soit 4 % de consommation d'eau supplémentaire au maximum." },
+];
+---
+<Page title="Adoucisseur d'eau pour particuliers en Isère" description="Adoucisseurs Privilège, antitartre, filtres, déferrisation et UVc pour la maison, posés et suivis par nos partenaires plombiers-chauffagistes en Rhône-Alpes." path="/particuliers/" crumbs={crumbs}
+  service={{ name: "Traitement de l'eau pour particuliers", description: "Adoucisseurs, antitartre, filtres, déferrisation et traitement UVc pour la maison, installés par des plombiers-chauffagistes partenaires." }}>
+  <PageHero title="Une eau douce à la maison." crumbs={crumbs} photo={hero} alt="Mains sous un filet d'eau claire au-dessus d'un lavabo"
+    lead="Vous désirez un antitartre ou un adoucisseur de qualité, au meilleur prix, avec le suivi et la garantie d'une société spécialisée dans le traitement de l'eau ? Nous vous mettons en relation avec nos partenaires plombiers-chauffagistes en Rhône-Alpes."
+    anchors={[{ label: 'Pourquoi adoucir', href: '#pourquoi' }, { label: 'Comment ça marche', href: '#comment' }, { label: 'Les adoucisseurs', href: '#materiel' }, { label: 'Votre dureté', href: '#chez-vous' }]} />
+
+  <Section id="pourquoi" title="Pourquoi adoucir ?">
+    <Split photo={pommeau} alt="Pommeau de douche couvert de tartre, en cours de nettoyage" caption="Le pommeau de douche, premier endroit où le tartre se voit.">
+      <ul class="reasons">{reasons.map((r) => <li><h3>{r.t}</h3><p class="muted">{r.d}</p></li>)}</ul>
+      <a class="link link--accent" href={url('/particuliers/pourquoi-un-adoucisseur/')}>Les raisons en détail</a>
+    </Split>
+  </Section>
+
+  <Section id="comment" tone="dark" title="Comment l'eau devient douce." intro="Un adoucisseur ne dissout pas le calcaire : il remplace les ions calcium et magnésium de l'eau par des ions sodium.">
+    <div class="how">
+      <StepsRail items={steps} />
+      <figure class="schema">
+        <img src={u2('/sequences/softener/fallback.webp')} width="1600" height="900" alt="Schéma en coupe d'un adoucisseur : l'eau traverse la résine, qui retient le calcaire" loading="lazy" decoding="async" />
+        <figcaption>Le schéma animé complet est sur la <a class="link" href={u2('/#adoucissement')}>page d'accueil</a>.</figcaption>
+      </figure>
+    </div>
+  </Section>
+
+  <Section id="materiel" tone="paper" title="Parce que tous les matériels ne se valent pas." intro="H2O Partner utilise des matériels fabriqués en France (sauf la tête d'adoucisseur, américaine, et les résines, fabriquées en France ou en Italie). Attestation de conformité sanitaire (ACS) sur demande.">
+    <div class="range">
+      <div class="prod"><Image src={gamme} alt="Adoucisseur Privilège avec son filtre, ses flexibles et ses accessoires" width={300} loading="lazy" /></div>
+      <div class="models">
+        <article><p class="tag">Maison</p><h3>Le Privilège</h3><p class="cap num">20 litres de résine</p><p class="muted">La qualité et la performance de nos adoucisseurs pour l'industrie, pour votre famille : tranquillité, simplicité et performance.</p></article>
+        <article><p class="tag">Appartement</p><h3>Le Petit Privilège</h3><p class="cap num">8 litres de résine</p><p class="muted">Le format compact pour les appartements où la place est limitée, avec les mêmes exigences de qualité.</p></article>
+        <p class="more"><a class="btn btn--ghost" href={url('/particuliers/adoucisseur-privilege/')}>Voir les adoucisseurs Privilège</a></p>
+      </div>
+    </div>
+    <h3 class="also">Aussi pour votre maison</h3>
+    <Checklist cols={2} items={['Filtres et antitartres', 'Déferrisation', 'Traitement UVc', "Traitement des eaux de source et de forage"]} />
+  </Section>
+
+  <ChezVous />
+
+  <CtaBand title="Un adoucisseur chez vous ?" text="Dites-nous où vous habitez et ce que vous cherchez : nous vous mettons en relation avec un plombier-chauffagiste partenaire de votre secteur." label="Être mis en relation" />
+  <Related items={[
+    { label: 'Les adoucisseurs Privilège', desc: 'Privilège 20 L, Petit Privilège 8 L, garantie 5 ans', href: '/particuliers/adoucisseur-privilege/' },
+    { label: 'Pourquoi un adoucisseur', desc: 'Installation protégée, économies, confort', href: '/particuliers/pourquoi-un-adoucisseur/' },
+    { label: 'Vrai ou faux', desc: "11 idées reçues sur l'adoucisseur", href: '/particuliers/verite-sur-adoucisseur/' },
+    { label: 'Entretien & SAV', desc: "L'entretien annuel de votre adoucisseur", href: '/entretien-sav/' },
+  ]} />
+</Page>
+<style>
+  .reasons { list-style: none; padding: 0; display: grid; gap: 26px; margin-bottom: 30px; }
+  .reasons h3 { font-size: var(--t-xl); margin-bottom: 8px; }
+  .range { display: grid; grid-template-columns: 4fr 8fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .prod { background: var(--day); border-radius: var(--radius); padding: 32px; display: grid; place-items: center; }
+  .prod :global(img) { width: min(100%, 300px); height: auto; }
+  .models { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .models article { border-top: 2px solid var(--accent-strong); padding-top: 16px; }
+  .tag { font-size: var(--t-sm); color: var(--accent-text); font-weight: 600; }
+  .models h3 { font-size: var(--t-2xl); margin: 4px 0 6px; }
+  .cap { font-weight: 600; margin-bottom: 10px; }
+  .more { grid-column: 1 / -1; }
+  .also { font-family: var(--f-body); font-weight: 600; font-size: 1.0625rem; margin-top: clamp(48px, 6vw, 80px); }
+  .how { display: grid; grid-template-columns: 6fr 6fr; gap: clamp(36px, 5vw, 80px); align-items: start; }
+  .schema { position: sticky; top: calc(var(--header-h) + 24px); }
+  .schema img { width: 100%; height: auto; border-radius: var(--radius); }
+  .schema figcaption { font-size: var(--t-xs); color: var(--on-dark-muted); margin-top: 10px; }
+  @media (max-width: 900px) { .how { grid-template-columns: 1fr; } .schema { position: static; } }
+  @media (max-width: 900px) { .range, .models { grid-template-columns: 1fr; } }
+</style>

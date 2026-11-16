@@ -1,0 +1,15 @@
+---
+interface Props { items: string[]; cols?: 1 | 2 }
+const { items, cols = 1 } = Astro.props;
+---
+<ul class:list={['check', { two: cols === 2 }]}>{items.map((it) => <li>{it}</li>)}</ul>
+<style>
+  .check { list-style: none; padding: 0; margin: 20px 0; border-top: 1px solid var(--line); }
+  :global(.dark) .check { border-color: var(--line-dark); }
+  .check.two { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; }
+  li { position: relative; padding: 12px 0 12px 30px; border-bottom: 1px solid var(--line); }
+  :global(.dark) li { border-color: var(--line-dark); }
+  li::before { content: ''; position: absolute; left: 2px; top: 19px; width: 12px; height: 7px; border-left: 2px solid var(--accent-strong); border-bottom: 2px solid var(--accent-strong); transform: rotate(-45deg); }
+  :global(.dark) li::before { border-color: var(--accent); }
+  @media (max-width: 700px) { .check.two { grid-template-columns: 1fr; } }
+</style>

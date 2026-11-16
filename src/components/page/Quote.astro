@@ -1,0 +1,15 @@
+---
+import { fr } from '../../lib/typo';
+interface Props { text: string; cite?: string }
+const { text, cite } = Astro.props;
+---
+<figure class="quote">
+  <blockquote><p>{fr(`« ${text} »`)}</p></blockquote>
+  {cite && <figcaption>{cite}</figcaption>}
+</figure>
+<style>
+  .quote { max-width: 980px; margin-inline: auto; text-align: left; }
+  blockquote p { font-family: var(--f-display); font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3.25rem); line-height: 1.15; letter-spacing: -.015em; text-wrap: balance; }
+  figcaption { margin-top: 20px; color: var(--muted); }
+  :global(.dark) figcaption { color: var(--on-dark-muted); }
+</style>

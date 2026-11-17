@@ -40,19 +40,28 @@ export function initSequence(): void {
 
   let progress = 0;
   let render: () => void = () => {};
+  const thresholds = (section.dataset.thresholds ?? '').split(',').map(Number).filter((n) => !Number.isNaN(n));
+  const hots = [...section.querySelectorAll<HTMLElement>('[data-hot-from]')];
+  const count = section.querySelector<HTMLElement>('[data-seq-count]');
   const setProgress = (p: number) => {
     progress = p;
     render();
-    const active = Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999));
-    steps.forEach((s, i) => s.classList.toggle('on', i <= active));
+    const active = thresholds.length === steps.length
+      ? thresholds.reduce((acc, t, i) => (p >= t ? i : acc), 0)
+      : Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999));
+    steps.forEach((s, i) => { s.classList.toggle('on', i <= active); s.classList.toggle('current', i === active); });
+    if (count) count.textContent = String(active + 1).padStart(2, '0');
+    hots.forEach((h) => h.classList.toggle('show', p >= Number(h.dataset.hotFrom)));
+    section.style.setProperty('--p', p.toFixed(4));
+    section.style.setProperty('--flow', Math.min(1, Math.max(0, (p - 0.4) / 0.3)).toFixed(3));
   };
 
   ScrollTrigger.create({
     trigger: pinned || layout === 'wide' ? section : stepsList,
     start: pinned ? 'top top' : layout === 'wide' ? 'top 60%' : 'top 70%',
-    end: pinned ? '+=220%' : layout === 'wide' ? 'bottom 40%' : 'bottom 70%',
+    end: pinned ? '+=280%' : layout === 'wide' ? 'bottom 40%' : 'bottom 70%',
     pin: pinned ? stage : false,
-    scrub: pinned ? 0.9 : 0.6,
+    scrub: pinned ? 1.2 : 0.7,
     onUpdate: (self) => setProgress(self.progress),
     onRefresh: (self) => setProgress(self.progress),
   });

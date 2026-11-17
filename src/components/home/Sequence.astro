@@ -8,8 +8,18 @@ const steps = [
   { t: "L'eau adoucie alimente la maison", d: "Canalisations, robinets, chauffe-eau et électroménager sont protégés du tartre. L'eau adoucie reste potable." },
   { t: 'La résine se régénère', d: 'Quand la résine est saturée, une saumure préparée dans le bac à sel la nettoie, puis l’eau de rinçage part à l’égout.' },
 ];
+// Seuils de progression (0 à 1) où chaque étape devient l'étape en cours (calés sur la vidéo :
+// ouverture jusqu'à 0,38, eau qui descend dans la résine, puis eau claire qui remonte).
+const thresholds = [0, 0.42, 0.62, 0.86];
+// Étiquettes posées sur les pièces (positions en % de l'image 1280 × 720), affichées entre from et to.
+const hotspots = [
+  { label: 'Tête de vanne', x: 56.5, y: 13.5, side: 'right', len: 9, from: 0.3 },
+  { label: 'Bac à sel', x: 79, y: 40, side: 'right', len: 9, from: 0.33 },
+  { label: "Résine échangeuse d'ions", x: 47, y: 66, side: 'left', len: 17, from: 0.45 },
+  { label: 'Eau adoucie, par le tube central', x: 49.4, y: 52, side: 'left', len: 19, from: 0.72 },
+];
 ---
-<section id="adoucissement" class="seq dark" data-sequence data-src={url('/sequences/softener/')}>
+<section id="adoucissement" class="seq dark" data-sequence data-src={url('/sequences/softener/')} data-thresholds={thresholds.join(',')}>
   <div class="stage">
     <div class="wrap layout">
       <header class="head">
@@ -17,18 +27,31 @@ const steps = [
         <p class="muted">Un adoucisseur ne dissout pas le calcaire : il remplace les ions calcium et magnésium de l'eau par des ions sodium.</p>
       </header>
       <div class="visual">
-        <canvas width="1280" height="720" aria-hidden="true" data-seq-canvas></canvas>
-        <img class="fallback" src={url('/sequences/softener/fallback.webp')} width="1280" height="720" alt="Adoucisseur ouvert en coupe : la bouteille remplie de billes de résine ambrées, le tube central et la tête de vanne" loading="lazy" decoding="async" data-seq-fallback />
+        <div class="frame">
+          <canvas width="1280" height="720" aria-hidden="true" data-seq-canvas></canvas>
+          <img class="fallback" src={url('/sequences/softener/fallback.webp')} width="1280" height="720" alt="Adoucisseur ouvert en coupe : la bouteille remplie de billes de résine ambrées, le tube central et la tête de vanne" loading="lazy" decoding="async" data-seq-fallback />
+          <span class="glow" aria-hidden="true"></span>
+          <div class="hots" aria-hidden="true">
+            {hotspots.map((h) => (
+              <span class:list={['hot', `hot--${h.side}`]} style={`--x:${h.x}%;--y:${h.y}%;--len:${h.len}`} data-hot-from={h.from}>
+                <i class="dot"></i><i class="line"></i><b>{h.label}</b>
+              </span>
+            ))}
+          </div>
+        </div>
         <p class="note">Illustration en images de synthèse : adoucisseur représenté à titre d'exemple.</p>
       </div>
-      <ol class="steps">
-        {steps.map((s, i) => (
-          <li data-seq-step={i}>
-            <span class="n num">{i + 1}</span>
-            <div><h3>{fr(s.t)}</h3><p class="muted">{fr(s.d)}</p></div>
-          </li>
-        ))}
-      </ol>
+      <div class="captions">
+        <div class="meter" aria-hidden="true"><span class="count num"><b data-seq-count>01</b> / 0{steps.length}</span><span class="bar"><i></i></span></div>
+        <ol class="steps">
+          {steps.map((s, i) => (
+            <li data-seq-step={i}>
+              <span class="n num">{i + 1}</span>
+              <div><h3>{fr(s.t)}</h3><p class="muted">{fr(s.d)}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   </div>
 </section>
@@ -39,20 +62,24 @@ const steps = [
 </script>
 
 <style>
-  .seq { background: var(--night); position: relative; }
+  .seq { --bg: #05080A; background: var(--bg); position: relative; }
   .stage { padding: clamp(80px, 9vw, 140px) 0; }
-  .layout { display: grid; grid-template-columns: 4fr 8fr; grid-template-areas: 'head visual' 'steps visual'; gap: 32px clamp(32px, 5vw, 80px); align-items: start; }
+  .layout { display: grid; grid-template-columns: 4fr 8fr; grid-template-areas: 'head visual' 'captions visual'; gap: 32px clamp(32px, 5vw, 80px); align-items: start; }
   .head { grid-area: head; }
   .head p { margin-top: 18px; max-width: 40ch; }
   .visual { grid-area: visual; position: relative; }
-  canvas, .fallback { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--radius); background: var(--night-2); }
+  .frame { position: relative; }
+  canvas, .fallback { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--radius); background: var(--bg); }
   canvas { display: none; }
   .note { font-size: var(--t-xs); color: var(--on-dark-muted); margin-top: 10px; }
-  .steps { grid-area: steps; list-style: none; padding: 0; border-top: 1px solid var(--line-dark); }
-  .steps li { display: grid; grid-template-columns: 44px 1fr; gap: 6px; padding: 16px 0; border-bottom: 1px solid var(--line-dark); transition: opacity .4s; }
+  .captions { grid-area: captions; }
+  .meter { display: none; }
+  .steps { list-style: none; padding: 0; border-top: 1px solid var(--line-dark); }
+  .steps li { display: grid; grid-template-columns: 44px 1fr; gap: 6px; padding: 16px 0; border-bottom: 1px solid var(--line-dark); }
   .n { font-family: var(--f-display); font-size: 1.375rem; color: var(--accent); line-height: 1.1; }
   h3 { font-family: var(--f-body); font-size: 1.0625rem; font-weight: 600; letter-spacing: 0; line-height: 1.35; }
   .steps p { font-size: var(--t-sm); margin-top: 4px; }
+  .glow, .hots { display: none; }
 
   /* Mode animé : canvas à la place de l'image fixe (dès que la 1re image est chargée) */
   :global(.seq-live) canvas { display: block; }
@@ -61,28 +88,71 @@ const steps = [
   :global(.seq-live) .steps li:not(.on) p { color: rgba(243, 242, 238, .56); }
   :global(.seq-live) .steps li:not(.on) .n { opacity: .6; }
 
-  /* Mode épinglé (ordinateur, si la scène tient dans l'écran) : posé par le script avant la mesure */
+  /* ===== Mode « cinéma » : ordinateur, scène épinglée plein écran ===== */
   @media (min-width: 901px) {
-    :global(.seq-pin) .stage { min-height: 100vh; display: flex; align-items: center; padding: calc(var(--header-h) * .5) 0 20px; }
-    :global(.seq-pin) .layout { width: min(var(--max), 100% - 2 * var(--gutter)); row-gap: 24px; }
-    :global(.seq-pin) .steps li { padding: 11px 0; }
-    :global(.seq-pin) .visual { align-self: center; }
-    :global(.seq-pin) canvas, :global(.seq-pin) .fallback { width: auto; max-width: 100%; max-height: calc(100vh - 140px); margin-inline: auto; }
+    :global(.seq-pin) .stage { height: 100vh; padding: 0; position: relative; overflow: hidden;
+      background: radial-gradient(ellipse 55% 60% at 58% 52%, rgba(22, 40, 47, .55), transparent 70%), var(--bg); }
+    :global(.seq-pin) .layout { display: block; position: relative; height: 100%; }
+    :global(.seq-pin) .head { position: absolute; left: 0; top: calc(var(--header-h) + 28px); z-index: 2; max-width: 30ch; }
+    :global(.seq-pin) .head h2 { font-size: clamp(2rem, 1.3rem + 1.8vw, 3.25rem); }
+    :global(.seq-pin) .head p { font-size: var(--t-sm); }
+    :global(.seq-pin) .visual { z-index: 0; position: absolute; inset: calc(var(--header-h) * .6) 0 0 0; display: grid; place-items: center; pointer-events: none; }
+    :global(.seq-pin) .stage::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(90deg, var(--bg) 0%, rgba(5, 8, 10, .88) 20%, rgba(5, 8, 10, .35) 34%, transparent 46%); }
+    :global(.seq-pin) .frame { height: min(80vh, calc((100vw - 2 * var(--gutter)) * .6)); aspect-ratio: 16 / 9; transform: translateX(10%); }
+    :global(.seq-pin) canvas, :global(.seq-pin) .fallback { width: 100%; height: 100%; border-radius: 0;
+      -webkit-mask-image: radial-gradient(ellipse 62% 72% at 52% 50%, #000 58%, transparent 100%);
+              mask-image: radial-gradient(ellipse 62% 72% at 52% 50%, #000 58%, transparent 100%); }
+    :global(.seq-pin) .note { position: absolute; right: 0; bottom: 18px; margin: 0; z-index: 2; }
+    :global(.seq-pin) .captions { position: absolute; left: 0; bottom: clamp(32px, 8vh, 88px); width: min(400px, 32vw); z-index: 2; }
+    :global(.seq-pin) .meter { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; color: var(--on-dark-muted); font-size: var(--t-sm); }
+    :global(.seq-pin) .count b { color: var(--accent); font-weight: 600; }
+    :global(.seq-pin) .bar { position: relative; flex: 1; height: 1px; background: var(--line-dark); }
+    :global(.seq-pin) .bar i { position: absolute; inset: 0; background: var(--accent); transform-origin: left; transform: scaleX(var(--p, 0)); }
+    :global(.seq-pin) .steps { display: grid; border: 0; }
+    :global(.seq-pin) .steps li { grid-area: 1 / 1; display: block; padding: 0; border: 0; transition: opacity .6s var(--ease-out), transform .8s var(--ease-out), filter .6s; }
+    :global(.seq-pin) .steps .n { display: none; }
+    :global(.seq-pin) .steps h3 { font-family: var(--f-display); font-weight: 380; font-size: clamp(1.6rem, 1.1rem + 1.3vw, 2.4rem); line-height: 1.1; letter-spacing: -.01em; }
+    :global(.seq-pin) .steps p { font-size: var(--t-base); margin-top: 12px; color: var(--on-dark-muted); }
+    :global(.seq-pin.seq-live) .steps li:not(.current) { opacity: 0; transform: translateY(18px); filter: blur(4px); }
+    :global(.seq-pin.seq-live) .steps li.current { opacity: 1; transform: none; filter: none; }
+    :global(.seq-pin.seq-live) .steps li.current h3, :global(.seq-pin.seq-live) .steps li.current p { color: inherit; }
+    :global(.seq-pin.seq-live) .steps li.current p { color: var(--on-dark-muted); }
+
+    /* Halo ambré quand l'eau traverse la résine */
+    :global(.seq-pin.seq-live) .glow { display: block; position: absolute; left: 49%; top: 60%; width: 34%; height: 70%; transform: translate(-50%, -50%);
+      background: radial-gradient(closest-side, rgba(217, 162, 95, .55), rgba(217, 162, 95, 0)); mix-blend-mode: screen; opacity: calc(var(--flow, 0) * .55); pointer-events: none; }
+
+    /* Étiquettes techniques sur les pièces */
+    :global(.seq-pin.seq-live) .hots { display: block; position: absolute; inset: 0; z-index: 3; }
+    .hot { position: absolute; left: var(--x); top: var(--y); display: flex; align-items: center; opacity: 0; transition: opacity .6s var(--ease-out); }
+    .hot .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(217, 162, 95, .22); transform: translate(-50%, 0) scale(.4); transition: transform .5s var(--ease-out); flex: none; }
+    .hot .line { height: 1px; width: 0; background: linear-gradient(90deg, rgba(217, 162, 95, .9), rgba(243, 242, 238, .5)); transition: width .7s var(--ease-out) .1s; }
+    .hot b { font-weight: 500; font-size: 13px; letter-spacing: .01em; color: var(--on-dark); white-space: nowrap; padding: 4px 8px; background: rgba(5, 8, 10, .55); border: 1px solid rgba(243, 242, 238, .14); border-radius: 2px; backdrop-filter: blur(4px); opacity: 0; transition: opacity .5s .45s; }
+    .hot { transform: translateY(-50%); }
+    .hot--left { flex-direction: row-reverse; }
+    .hot--left .dot { transform: translate(50%, 0) scale(.4); }
+    .hot--left .line { background: linear-gradient(270deg, rgba(217, 162, 95, .9), rgba(243, 242, 238, .5)); }
+    .hot--left { right: calc(100% - var(--x)); left: auto; }
+    :global(.hot.show) { opacity: 1; }
+    :global(.hot.show) .dot { transform: translate(-50%, 0) scale(1); }
+    :global(.hot--left.show) .dot { transform: translate(50%, 0) scale(1); }
+    :global(.hot.show) .line { width: calc(var(--len) * .62vw); }
+    :global(.hot.show) b { opacity: 1; }
   }
-  @media (min-width: 901px) and (max-height: 820px) {
-    :global(.seq-pin) .head p { display: none; }
-    :global(.seq-pin) .head h2 { font-size: clamp(2rem, 1.4rem + 1.6vw, 2.75rem); }
-    :global(.seq-pin) .steps p { font-size: var(--t-xs); line-height: 1.45; }
-    :global(.seq-pin) .steps li { padding: 9px 0; }
+  @media (min-width: 901px) and (max-width: 1180px) {
+    :global(.seq-pin) .frame { transform: translateX(14%); }
+    .hot b { font-size: 12px; }
   }
 
-  /* Téléphone : image fixée en haut pendant que les étapes défilent dessous */
+  /* ===== Téléphone : image fixée en haut pendant que les étapes défilent dessous ===== */
   @media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; grid-template-areas: 'head' 'visual' 'steps'; }
+    .layout { grid-template-columns: 1fr; grid-template-areas: 'head' 'visual' 'captions'; }
     canvas { aspect-ratio: 3 / 4; }
     .fallback { aspect-ratio: 16 / 9; object-fit: contain; }
-    :global(.seq-live) .visual { position: sticky; top: 8px; z-index: 1; background: var(--night); padding-bottom: 8px; }
-    :global(.seq-live) canvas { width: auto; height: min(52svh, 520px); margin-inline: auto; }
+    :global(.seq-live) .visual { position: sticky; top: 8px; z-index: 1; background: var(--bg); padding-bottom: 8px; }
+    :global(.seq-live) canvas { width: auto; height: min(52svh, 520px); margin-inline: auto;
+      -webkit-mask-image: linear-gradient(180deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(180deg, transparent, #000 8%, #000 92%, transparent); }
     :global(.seq-live) .steps { padding-bottom: 30svh; }
   }
 </style>

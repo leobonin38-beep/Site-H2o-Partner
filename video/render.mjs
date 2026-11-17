@@ -1,3 +1,4 @@
+// ⚠️ Ancienne séquence (schéma dessiné par le code). Remplacée le 2026-11-17 par la vidéo Veo : voir scripts/veo-sequence.sh. Ne relancer que pour revenir au schéma.
 // Rend les deux séquences en PNG, puis les convertit en WebP pour le site.
 import { execSync } from 'node:child_process';
 import { mkdirSync, readdirSync, writeFileSync, rmSync } from 'node:fs';

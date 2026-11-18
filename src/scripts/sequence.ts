@@ -43,9 +43,12 @@ export function initSequence(): void {
   const thresholds = (section.dataset.thresholds ?? '').split(',').map(Number).filter((n) => !Number.isNaN(n));
   const hots = [...section.querySelectorAll<HTMLElement>('[data-hot-from]')];
   const count = section.querySelector<HTMLElement>('[data-seq-count]');
+  // Un seul dessin par image d'écran, et seulement si l'image affichée change vraiment.
+  let raf = 0;
+  const requestRender = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; render(); }); };
   const setProgress = (p: number) => {
     progress = p;
-    render();
+    requestRender();
     const active = thresholds.length === steps.length
       ? thresholds.reduce((acc, t, i) => (p >= t ? i : acc), 0)
       : Math.min(steps.length - 1, Math.floor(p * steps.length * 0.999));
@@ -61,7 +64,9 @@ export function initSequence(): void {
     start: pinned ? 'top top' : layout === 'wide' ? 'top 60%' : 'top 70%',
     end: pinned ? '+=280%' : layout === 'wide' ? 'bottom 40%' : 'bottom 70%',
     pin: pinned ? stage : false,
-    scrub: pinned ? 1.2 : 0.7,
+    // Avec le défilement doux (souris), la séquence suit directement : un seul amorti, pas de traîne
+    // au ralenti. Sans lui (tactile), un léger lissage.
+    scrub: matchMedia('(pointer: fine)').matches ? true : 0.4,
     onUpdate: (self) => setProgress(self.progress),
     onRefresh: (self) => setProgress(self.progress),
   });
@@ -86,10 +91,14 @@ export function initSequence(): void {
       return null;
     };
     // Fondu entre deux images voisines selon la position exacte : un défilement lent reste fluide.
+    let lastKey = '';
     render = () => {
       const { index, next, mix } = frameAt(progress, count);
       const a = nearest(index);
       if (!a) return;
+      const key = `${index}|${frames[next] ? Math.round(mix * 40) : 0}|${a.src}`;
+      if (key === lastKey) return;
+      lastKey = key;
       ctx!.globalAlpha = 1;
       ctx!.drawImage(a, 0, 0, width, height);
       const b = frames[next];
@@ -102,7 +111,14 @@ export function initSequence(): void {
     const fetchFrame = (i: number) => new Promise<void>((resolve) => {
       const img = new Image();
       img.decoding = 'async';
-      img.onload = () => { frames[i] = img; if (Math.abs(i - progress * (count - 1)) < 2) render(); resolve(); };
+      // Décodage à l'avance, hors du fil principal : le dessin au défilement n'a plus rien à décompresser.
+      img.onload = () => {
+        img.decode().catch(() => {}).finally(() => {
+          frames[i] = img;
+          if (Math.abs(i - progress * (count - 1)) < 2) { lastKey = ''; requestRender(); }
+          resolve();
+        });
+      };
       img.onerror = () => resolve();
       img.src = `${base}${layout}/f${String(i).padStart(3, '0')}.webp`;
     });

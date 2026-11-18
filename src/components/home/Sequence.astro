@@ -70,7 +70,7 @@ const hotspots = [
   .visual { grid-area: visual; position: relative; }
   .frame { position: relative; }
   canvas, .fallback { width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--radius); background: var(--bg); }
-  canvas { display: none; }
+  canvas { display: none; will-change: contents; }
   .note { font-size: var(--t-xs); color: var(--on-dark-muted); margin-top: 10px; }
   .captions { grid-area: captions; }
   .meter { display: none; }
@@ -100,9 +100,10 @@ const hotspots = [
     :global(.seq-pin) .stage::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: linear-gradient(90deg, var(--bg) 0%, rgba(5, 8, 10, .88) 20%, rgba(5, 8, 10, .35) 34%, transparent 46%); }
     :global(.seq-pin) .frame { height: min(80vh, calc((100vw - 2 * var(--gutter)) * .6)); aspect-ratio: 16 / 9; transform: translateX(10%); }
-    :global(.seq-pin) canvas, :global(.seq-pin) .fallback { width: 100%; height: 100%; border-radius: 0;
-      -webkit-mask-image: radial-gradient(ellipse 62% 72% at 52% 50%, #000 58%, transparent 100%);
-              mask-image: radial-gradient(ellipse 62% 72% at 52% 50%, #000 58%, transparent 100%); }
+    :global(.seq-pin) canvas, :global(.seq-pin) .fallback { width: 100%; height: 100%; border-radius: 0; }
+    /* Bords fondus dans le fond : un calque fixe (et non un masque recalculé à chaque image) */
+    :global(.seq-pin) .frame::after { content: ''; position: absolute; inset: -1px; pointer-events: none; z-index: 1;
+      background: radial-gradient(ellipse 62% 72% at 52% 50%, transparent 56%, var(--bg) 100%); }
     :global(.seq-pin) .note { position: absolute; right: 0; bottom: 18px; margin: 0; z-index: 2; }
     :global(.seq-pin) .captions { position: absolute; left: 0; bottom: clamp(32px, 8vh, 88px); width: min(400px, 32vw); z-index: 2; }
     :global(.seq-pin) .meter { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; color: var(--on-dark-muted); font-size: var(--t-sm); }
@@ -110,25 +111,25 @@ const hotspots = [
     :global(.seq-pin) .bar { position: relative; flex: 1; height: 1px; background: var(--line-dark); }
     :global(.seq-pin) .bar i { position: absolute; inset: 0; background: var(--accent); transform-origin: left; transform: scaleX(var(--p, 0)); }
     :global(.seq-pin) .steps { display: grid; border: 0; }
-    :global(.seq-pin) .steps li { grid-area: 1 / 1; display: block; padding: 0; border: 0; transition: opacity .6s var(--ease-out), transform .8s var(--ease-out), filter .6s; }
+    :global(.seq-pin) .steps li { grid-area: 1 / 1; display: block; padding: 0; border: 0; transition: opacity .6s var(--ease-out), transform .8s var(--ease-out); }
     :global(.seq-pin) .steps .n { display: none; }
     :global(.seq-pin) .steps h3 { font-family: var(--f-display); font-weight: 380; font-size: clamp(1.6rem, 1.1rem + 1.3vw, 2.4rem); line-height: 1.1; letter-spacing: -.01em; }
     :global(.seq-pin) .steps p { font-size: var(--t-base); margin-top: 12px; color: var(--on-dark-muted); }
-    :global(.seq-pin.seq-live) .steps li:not(.current) { opacity: 0; transform: translateY(18px); filter: blur(4px); }
-    :global(.seq-pin.seq-live) .steps li.current { opacity: 1; transform: none; filter: none; }
+    :global(.seq-pin.seq-live) .steps li:not(.current) { opacity: 0; transform: translateY(18px); }
+    :global(.seq-pin.seq-live) .steps li.current { opacity: 1; transform: none; }
     :global(.seq-pin.seq-live) .steps li.current h3, :global(.seq-pin.seq-live) .steps li.current p { color: inherit; }
     :global(.seq-pin.seq-live) .steps li.current p { color: var(--on-dark-muted); }
 
     /* Halo ambré quand l'eau traverse la résine */
     :global(.seq-pin.seq-live) .glow { display: block; position: absolute; left: 49%; top: 60%; width: 34%; height: 70%; transform: translate(-50%, -50%);
-      background: radial-gradient(closest-side, rgba(217, 162, 95, .55), rgba(217, 162, 95, 0)); mix-blend-mode: screen; opacity: calc(var(--flow, 0) * .55); pointer-events: none; }
+      background: radial-gradient(closest-side, rgba(255, 196, 120, .38), rgba(217, 162, 95, 0)); opacity: calc(var(--flow, 0) * .6); pointer-events: none; z-index: 2; }
 
     /* Étiquettes techniques sur les pièces */
     :global(.seq-pin.seq-live) .hots { display: block; position: absolute; inset: 0; z-index: 3; }
     .hot { position: absolute; left: var(--x); top: var(--y); display: flex; align-items: center; opacity: 0; transition: opacity .6s var(--ease-out); }
     .hot .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(217, 162, 95, .22); transform: translate(-50%, 0) scale(.4); transition: transform .5s var(--ease-out); flex: none; }
     .hot .line { height: 1px; width: 0; background: linear-gradient(90deg, rgba(217, 162, 95, .9), rgba(243, 242, 238, .5)); transition: width .7s var(--ease-out) .1s; }
-    .hot b { font-weight: 500; font-size: 13px; letter-spacing: .01em; color: var(--on-dark); white-space: nowrap; padding: 4px 8px; background: rgba(5, 8, 10, .55); border: 1px solid rgba(243, 242, 238, .14); border-radius: 2px; backdrop-filter: blur(4px); opacity: 0; transition: opacity .5s .45s; }
+    .hot b { font-weight: 500; font-size: 13px; letter-spacing: .01em; color: var(--on-dark); white-space: nowrap; padding: 4px 8px; background: rgba(5, 8, 10, .78); border: 1px solid rgba(243, 242, 238, .14); border-radius: 2px; opacity: 0; transition: opacity .5s .45s; }
     .hot { transform: translateY(-50%); }
     .hot--left { flex-direction: row-reverse; }
     .hot--left .dot { transform: translate(50%, 0) scale(.4); }
@@ -151,8 +152,10 @@ const hotspots = [
     canvas { aspect-ratio: 3 / 4; }
     .fallback { aspect-ratio: 16 / 9; object-fit: contain; }
     :global(.seq-live) .visual { position: sticky; top: 8px; z-index: 1; background: var(--bg); padding-bottom: 8px; }
-    :global(.seq-live) canvas { width: auto; height: min(52svh, 520px); margin-inline: auto;
-      -webkit-mask-image: linear-gradient(180deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(180deg, transparent, #000 8%, #000 92%, transparent); }
+    :global(.seq-live) canvas { width: auto; height: min(52svh, 520px); margin-inline: auto; }
+    :global(.seq-live) .frame { width: fit-content; margin-inline: auto; }
+    :global(.seq-live) .frame::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(180deg, var(--bg), transparent 9%, transparent 91%, var(--bg)); }
     :global(.seq-live) .steps { padding-bottom: 30svh; }
   }
 </style>

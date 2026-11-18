@@ -85,3 +85,17 @@ test('écran bas (1280×680) : pendant l’épinglage, les 4 étapes restent dan
   const b = await page.locator('[data-seq-step="3"]').evaluate((e) => e.getBoundingClientRect().bottom);
   expect(b).toBeLessThanOrEqual(680);
 });
+
+test('séquence : aucun effet recalculé à chaque image (masque, flou d’arrière-plan, mélange)', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('./');
+  await page.locator('#adoucissement').scrollIntoViewIfNeeded();
+  await expect(page.locator('html')).toHaveClass(/seq-live/, { timeout: 8000 });
+  const costly = await page.$$eval('#adoucissement *', (els) => els.filter((e) => {
+    const s = getComputedStyle(e);
+    return (s.maskImage && s.maskImage !== 'none') || (s.webkitMaskImage && s.webkitMaskImage !== 'none')
+      || (s.backdropFilter && s.backdropFilter !== 'none') || s.mixBlendMode !== 'normal'
+      || (s.filter && s.filter !== 'none');
+  }).map((e) => e.className || e.tagName));
+  expect(costly).toEqual([]);
+});

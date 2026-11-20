@@ -11,7 +11,7 @@ import Footer from '../components/Footer.astro';
 import { url } from '../lib/url';
 import fontDisplay from '@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url';
 import fontBody from '@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url';
-interface Props { title: string; description: string; path: string; ld?: object[]; ogImage?: string; noindex?: boolean; bodyClass?: string; overDark?: boolean }
+interface Props { title: string; description: string; path: string; ld?: object[]; ogImage?: string; noindex?: boolean; bodyClass?: string; overDark?: boolean; suffix?: boolean }
 const p = Astro.props;
 ---
 <!doctype html>
@@ -34,7 +34,7 @@ const p = Astro.props;
         }
       })(document.documentElement);
     </script>
-    <Seo title={p.title} description={p.description} path={p.path} ld={p.ld} ogImage={p.ogImage} noindex={p.noindex} />
+    <Seo title={p.title} description={p.description} path={p.path} ld={p.ld} ogImage={p.ogImage} noindex={p.noindex} suffix={p.suffix} />
     <slot name="head" />
   </head>
   <body class={p.bodyClass}>

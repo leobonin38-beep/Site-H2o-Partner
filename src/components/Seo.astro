@@ -1,13 +1,15 @@
 ---
 import { SITE } from '../config/site';
 import { url } from '../lib/url';
-interface Props { title: string; description: string; path: string; ld?: object[]; ogImage?: string; noindex?: boolean }
-const { title, description, path, ld = [], ogImage = '/og-default.jpg', noindex = false } = Astro.props;
+interface Props { title: string; description: string; path: string; ld?: object[]; ogImage?: string; noindex?: boolean; suffix?: boolean }
+const { title, description, path, ld = [], ogImage = '/og-default.jpg', noindex = false, suffix = true } = Astro.props;
 const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true' && !noindex;
 const site = new URL(import.meta.env.BASE_URL, Astro.site).href;
 const canonical = new URL(path.replace(/^\//, ''), site).href;
 const og = new URL(url(ogImage).replace(/^\//, ''), Astro.site).href;
-const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
+const withName = `${title} · ${SITE.name}`;
+// Le nom de l'entreprise est ajouté si le titre reste sous 60 caractères (ou si on le demande).
+const fullTitle = title.includes(SITE.name) || (!suffix && withName.length > 60) ? title : withName;
 ---
 <title>{fullTitle}</title>
 <meta name="description" content={description} />

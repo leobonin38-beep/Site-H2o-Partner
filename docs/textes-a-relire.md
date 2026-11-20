@@ -52,3 +52,19 @@ Les pages reprennent les textes de la V2 et de l'ancien site. Textes nouveaux, �
 | L'entreprise | « Notre façon de travailler » (4 points, reformulés à partir de faits du site) |
 | Diagnostic | Titre « Parlons de votre eau, en quatre questions. » ; texte d'introduction ; libellés des besoins (« Calcaire, eau dure », « Embouage du chauffage »…) |
 | Formulaires | Messages d'erreur et de confirmation |
+
+## Dureté de l'eau par commune (ajout du 2026-11-20)
+Pages `/durete-eau-isere/` (accueil de l'outil) et une page par commune (489 pages). Les chiffres viennent des analyses officielles (ARS, via Hub'Eau) ; les textes ci-dessous sont rédigés par Claude, à relire :
+| Où | Texte |
+|---|---|
+| Accueil de l'outil | Titre « La dureté de l'eau en Isère, commune par commune. » ; introduction « Les analyses officielles de l'eau du robinet… Tapez votre commune… » ; « Combien de communes ont une eau dure ? » ; paragraphe « La méthode » |
+| Page commune | Titre « Dureté de l'eau à {Commune} ({code postal}). » ; phrase d'introduction ; « Selon votre quartier » ; « Autour de votre commune » ; « Un adoucisseur à {Commune} ? » + texte |
+| Conseil, eau très douce | « Une eau très douce : pas de tartre à craindre. Un adoucisseur n'est en général pas nécessaire. » |
+| Conseil, eau douce | « Une eau douce : peu de tartre. Un adoucisseur n'est en général pas nécessaire ; un filtre peut suffire selon vos besoins. » |
+| Conseil, eau moyennement dure | « Le tartre commence à se voir : traces sur la robinetterie, dépôts dans la bouilloire et le chauffe-eau. Un adoucisseur protège l'installation, surtout pour l'eau chaude. » |
+| Conseil, eau dure | « Le tartre se dépose vite dans le chauffe-eau, la robinetterie et l'électroménager. Un adoucisseur bien réglé protège l'installation et réduit l'entretien. » |
+| Conseil, eau très dure | « Une eau très chargée en calcaire : les dépôts sont importants et rapides. Un adoucisseur, dimensionné par un professionnel, est fortement conseillé. » |
+| Accueil du site | « Trouvez la dureté de l'eau de votre commune (Isère) » |
+| Mentions légales | Paragraphe sur la source des données (Hub'Eau, Licence Ouverte Etalab) |
+
+Mise à jour des chiffres : `node scripts/fetch-durete.mjs`, puis reconstruire le site (à refaire une ou deux fois par an).

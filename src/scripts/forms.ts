@@ -72,9 +72,19 @@ async function send(form: HTMLFormElement, kind: string) {
   done.focus();
 }
 
+/** Pré-remplit les champs depuis l'adresse (?commune=…&durete=…), par exemple depuis une page commune. */
+function prefill(form: HTMLFormElement) {
+  const q = new URLSearchParams(window.location.search);
+  for (const [name, value] of q) {
+    const field = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="${CSS.escape(name)}"]`);
+    if (field && 'value' in field && field.type !== 'radio' && field.type !== 'checkbox' && !field.value) field.value = value.slice(0, 200);
+  }
+}
+
 export function initForms(): void {
   document.querySelectorAll<HTMLFormElement>('form[data-diag]').forEach((form) => {
     if (form.dataset.ready) return; form.dataset.ready = '1';
+    prefill(form);
     form.classList.add('stepped');
     const steps = [...form.querySelectorAll<HTMLFieldSetElement>('fieldset[data-step]')];
     const label = form.querySelector<HTMLElement>('[data-step-label]')!;

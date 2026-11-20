@@ -1,0 +1,120 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import CtaBand from '../../components/page/CtaBand.astro';
+import Related from '../../components/page/Related.astro';
+import CommuneSearch from '../../components/CommuneSearch.astro';
+import hero from '../../assets/photos/robinet-goutte-marbre.jpg';
+import { COMMUNES, COMMUNES_MESUREES, DURETE, classify, fmt, fmtDate } from '../../lib/durete';
+import { url } from '../../lib/url';
+const crumbs = [{ name: "Dureté de l'eau en Isère", href: '/durete-eau-isere/' }];
+const values = COMMUNES_MESUREES.map((c) => c.th!.principal).sort((a, b) => a - b);
+const median = values[Math.floor(values.length / 2)];
+const lastDate = COMMUNES_MESUREES.map((c) => c.th!.date).sort().pop()!;
+const classes = [
+  { key: 'très douce', range: 'moins de 7 °f' }, { key: 'douce', range: '7 à 15 °f' }, { key: 'moyennement dure', range: '15 à 25 °f' },
+  { key: 'dure', range: '25 à 35 °f' }, { key: 'très dure', range: '35 °f et plus' },
+].map((k) => ({ ...k, n: COMMUNES_MESUREES.filter((c) => classify(c.th!.principal) === k.key).length }));
+const maxN = Math.max(...classes.map((k) => k.n));
+const sorted = [...COMMUNES].sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));
+const sansMesure = sorted.filter((c) => !c.th);
+const letters = [...new Set(COMMUNES_MESUREES.map((c) => c.nom.normalize('NFD')[0].toUpperCase()))].sort();
+const site = new URL(import.meta.env.BASE_URL, Astro.site).href;
+const datasetLd = {
+  '@context': 'https://schema.org', '@type': 'Dataset',
+  name: "Dureté de l'eau du robinet par commune en Isère",
+  description: "Titre hydrotimétrique (TH, en degrés français) de l'eau distribuée dans les communes d'Isère, d'après les résultats du contrôle sanitaire publiés par Hub'Eau.",
+  url: new URL('durete-eau-isere/', site).href, spatialCoverage: 'Isère, France', temporalCoverage: `${DURETE.depuis}/${lastDate}`,
+  license: 'https://www.etalab.gouv.fr/licence-ouverte-open-licence/', isBasedOn: 'https://hubeau.eaufrance.fr/page/api-qualite-eau-potable',
+  creator: { '@type': 'Organization', name: 'H2O Partner' },
+};
+---
+<Page title="Dureté de l'eau en Isère, commune par commune" description={`Quelle est la dureté de l'eau du robinet dans votre commune ? Les mesures officielles pour ${COMMUNES_MESUREES.length} communes d'Isère, en degrés français (°f).`} path="/durete-eau-isere/" crumbs={crumbs} ld={[datasetLd]}>
+  <PageHero title="La dureté de l'eau en Isère, commune par commune." crumbs={crumbs} photo={hero} alt="Goutte d'eau au bout d'un robinet chromé"
+    lead={`Les analyses officielles de l'eau du robinet, pour ${COMMUNES_MESUREES.length} communes d'Isère. Tapez votre commune : vous saurez si votre eau est douce ou dure, et ce que ça change chez vous.`} />
+
+  <Section tone="paper" id="chercher">
+    <div class="search">
+      <div class="s-box">
+        <h2 class="s-title">Quelle est la dureté de l'eau chez vous ?</h2>
+        <CommuneSearch id="cs-isere" mode="navigate" />
+      </div>
+      <dl class="facts">
+        <div><dt>Dureté médiane en Isère</dt><dd class="num">{fmt(median)} °f</dd><p>eau {classify(median)}</p></div>
+        <div><dt>Communes avec une mesure</dt><dd class="num">{COMMUNES_MESUREES.length}</dd><p>sur {COMMUNES.length}</p></div>
+        <div><dt>Dernière analyse publiée</dt><dd class="small">{fmtDate(lastDate)}</dd><p>source : Hub'Eau</p></div>
+      </dl>
+    </div>
+  </Section>
+
+  <Section id="repartition" title="Combien de communes ont une eau dure ?" intro="Répartition des communes d'Isère selon la dureté de leur eau (réseau principal). Les repères sont ceux couramment utilisés en France.">
+    <div class="bars" role="img" aria-label={classes.map((k) => `${k.key} : ${k.n} communes`).join(', ')}>
+      {classes.map((k) => (
+        <div class="bar-row">
+          <span class="bar-lab"><b>{k.key[0].toUpperCase() + k.key.slice(1)}</b><span>{k.range}</span></span>
+          <span class="bar-track"><span class="bar" style={`--w:${(k.n / maxN) * 100}%`}></span><span class="bar-val num">{k.n}</span></span>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <Section tone="paper" id="communes" title="Toutes les communes" intro="Cliquez sur une commune pour voir le détail : dureté par quartier, évolution des mesures et conseils.">
+    <nav class="az" aria-label="Lettres">{letters.map((l) => <a href={`#lettre-${l}`}>{l}</a>)}</nav>
+    {letters.map((l) => (
+      <div class="group" id={`lettre-${l}`}>
+        <h3>{l}</h3>
+        <ul class="list">
+          {sorted.filter((c) => c.th && c.nom.normalize('NFD')[0].toUpperCase() === l).map((c) => (
+            <li><a href={url(`/durete-eau-isere/${c.slug}/`)} data-commune><span>{c.nom}</span><span class="v num">{c.th!.min !== c.th!.max ? `${fmt(c.th!.min)}–${fmt(c.th!.max)}` : fmt(c.th!.principal)} °f</span></a></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+    {sansMesure.length > 0 && <p class="none"><b>Pas de mesure récente publiée :</b> {sansMesure.map((c) => c.nom).join(', ')}. Votre facture d'eau ou votre mairie peut vous renseigner.</p>}
+  </Section>
+
+  <Section id="methode" title="D'où viennent ces chiffres ?">
+    <div class="method">
+      <p>Les valeurs viennent du <b>contrôle sanitaire de l'eau du robinet</b>, réalisé par les Agences régionales de santé et publié par <a class="link" href="https://hubeau.eaufrance.fr/page/api-qualite-eau-potable" rel="noopener">Hub'Eau</a> (Licence Ouverte Etalab). La dureté est le <b>titre hydrotimétrique (TH)</b>, exprimé en degrés français (°f).</p>
+      <p>Pour chaque réseau d'eau qui dessert une commune, nous retenons la <b>médiane des analyses de l'année précédant la dernière mesure</b>. Quand plusieurs réseaux desservent la commune, la dureté peut varier d'un quartier à l'autre : nous affichons alors une fourchette.</p>
+      <p class="muted">Mesures publiées depuis le {fmtDate(DURETE.depuis)}, dernière analyse le {fmtDate(lastDate)}. Données mises à jour le {fmtDate(DURETE.genere)}. Votre facture d'eau indique aussi la dureté de votre eau.</p>
+    </div>
+  </Section>
+
+  <CtaBand title="Votre eau est dure ?" text="Indiquez-nous votre commune : nous vous conseillons et vous mettons en relation avec un plombier-chauffagiste partenaire de votre secteur." label="Demander un diagnostic" />
+  <Related items={[
+    { label: 'Pourquoi un adoucisseur', desc: 'Installation protégée, économies, confort', href: '/particuliers/pourquoi-un-adoucisseur/' },
+    { label: 'Les adoucisseurs Privilège', desc: 'Privilège 20 L, Petit Privilège 8 L', href: '/particuliers/adoucisseur-privilege/' },
+    { label: 'Vrai ou faux', desc: "11 idées reçues sur l'adoucisseur", href: '/particuliers/verite-sur-adoucisseur/' },
+  ]} />
+</Page>
+<style>
+  .search { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 5vw, 80px); align-items: start; }
+  .s-title { font-size: var(--t-2xl); margin-bottom: 24px; max-width: 16ch; }
+  .facts { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .facts > div { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .facts dt { font-size: var(--t-sm); color: var(--muted); }
+  .facts dd { font-family: var(--f-display); font-size: var(--t-2xl); line-height: 1.1; margin-top: 4px; }
+  .facts dd.small { font-size: var(--t-xl); }
+  .facts p { font-size: var(--t-sm); color: var(--muted); }
+  .bars { display: grid; gap: 14px; max-width: 900px; }
+  .bar-row { display: grid; grid-template-columns: 200px 1fr; gap: 20px; align-items: center; }
+  .bar-lab b { display: block; font-weight: 600; }
+  .bar-lab span { font-size: var(--t-sm); color: var(--muted); }
+  .bar-track { display: flex; align-items: center; gap: 10px; }
+  .bar { height: 22px; width: var(--w); min-width: 4px; background: var(--accent-strong); border-radius: 0 4px 4px 0; }
+  .bar-val { font-weight: 600; }
+  .az { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 28px; }
+  .az a { min-width: 36px; min-height: 36px; display: grid; place-items: center; text-decoration: none; border: 1px solid var(--line); border-radius: var(--radius); font-weight: 600; }
+  .az a:hover { border-color: var(--accent-strong); }
+  .group { margin-bottom: 28px; scroll-margin-top: calc(var(--header-h) + 16px); }
+  .group h3 { font-size: var(--t-xl); margin-bottom: 10px; }
+  .list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0 28px; }
+  .list a { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+  .list a:hover span:first-child { color: var(--accent-text); }
+  .v { color: var(--muted); white-space: nowrap; }
+  .none { margin-top: 24px; font-size: var(--t-sm); color: var(--muted); max-width: 90ch; }
+  .method { max-width: 72ch; display: grid; gap: 14px; }
+  @media (max-width: 900px) { .search { grid-template-columns: 1fr; } .bar-row { grid-template-columns: 1fr; gap: 6px; } }
+</style>

@@ -25,6 +25,7 @@ export const NAV: NavItem[] = [
       { label: 'Adoucisseurs Privilège', href: '/particuliers/adoucisseur-privilege/', desc: 'Privilège 20 L et Petit Privilège 8 L' },
       { label: 'Pourquoi un adoucisseur', href: '/particuliers/pourquoi-un-adoucisseur/', desc: 'Installation, confort, économies' },
       { label: 'Vrai ou faux', href: '/particuliers/verite-sur-adoucisseur/', desc: '11 idées reçues sur l’adoucisseur' },
+      { label: "Dureté de l'eau en Isère", href: '/durete-eau-isere/', desc: 'Le chiffre officiel de votre commune' },
     ],
   },
   { label: 'Installateurs', href: '/installateurs/' },

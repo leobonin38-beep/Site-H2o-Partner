@@ -1,5 +1,9 @@
 ---
 // Règle de dureté (logique reprise de la V2) : src/lib/hardness.ts
+import { classify, sodiumAdded } from '../../lib/hardness';
+interface Props { initial?: number; target?: number }
+const { initial = 28, target = 10 } = Astro.props;
+const th0 = Math.round(Math.min(50, initial)); const ci0 = Math.min(target, th0);
 const marks = [0, 7, 15, 25, 35, 50];
 const bands = [
   { from: 0, to: 7, label: 'Très douce' }, { from: 7, to: 15, label: 'Douce' }, { from: 15, to: 25, label: 'Moy. dure' },
@@ -9,9 +13,9 @@ const bands = [
 <div class="hardness" data-hardness>
   <div class="row">
     <label for="th">Dureté de votre eau</label>
-    <output id="th-out" for="th" class="val num"><b>28</b> °f</output>
+    <output id="th-out" for="th" class="val num"><b>{th0}</b> °f</output>
   </div>
-  <input id="th" type="range" min="0" max="50" step="1" value="28" aria-describedby="th-help" />
+  <input id="th" type="range" min="0" max="50" step="1" value={th0} aria-describedby="th-help" />
   <div class="scale" aria-hidden="true">
     {bands.map((b) => <span style={`--w:${b.to - b.from}`}>{b.label}</span>)}
   </div>
@@ -19,13 +23,13 @@ const bands = [
 
   <div class="row row--2">
     <label for="cible">Dureté souhaitée après adoucissement</label>
-    <output id="cible-out" for="cible" class="val num"><b>10</b> °f</output>
+    <output id="cible-out" for="cible" class="val num"><b>{ci0}</b> °f</output>
   </div>
-  <input id="cible" type="range" min="0" max="50" step="1" value="10" />
+  <input id="cible" type="range" min="0" max="50" step="1" value={ci0} />
 
   <dl class="result">
-    <div><dt>Votre eau est</dt><dd id="th-classe">dure</dd></div>
-    <div><dt>Sodium apporté par l'adoucissement</dt><dd><span id="sodium" class="num">83</span> <small>mg/L</small></dd></div>
+    <div><dt>Votre eau est</dt><dd id="th-classe">{classify(th0)}</dd></div>
+    <div><dt>Sodium apporté par l'adoucissement</dt><dd><span id="sodium" class="num">{sodiumAdded(th0, ci0)}</span> <small>mg/L</small></dd></div>
   </dl>
   <p id="th-help" class="help">La dureté figure sur votre facture d'eau ou sur le site de votre commune. Repères couramment utilisés ; adoucir de 1 °f apporte en moyenne 4,6 mg de sodium par litre. La réglementation n'exige pas de dureté résiduelle : un installateur qualifié détermine avec vous le bon seuil.</p>
 </div>

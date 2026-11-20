@@ -12,14 +12,17 @@ export function initMenus(): void {
     panelOf(t).hidden = true;
     if (focus) t.focus();
   };
+  let openedAt = 0;
   const open = (t: HTMLButtonElement) => {
     triggers.forEach((o) => o !== t && close(o));
+    if (!isOpen(t)) openedAt = performance.now();
     t.setAttribute('aria-expanded', 'true');
     panelOf(t).hidden = false;
   };
   const hoverable = matchMedia('(hover: hover) and (pointer: fine)').matches;
   triggers.forEach((t) => {
-    t.addEventListener('click', () => (isOpen(t) ? close(t) : open(t)));
+    // Un clic juste après l'ouverture au survol ne doit pas refermer le menu.
+    t.addEventListener('click', () => (isOpen(t) ? (performance.now() - openedAt > 400 && close(t)) : open(t)));
     const li = t.parentElement!;
     let timer: number | undefined;
     if (hoverable) {

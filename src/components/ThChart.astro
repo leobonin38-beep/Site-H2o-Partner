@@ -1,0 +1,97 @@
+---
+// Courbe des dernières mesures de dureté d'un réseau. Une seule série (pas de légende : le titre la nomme),
+// trait de 2 px, points de 8 px avec anneau de la couleur du fond, grille fine, infobulle au survol et au
+// clavier, et tableau des valeurs juste dessous (la courbe ne cache aucune information).
+import { fmt, fmtDate } from '../lib/durete';
+interface Props { serie: [string, number][]; title: string }
+const { serie, title } = Astro.props;
+const W = 640, H = 230, L = 40, R = 16, T = 16, B = 34;
+const maxV = Math.max(...serie.map(([, v]) => v));
+const step = maxV > 50 ? 20 : 10;
+const top = Math.max(40, Math.ceil((maxV * 1.1) / step) * step);
+const ticks = Array.from({ length: top / step + 1 }, (_, i) => i * step);
+const t0 = Date.parse(serie[0][0]), t1 = Date.parse(serie[serie.length - 1][0]);
+const x = (d: string) => (serie.length === 1 ? (L + W - R) / 2 : L + ((Date.parse(d) - t0) / (t1 - t0 || 1)) * (W - L - R));
+const y = (v: number) => T + (1 - v / top) * (H - T - B);
+const pts = serie.map(([d, v]) => ({ d, v, x: x(d), y: y(v) }));
+const path = pts.map((p, i) => `${i ? 'L' : 'M'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+const area = `${path} L${pts[pts.length - 1].x.toFixed(1)},${y(0)} L${pts[0].x.toFixed(1)},${y(0)} Z`;
+const short = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('fr-FR', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const last = pts[pts.length - 1];
+---
+<figure class="chart" data-th-chart>
+  <figcaption class="cap">{title}</figcaption>
+  <div class="plot">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${title} : de ${fmt(Math.min(...serie.map(([, v]) => v)))} à ${fmt(maxV)} °f`}>
+      {ticks.map((t) => (
+        <g>
+          <line x1={L} x2={W - R} y1={y(t)} y2={y(t)} class="grid" />
+          <text x={L - 8} y={y(t) + 4} class="tick" text-anchor="end">{t}</text>
+        </g>
+      ))}
+      <text x={L - 8} y={T - 4} class="tick" text-anchor="end">°f</text>
+      {pts.length > 1 && <path d={area} class="area" />}
+      {pts.length > 1 && <path d={path} class="line" />}
+      <text x={pts[0].x} y={H - 10} class="tick" text-anchor="start">{short(pts[0].d)}</text>
+      {pts.length > 1 && <text x={last.x} y={H - 10} class="tick" text-anchor="end">{short(last.d)}</text>}
+      <text x={last.x} y={last.y - 12} class="endlabel" text-anchor="end">{fmt(last.v)} °f</text>
+      {pts.map((p) => (
+        <g class="pt" tabindex="0" role="img" aria-label={`${fmtDate(p.d)} : ${fmt(p.v)} °f`} data-x={p.x} data-y={p.y} data-label={`${fmt(p.v)} °f`} data-date={fmtDate(p.d)}>
+          <circle cx={p.x} cy={p.y} r="14" class="hit" />
+          <circle cx={p.x} cy={p.y} r="4" class="dot" />
+        </g>
+      ))}
+    </svg>
+    <div class="tip" role="status" aria-live="polite" hidden><b></b><span></span></div>
+  </div>
+  <details class="table">
+    <summary>Voir les mesures en tableau</summary>
+    <table>
+      <thead><tr><th scope="col">Date du prélèvement</th><th scope="col">Dureté (TH)</th></tr></thead>
+      <tbody>{[...serie].reverse().map(([d, v]) => <tr><td>{fmtDate(d)}</td><td class="num">{fmt(v)} °f</td></tr>)}</tbody>
+    </table>
+  </details>
+</figure>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-th-chart]').forEach((fig) => {
+    const svg = fig.querySelector('svg')!; const tip = fig.querySelector<HTMLElement>('.tip')!;
+    const show = (g: SVGGElement) => {
+      const vb = svg.viewBox.baseVal; const r = svg.getBoundingClientRect();
+      tip.querySelector('b')!.textContent = g.dataset.label!;
+      tip.querySelector('span')!.textContent = g.dataset.date!;
+      tip.hidden = false;
+      tip.style.left = `${(Number(g.dataset.x) / vb.width) * r.width}px`;
+      tip.style.top = `${(Number(g.dataset.y) / vb.height) * r.height}px`;
+      fig.querySelectorAll('.pt').forEach((p) => p.classList.toggle('on', p === g));
+    };
+    const hide = () => { tip.hidden = true; fig.querySelectorAll('.pt').forEach((p) => p.classList.remove('on')); };
+    fig.querySelectorAll<SVGGElement>('.pt').forEach((g) => {
+      g.addEventListener('pointerenter', () => show(g)); g.addEventListener('focus', () => show(g));
+      g.addEventListener('pointerleave', hide); g.addEventListener('blur', hide);
+    });
+  });
+</script>
+<style>
+  .chart { margin: 0; }
+  .cap { font-weight: 600; margin-bottom: 10px; }
+  .plot { position: relative; }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .grid { stroke: var(--line); stroke-width: 1; }
+  .tick { font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .line { fill: none; stroke: var(--accent-strong); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .area { fill: var(--accent-strong); opacity: .1; }
+  .dot { fill: var(--accent-strong); stroke: var(--paper); stroke-width: 2; transition: r .2s; }
+  .hit { fill: transparent; }
+  .pt { cursor: pointer; outline: none; }
+  .pt.on .dot, .pt:focus-visible .dot { r: 6; }
+  .pt:focus-visible .hit { stroke: var(--accent-strong); stroke-width: 2; }
+  .endlabel { font-size: 13px; font-weight: 600; fill: var(--ink); font-variant-numeric: tabular-nums; }
+  .tip { position: absolute; transform: translate(-50%, calc(-100% - 14px)); background: var(--paper); border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(0, 0, 0, .12); border-radius: var(--radius); padding: 6px 10px; white-space: nowrap; pointer-events: none; font-size: 13px; }
+  .tip b { display: block; font-variant-numeric: tabular-nums; }
+  .tip span { color: var(--muted); }
+  .table { margin-top: 14px; font-size: var(--t-sm); }
+  .table summary { cursor: pointer; color: var(--muted); }
+  .table table { margin-top: 10px; border-collapse: collapse; min-width: 280px; }
+  .table th, .table td { text-align: left; padding: 6px 18px 6px 0; border-bottom: 1px solid var(--line); }
+  .table thead th { color: var(--muted); font-weight: 600; }
+</style>

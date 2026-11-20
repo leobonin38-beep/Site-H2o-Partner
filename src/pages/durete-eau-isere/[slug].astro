@@ -1,0 +1,120 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/page/PageHero.astro';
+import Section from '../../components/page/Section.astro';
+import CtaBand from '../../components/page/CtaBand.astro';
+import Hardness from '../../components/home/Hardness.astro';
+import CommuneSearch from '../../components/CommuneSearch.astro';
+import ThChart from '../../components/ThChart.astro';
+import hero from '../../assets/photos/robinet-goutte-marbre.jpg';
+import { COMMUNES, COMMUNES_MESUREES, CONSEILS, DURETE, classify, cpLabel, fmt, fmtDate, toIndex, type Commune } from '../../lib/durete';
+import { nearest } from '../../lib/communes';
+import { url } from '../../lib/url';
+import { fr } from '../../lib/typo';
+
+export function getStaticPaths() {
+  return COMMUNES_MESUREES.map((c) => ({ params: { slug: c.slug }, props: { c } }));
+}
+const { c } = Astro.props as { c: Commune };
+const th = c.th!;
+const cls = classify(th.principal);
+const spread = th.min !== th.max;
+const cp = cpLabel(c);
+const name = `${c.nom} (${c.cp[0] ?? ''})`;
+const crumbs = [{ name: "Dureté de l'eau en Isère", href: '/durete-eau-isere/' }, { name: c.nom, href: `/durete-eau-isere/${c.slug}/` }];
+const index = COMMUNES.map(toIndex);
+const voisines = nearest(index, toIndex(c), 6);
+const main = c.reseaux[0];
+// Nom de réseau lisible : « VOIRON ST JOSEPH » → « Voiron St Joseph »
+const tidy = (s: string) => s.toLowerCase().replace(/(^|[\s\-'(/])([a-zà-ÿ])/g, (_, a, b) => a + b.toUpperCase());
+let description = `Dureté de l'eau du robinet à ${name} : ${spread ? `${fmt(th.min)} à ${fmt(th.max)}` : fmt(th.principal)} °f, eau ${cls}. Mesures officielles, détail par quartier et conseils contre le calcaire.`;
+if (description.length > 160) description = `Dureté de l'eau à ${name} : ${spread ? `${fmt(th.min)} à ${fmt(th.max)}` : fmt(th.principal)} °f, eau ${cls}. Mesures officielles et conseils.`;
+const diag = url(`/diagnostic/?commune=${encodeURIComponent(c.nom)}&durete=${th.principal}`);
+---
+<Page title={`Dureté de l'eau à ${name}`} suffix={false} description={description} path={`/durete-eau-isere/${c.slug}/`} crumbs={crumbs}>
+  <PageHero title={`Dureté de l'eau à ${name}.`} crumbs={crumbs} photo={hero} alt="Goutte d'eau au bout d'un robinet chromé"
+    lead={`${spread ? `Entre ${fmt(th.min)} et ${fmt(th.max)} °f selon le quartier` : `${fmt(th.principal)} °f`} : l'eau du robinet à ${c.nom} (${cp}) est ${cls}, d'après les analyses officielles du contrôle sanitaire.`} />
+
+  <Section tone="paper" id="durete">
+    <div class="top">
+      <div class="figure">
+        <p class="lab">Dureté de l'eau{spread ? ' du réseau principal' : ''}</p>
+        <p class="big num">{fmt(th.principal)}<span> °f</span></p>
+        <p class="cls">Eau <b>{cls}</b></p>
+        {spread && <p class="range">De <b class="num">{fmt(th.min)} à {fmt(th.max)} °f</b> selon le réseau qui dessert votre quartier.</p>}
+        <p class="date">Dernière analyse publiée le {fmtDate(th.date)}.</p>
+        <p class="adv">{fr(CONSEILS[cls])}</p>
+        <p class="act"><a class="btn" href={diag}>Demander un diagnostic à {c.nom}</a></p>
+      </div>
+      <div class="ruler"><Hardness initial={th.principal} /></div>
+    </div>
+  </Section>
+
+  <Section id="quartiers" title={c.reseaux.length > 1 ? 'Selon votre quartier' : "Le réseau d'eau de la commune"} intro={c.reseaux.length > 1 ? `${c.nom} est desservie par ${c.reseaux.length} réseaux d'eau. Leur dureté peut différer.` : undefined}>
+    <div class="tbl" role="region" aria-label="Dureté par réseau" tabindex="0">
+      <table>
+        <thead><tr><th scope="col">Réseau</th><th scope="col">Quartiers desservis</th><th scope="col">Dureté (médiane sur un an)</th><th scope="col">Dernière analyse</th><th scope="col">Analyses</th></tr></thead>
+        <tbody>
+          {c.reseaux.map((r) => (
+            <tr>
+              <th scope="row">{tidy(r.nom)}</th>
+              <td data-l="Quartiers">{r.quartiers.length ? r.quartiers.map(tidy).join(', ') : '—'}</td>
+              <td class="num" data-l="Dureté (médiane)"><span><b>{fmt(r.mediane)} °f</b> <span class="muted">({classify(r.mediane)})</span></span></td>
+              <td class="num" data-l="Dernière analyse">{fmt(r.dernier)} °f, le {fmtDate(r.date)}</td>
+              <td class="num" data-l="Analyses">{r.mesures}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    {main.serie.length > 1 && <div class="chart"><ThChart serie={main.serie} title={`Dernières analyses du réseau ${tidy(main.nom)}`} /></div>}
+  </Section>
+
+  <Section tone="paper" id="autour" title="Autour de votre commune">
+    <ul class="near">
+      {voisines.map((v) => (
+        <li><a href={url(`/durete-eau-isere/${v.s}/`)}><span class="n">{v.n}</span><span class="v num">{v.lo !== v.hi ? `${fmt(v.lo!)}–${fmt(v.hi!)}` : fmt(v.th!)} °f</span><span class="c">eau {classify(v.th!)}</span></a></li>
+      ))}
+    </ul>
+    <div class="other"><CommuneSearch id="cs-autre" mode="navigate" label="Chercher une autre commune" /></div>
+    <p class="src">Source : contrôle sanitaire de l'eau du robinet (ARS), publié par <a class="link" href="https://hubeau.eaufrance.fr/page/api-qualite-eau-potable" rel="noopener">Hub'Eau</a>, Licence Ouverte Etalab. Médiane des analyses de l'année précédant la dernière mesure, par réseau. Données mises à jour le {fmtDate(DURETE.genere)}. <a class="link" href={url('/durete-eau-isere/#methode')}>La méthode</a></p>
+  </Section>
+
+  <CtaBand title={`Un adoucisseur à ${c.nom} ?`} text="Nous vous conseillons selon la dureté de votre eau et votre installation, et vous mettons en relation avec un plombier-chauffagiste partenaire de votre secteur." label="Demander un diagnostic" href={`/diagnostic/?commune=${encodeURIComponent(c.nom)}&durete=${th.principal}`} />
+</Page>
+<style>
+  .top { display: grid; grid-template-columns: 5fr 6fr; gap: clamp(36px, 6vw, 96px); align-items: start; }
+  .lab { font-size: var(--t-sm); color: var(--muted); }
+  .big { font-family: var(--f-display); font-size: clamp(4rem, 2.5rem + 6vw, 7.5rem); line-height: .95; letter-spacing: -.03em; margin-top: 6px; }
+  .big span { font-size: .35em; letter-spacing: 0; color: var(--muted); }
+  .cls { font-size: var(--t-xl); font-family: var(--f-display); margin-top: 8px; }
+  .cls b { font-weight: 400; color: var(--accent-text); }
+  .range { margin-top: 14px; }
+  .date { margin-top: 8px; font-size: var(--t-sm); color: var(--muted); }
+  .adv { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); max-width: 52ch; }
+  .act { margin-top: 24px; }
+  .tbl { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 720px; }
+  th, td { text-align: left; padding: 14px 16px 14px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { font-size: var(--t-sm); color: var(--muted); font-weight: 600; }
+  tbody th { font-weight: 600; }
+  .chart { margin-top: clamp(40px, 5vw, 64px); max-width: 760px; }
+  .near { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 28px; }
+  .near a { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 14px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+  .near .n { font-weight: 600; }
+  .near .v { color: var(--ink); }
+  .near .c { grid-column: 1 / -1; font-size: var(--t-sm); color: var(--muted); }
+  .near a:hover .n { color: var(--accent-text); }
+  .other { margin-top: 40px; max-width: 520px; }
+  .src { margin-top: 32px; font-size: var(--t-sm); color: var(--muted); max-width: 90ch; }
+  @media (max-width: 900px) { .top { grid-template-columns: 1fr; } .near { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) {
+    table { min-width: 0; }
+    thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    tbody tr { display: block; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    tbody th, tbody td { display: grid; grid-template-columns: 9.5em 1fr; gap: 12px; padding: 3px 0; border: 0; }
+    tbody th { display: block; font-size: var(--t-lg, 1.1rem); padding-bottom: 6px; }
+    tbody td::before { content: attr(data-l); color: var(--muted); font-size: var(--t-sm); }
+  }
+  @media (max-width: 560px) { .near { grid-template-columns: 1fr; } }
+</style>

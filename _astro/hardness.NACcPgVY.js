@@ -1,0 +1,1 @@
+var e=[[7,`très douce`],[15,`douce`],[25,`moyennement dure`],[35,`dure`]];function t(t){for(let[n,r]of e)if(t<n)return r;return`très dure`}var n=4.6;function r(e,t){return Math.round(Math.max(0,e-Math.min(t,e))*n)}export{r as n,t};

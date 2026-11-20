@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 // Vérifie que chaque ressource interne de chaque page construite répond 200,
 // y compris quand le site est servi sous un sous-dossier (BASE_PATH).
 test('aucun fichier interne cassé', async ({ page, request, baseURL }) => {
-  test.setTimeout(600_000); // parcourt tout le site, pages communes comprises
+  test.setTimeout(180_000); // parcourt tout le site
   const origin = new URL(baseURL!).origin;
   const toVisit = ['./'];
   const seen = new Set<string>();

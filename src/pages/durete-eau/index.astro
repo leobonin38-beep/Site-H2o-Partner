@@ -1,0 +1,70 @@
+---
+import Page from '../../layouts/Page.astro';
+import Crumbs from '../../components/page/Crumbs.astro';
+import DureteSearch from '../../components/DureteSearch.astro';
+import { ECHELLE, CONSEILS } from '../../lib/durete';
+import { fr } from '../../lib/typo';
+const crumbs = [{ name: "Dureté de l'eau", href: '/durete-eau/' }];
+const bornes = (from: number, to: number) => (from === 0 ? `moins de ${to} °f` : to === 50 ? `${from} °f et plus` : `${from} à ${to} °f`);
+---
+<Page title="Dureté de l'eau de votre commune" description="Quelle est la dureté de l'eau du robinet chez vous ? Tapez le nom de votre commune ou votre code postal : analyses officielles, partout en France, et conseils contre le calcaire." path="/durete-eau/" crumbs={crumbs}>
+  <section class="stage dark" id="haut">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <Crumbs items={crumbs} />
+      <h1 data-hero-title>{fr("Quelle est la dureté de l'eau chez vous ?")}</h1>
+      <p class="lead">{fr("Les analyses officielles de l'eau du robinet, pour toutes les communes de France. Tapez le nom de votre commune ou votre code postal.")}</p>
+      <div class="search"><DureteSearch id="ds-page" mode="full" size="xl" label="Votre commune ou votre code postal" /></div>
+    </div>
+  </section>
+
+  <section class="read" id="comprendre">
+    <div class="wrap">
+      <h2>{fr('Lire le résultat')}</h2>
+      <p class="intro muted">{fr("La dureté (ou titre hydrotimétrique, TH) mesure le calcaire dissous dans l'eau, en degrés français (°f). Repères couramment utilisés :")}</p>
+      <ol class="classes">
+        {ECHELLE.map((c) => (
+          <li>
+            <span class="sw" data-cls={c.label} aria-hidden="true"></span>
+            <p class="c-l"><b>Eau {c.label}</b><span class="num">{bornes(c.from, c.to)}</span></p>
+            <p class="c-t">{fr(CONSEILS[c.label])}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="src muted">{fr("Les chiffres viennent du contrôle sanitaire de l'eau distribuée (Agences régionales de santé), publiés par le service public Hub'Eau. Une commune peut être desservie par plusieurs réseaux d'eau : la dureté varie alors selon le quartier. Pour chaque réseau, nous prenons la médiane des analyses de l'année précédant la dernière mesure.")}</p>
+    </div>
+  </section>
+</Page>
+
+<style>
+  .stage { position: relative; overflow: hidden; min-height: min(100svh, 980px); padding: calc(var(--header-h) + clamp(32px, 6vw, 88px)) 0 clamp(64px, 8vw, 120px); }
+  .glow { position: absolute; inset: -20% -10% auto; height: 80%; background: radial-gradient(60% 60% at 50% 0%, rgba(214, 153, 92, .16), transparent 70%); pointer-events: none; }
+  .inner { position: relative; }
+  .search { max-width: 1080px; }
+  h1 { margin-top: 28px; max-width: 16ch; font-size: clamp(2.6rem, 1.4rem + 4.4vw, 5.75rem); }
+  .lead { margin-top: 22px; max-width: 56ch; color: var(--on-dark-muted); font-size: var(--t-lg); }
+  .search { margin-top: clamp(32px, 4vw, 52px); }
+  .search :global(label) { color: var(--on-dark-muted); font-weight: 500; }
+
+  .read { background: var(--paper); padding: clamp(72px, 9vw, 130px) 0; }
+  .read h2 { font-size: var(--t-2xl, clamp(2rem, 1.4rem + 2vw, 3rem)); }
+  .intro { margin-top: 16px; max-width: 64ch; }
+  .classes { list-style: none; padding: 0; margin-top: clamp(28px, 4vw, 48px); display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+  .classes li { display: grid; grid-template-rows: auto auto 1fr; gap: 14px; }
+  .sw { height: 10px; border-radius: 2px; background: var(--seg); }
+  .sw[data-cls='très douce'] { --seg: #D8E4E6; }
+  .sw[data-cls='douce'] { --seg: #C9D7CF; }
+  .sw[data-cls='moyennement dure'] { --seg: #E7CFAE; }
+  .sw[data-cls='dure'] { --seg: #D3A06B; }
+  .sw[data-cls='très dure'] { --seg: #A8692A; }
+  .c-l, .c-t { padding-right: 22px; }
+  .c-l { display: grid; gap: 2px; }
+  .c-l span { color: var(--muted); font-size: var(--t-sm); }
+  .c-t { font-size: var(--t-sm); }
+  .src { margin-top: clamp(36px, 5vw, 56px); max-width: 80ch; font-size: var(--t-sm); padding-top: 20px; border-top: 1px solid var(--line); }
+  @media (max-width: 900px) {
+    .classes { grid-template-columns: 1fr; gap: 22px; }
+    .classes li { grid-template-columns: 10px 1fr; grid-template-rows: auto auto; gap: 6px 16px; }
+    .sw { grid-row: 1 / 3; height: auto; width: 10px; }
+  }
+</style>

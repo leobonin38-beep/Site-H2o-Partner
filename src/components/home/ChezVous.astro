@@ -2,7 +2,7 @@
 import { fr } from '../../lib/typo';
 import Hardness from './Hardness.astro';
 import BeforeAfter from './BeforeAfter.astro';
-import CommuneSearch from '../CommuneSearch.astro';
+import DureteSearch from '../DureteSearch.astro';
 ---
 <section id="chez-vous" class="cv">
   <div class="wrap">
@@ -12,7 +12,7 @@ import CommuneSearch from '../CommuneSearch.astro';
     </header>
     <div class="grid">
       <div class="left">
-        <div class="cs"><CommuneSearch id="cs-accueil" mode="ruler" label="Trouvez la dureté de l'eau de votre commune (Isère)" /></div>
+        <div class="cs"><DureteSearch id="ds-accueil" mode="ruler" label="Trouvez la dureté de l'eau de votre commune" /></div>
         <Hardness />
       </div>
       <BeforeAfter />

@@ -1,0 +1,144 @@
+---
+// Barre de recherche de la dureté de l'eau (France entière : nom de commune ou code postal).
+// mode « full » : fiche résultat complète sous la barre ; mode « ruler » : règle la règle de dureté de la page.
+import { url } from '../lib/url';
+import { ECHELLE } from '../lib/durete';
+import { SITE } from '../config/site';
+interface Props { id: string; label: string; mode?: 'full' | 'ruler'; size?: 'xl' | 'md' }
+const { id, label, mode = 'full', size = 'md' } = Astro.props;
+---
+<div class:list={['ds', `ds--${size}`]} data-durete-search data-mode={mode} data-page={url('/durete-eau/')} data-diag={url('/diagnostic/')}>
+  <label for={id}>{label}</label>
+  <div class="box">
+    <svg class="ico" width="22" height="22" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m13 13 5 5" stroke="currentColor" stroke-width="1.6"/></svg>
+    <input id={id} type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls={`${id}-list`} aria-describedby={`${id}-status`} autocomplete="off" spellcheck="false" enterkeyhint="search" placeholder="Nom de la commune ou code postal" />
+    <span class="spin" aria-hidden="true" data-ds-spin hidden></span>
+    <ul id={`${id}-list`} role="listbox" aria-label="Communes trouvées" hidden></ul>
+  </div>
+  <p class="status" id={`${id}-status`} aria-live="polite" data-ds-status></p>
+
+  {mode === 'ruler' && <p class="mini" data-ds-mini hidden></p>}
+
+  {mode === 'full' && (
+    <div class="out" data-ds-out aria-live="polite">
+      <template data-ds-tpl>
+        <article class="card">
+          <div class="c-left">
+            <h2 class="c-name" tabindex="-1" data-f="nom"></h2>
+            <p class="c-where" data-f="where"></p>
+            <p class="c-val"><span class="num" data-f="val"></span><span class="u">°f</span></p>
+            <p class="c-cls">Eau <b data-f="cls"></b></p>
+          </div>
+          <div class="c-right">
+            <div class="scale" aria-hidden="true">
+              <div class="bar">
+                {ECHELLE.map((c) => <span class="seg" style={`flex:${c.to - c.from}`} data-cls={c.label}></span>)}
+                <span class="band" data-f="band"></span>
+                <span class="mark" data-f="mark"></span>
+              </div>
+              <div class="lbl">
+                {ECHELLE.map((c) => <span style={`flex:${c.to - c.from}`}>{c.label === 'moyennement dure' ? 'moy. dure' : c.label}</span>)}
+              </div>
+            </div>
+            <p class="c-range" data-f="range"></p>
+            <p class="c-adv" data-f="adv"></p>
+            <p class="c-act">
+              <a class="btn" data-f="diag" href="#">Demander un diagnostic</a>
+              <a class="c-tel" href={`tel:${SITE.phoneIntl}`}>ou appelez le <span class="num">{SITE.phone}</span></a>
+            </p>
+            <details class="c-nets" data-f="nets-wrap">
+              <summary data-f="nets-sum"></summary>
+              <ul data-f="nets"></ul>
+            </details>
+            <p class="c-src" data-f="src"></p>
+          </div>
+        </article>
+      </template>
+    </div>
+  )}
+  <noscript><p class="status">La recherche a besoin de JavaScript. Votre facture d'eau indique aussi la dureté (TH).</p></noscript>
+</div>
+
+<script>
+  import { initDureteSearch } from '../scripts/durete-search';
+  initDureteSearch();
+</script>
+
+<style>
+  .ds { position: relative; }
+  label { display: block; font-weight: 600; font-size: var(--t-sm); margin-bottom: 10px; }
+  .box { position: relative; }
+  .ico { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+  input {
+    width: 100%; min-height: 56px; padding: 12px 52px 12px 50px; font-size: 1.0625rem;
+    border: 1px solid rgba(21, 28, 32, .28); border-radius: var(--radius); background: var(--paper); color: var(--ink);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input::placeholder { color: rgba(21, 28, 32, .5); }
+  input:focus { outline: none; border-color: var(--accent-strong); box-shadow: 0 0 0 4px rgba(168, 105, 42, .25); }
+  .ds--xl input { min-height: 72px; font-size: clamp(1.125rem, 1rem + .5vw, 1.375rem); padding-left: 58px; border-color: transparent; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); }
+  .ds--xl input:focus { box-shadow: 0 0 0 4px rgba(214, 153, 92, .45), 0 24px 60px rgba(0, 0, 0, .35); }
+  .ds--xl .ico { left: 20px; }
+  .spin { position: absolute; right: 18px; top: 50%; width: 20px; height: 20px; margin-top: -10px; border: 2px solid rgba(21, 28, 32, .15); border-top-color: var(--accent-strong); border-radius: 50%; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  ul[role='listbox'] {
+    position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 8px); list-style: none; padding: 6px; margin: 0;
+    background: var(--paper); color: var(--ink); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .22); max-height: 360px; overflow-y: auto; text-align: left;
+  }
+  :global([data-durete-search] [role='option']) { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 14px; border-radius: calc(var(--radius) - 2px); cursor: pointer; }
+  :global([data-durete-search] [role='option'][aria-selected='true']), :global([data-durete-search] [role='option']:hover) { background: var(--day); }
+  :global([data-durete-search] .o-name) { font-weight: 600; }
+  :global([data-durete-search] .o-meta) { color: var(--muted); font-size: var(--t-sm); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .status { min-height: 1.5em; margin-top: 10px; font-size: var(--t-sm); color: var(--muted); }
+  :global(.dark) .status { color: var(--on-dark-muted); }
+  .mini { margin-top: 4px; padding: 14px 16px; background: var(--day); border-left: 3px solid var(--accent-strong); border-radius: var(--radius); }
+
+  /* Fiche résultat */
+  .out { margin-top: clamp(20px, 3vw, 32px); text-align: left; }
+  :global([data-durete-search] .card) {
+    display: grid; grid-template-columns: 5fr 7fr; gap: clamp(28px, 4vw, 64px);
+    background: var(--paper); color: var(--ink); border-radius: calc(var(--radius) * 2); padding: clamp(24px, 4vw, 56px);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .35); animation: rise .5s cubic-bezier(.2, .7, .2, 1) both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+  @media (prefers-reduced-motion: reduce) { :global([data-durete-search] .card) { animation: none; } }
+  :global([data-durete-search] .c-name) { font-size: clamp(1.75rem, 1.3rem + 1.6vw, 2.75rem); line-height: 1.05; outline: none; }
+  :global([data-durete-search] .c-where) { margin-top: 6px; color: var(--muted); font-size: var(--t-sm); }
+  :global([data-durete-search] .c-val) { margin-top: clamp(20px, 3vw, 36px); font-family: var(--f-display); font-size: clamp(4.5rem, 3rem + 6vw, 8rem); line-height: .9; letter-spacing: -.035em; }
+  :global([data-durete-search] .c-val .u) { font-size: .32em; letter-spacing: 0; color: var(--muted); margin-left: .15em; }
+  :global([data-durete-search] .c-cls) { margin-top: 10px; font-family: var(--f-display); font-size: var(--t-xl); }
+  :global([data-durete-search] .c-cls b) { font-weight: 400; color: var(--accent-text); }
+  :global([data-durete-search] .scale) { padding-top: 8px; }
+  :global([data-durete-search] .bar) { position: relative; display: flex; gap: 2px; height: 12px; }
+  :global([data-durete-search] .seg) { border-radius: 2px; background: var(--seg); }
+  :global([data-durete-search] .seg[data-cls='très douce']) { --seg: #D8E4E6; }
+  :global([data-durete-search] .seg[data-cls='douce']) { --seg: #C9D7CF; }
+  :global([data-durete-search] .seg[data-cls='moyennement dure']) { --seg: #E7CFAE; }
+  :global([data-durete-search] .seg[data-cls='dure']) { --seg: #D3A06B; }
+  :global([data-durete-search] .seg[data-cls='très dure']) { --seg: #A8692A; }
+  :global([data-durete-search] .band) { position: absolute; top: -4px; bottom: -4px; border: 2px solid var(--ink); border-radius: 4px; opacity: .35; }
+  :global([data-durete-search] .mark) { position: absolute; top: -9px; bottom: -9px; width: 4px; margin-left: -2px; background: var(--ink); border-radius: 2px; box-shadow: 0 0 0 2px var(--paper); transition: left .8s cubic-bezier(.2, .7, .2, 1); }
+  :global([data-durete-search] .lbl) { display: flex; gap: 2px; margin-top: 12px; font-size: var(--t-xs); color: var(--muted); }
+  :global([data-durete-search] .lbl span) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  :global([data-durete-search] .c-range) { margin-top: 22px; }
+  :global([data-durete-search] .c-adv) { margin-top: 14px; max-width: 58ch; }
+  :global([data-durete-search] .c-act) { margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; }
+  :global([data-durete-search] .c-tel) { color: var(--muted); text-decoration: none; font-size: var(--t-sm); }
+  :global([data-durete-search] .c-tel:hover) { color: var(--ink); }
+  :global([data-durete-search] .c-nets) { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 14px; font-size: var(--t-sm); }
+  :global([data-durete-search] .c-nets summary) { cursor: pointer; font-weight: 600; }
+  :global([data-durete-search] .c-nets ul) { list-style: none; padding: 0; margin-top: 10px; }
+  :global([data-durete-search] .c-nets li) { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  :global([data-durete-search] .c-nets .n-q) { grid-column: 1 / -1; color: var(--muted); }
+  :global([data-durete-search] .c-src) { margin-top: 18px; font-size: var(--t-xs); color: var(--muted); }
+  :global([data-durete-search] .c-src a) { color: inherit; }
+  :global([data-durete-search] .msg) { background: var(--paper); color: var(--ink); border-radius: calc(var(--radius) * 2); padding: clamp(20px, 3vw, 36px); }
+  :global([data-durete-search] .msg button) { margin-top: 14px; }
+  @media (max-width: 820px) {
+    :global([data-durete-search] .card) { grid-template-columns: 1fr; }
+    :global([data-durete-search] .lbl span) { font-size: 0; }
+    :global([data-durete-search] .lbl span:first-child), :global([data-durete-search] .lbl span:last-child) { font-size: var(--t-xs); overflow: visible; }
+    :global([data-durete-search] .lbl span:last-child) { text-align: right; }
+  }
+</style>

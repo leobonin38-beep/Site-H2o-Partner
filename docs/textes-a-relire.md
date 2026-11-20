@@ -53,18 +53,18 @@ Les pages reprennent les textes de la V2 et de l'ancien site. Textes nouveaux, �
 | Diagnostic | Titre « Parlons de votre eau, en quatre questions. » ; texte d'introduction ; libellés des besoins (« Calcaire, eau dure », « Embouage du chauffage »…) |
 | Formulaires | Messages d'erreur et de confirmation |
 
-## Dureté de l'eau par commune (ajout du 2026-11-20)
-Pages `/durete-eau-isere/` (accueil de l'outil) et une page par commune (489 pages). Les chiffres viennent des analyses officielles (ARS, via Hub'Eau) ; les textes ci-dessous sont rédigés par Claude, à relire :
+## Dureté de l'eau de votre commune (2026-11-20, version France entière)
+Page `/durete-eau/` : une barre de recherche (nom de commune ou code postal, toute la France) ; les analyses officielles (ARS, via Hub'Eau) sont lues au moment de la recherche. Textes rédigés par Claude, à relire :
 | Où | Texte |
 |---|---|
-| Accueil de l'outil | Titre « La dureté de l'eau en Isère, commune par commune. » ; introduction « Les analyses officielles de l'eau du robinet… Tapez votre commune… » ; « Combien de communes ont une eau dure ? » ; paragraphe « La méthode » |
-| Page commune | Titre « Dureté de l'eau à {Commune} ({code postal}). » ; phrase d'introduction ; « Selon votre quartier » ; « Autour de votre commune » ; « Un adoucisseur à {Commune} ? » + texte |
+| Page | Titre « Quelle est la dureté de l'eau chez vous ? » ; « Les analyses officielles de l'eau du robinet, pour toutes les communes de France. Tapez le nom de votre commune ou votre code postal. » |
+| Fiche résultat | « Dureté de l'eau à {Commune} » ; « De X à Y °f selon le quartier » ; phrase de source « Valeur indicative : votre facture d'eau indique aussi la dureté (TH). » |
+| Messages | « Aucune analyse de dureté publiée ces trois dernières années pour {Commune}. Votre facture d'eau ou votre mairie peuvent vous l'indiquer. » ; « Le service public des données sur l'eau ne répond pas pour le moment. » ; « Tapez les 5 chiffres du code postal. » |
+| Lire le résultat | Introduction sur le TH ; paragraphe sur l'origine des chiffres |
 | Conseil, eau très douce | « Une eau très douce : pas de tartre à craindre. Un adoucisseur n'est en général pas nécessaire. » |
 | Conseil, eau douce | « Une eau douce : peu de tartre. Un adoucisseur n'est en général pas nécessaire ; un filtre peut suffire selon vos besoins. » |
 | Conseil, eau moyennement dure | « Le tartre commence à se voir : traces sur la robinetterie, dépôts dans la bouilloire et le chauffe-eau. Un adoucisseur protège l'installation, surtout pour l'eau chaude. » |
 | Conseil, eau dure | « Le tartre se dépose vite dans le chauffe-eau, la robinetterie et l'électroménager. Un adoucisseur bien réglé protège l'installation et réduit l'entretien. » |
 | Conseil, eau très dure | « Une eau très chargée en calcaire : les dépôts sont importants et rapides. Un adoucisseur, dimensionné par un professionnel, est fortement conseillé. » |
-| Accueil du site | « Trouvez la dureté de l'eau de votre commune (Isère) » |
-| Mentions légales | Paragraphe sur la source des données (Hub'Eau, Licence Ouverte Etalab) |
-
-Mise à jour des chiffres : `node scripts/fetch-durete.mjs`, puis reconstruire le site (à refaire une ou deux fois par an).
+| Accueil du site | « Trouvez la dureté de l'eau de votre commune » |
+| Mentions légales | Paragraphe sur les services publics interrogés pendant la recherche |
